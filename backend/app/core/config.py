@@ -16,7 +16,7 @@ class Settings(BaseSettings):
     # External APIs
     RESEND_API_KEY: Optional[str] = None
     
-    FRONTEND_URL: str = "http://localhost:6000"
+    FRONTEND_URL: str = "http://localhost:6100"
 
     # Toss Payments
     TOSS_CLIENT_KEY: Optional[str] = None

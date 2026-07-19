@@ -20,7 +20,7 @@ type(scope): English summary — 한국어 요약
 
 ## Stack
 
-- Frontend: Next.js 15 — **port 6000**
+- Frontend: Next.js 15 — **port 6100** (not 6000: Chrome ERR_UNSAFE_PORT)
 - Backend: FastAPI — port 8000
 - DB: PostgreSQL 5432
 - Design: `docs/superpowers/specs/2026-07-19-fortuneone-local-mvp-design.md`

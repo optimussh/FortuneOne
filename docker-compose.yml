@@ -4,7 +4,7 @@ services:
   frontend:
     build: ./frontend
     ports:
-      - "6000:3000"
+      - "6100:3000"
     environment:
       - NEXT_PUBLIC_API_URL=http://localhost:8000
     depends_on:
@@ -18,7 +18,7 @@ services:
       - DATABASE_URL=postgresql+asyncpg://user:password@db:5432/saasdb
       - SECRET_KEY=your-super-secret-key-2026
       - RESEND_API_KEY=re_xxxxxxxxxxxxxxxx  # 교체 필요
-      - FRONTEND_URL=http://localhost:6000
+      - FRONTEND_URL=http://localhost:6100
     depends_on:
       db:
         condition: service_healthy

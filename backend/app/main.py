@@ -49,8 +49,9 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         settings.FRONTEND_URL,
-        "http://localhost:6000",
-        "http://localhost:3000",  # legacy local
+        "http://localhost:6100",
+        "http://localhost:6000",  # blocked by Chrome (ERR_UNSAFE_PORT)
+        "http://localhost:3000",
     ],
     allow_credentials=True,
     allow_methods=["*"],

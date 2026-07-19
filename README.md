@@ -7,7 +7,7 @@ Next.js 15 · FastAPI · PostgreSQL
 
 | Service  | Port |
 |----------|------|
-| Frontend | **6000** |
+| Frontend | **6100** (Chrome blocks 6000 as unsafe) |
 | API      | **8000** |
 | Postgres | **5432** |
 
@@ -18,7 +18,7 @@ cp .env.example .env   # 필요 시 값 수정
 docker compose up --build
 ```
 
-- App: http://localhost:6000  
+- App: http://localhost:6100  
 - API docs: http://localhost:8000/docs  
 - Health: http://localhost:8000/api/health  
 
@@ -40,14 +40,14 @@ uvicorn app.main:app --reload --port 8000
 ```bash
 cd frontend
 npm install
-npm run dev   # port 6000
+npm run dev   # port 6100
 ```
 
 ## Flows
 
 ### Guest (no login)
 
-1. Open http://localhost:6000  
+1. Open http://localhost:6100  
 2. Enter birth (solar date, optional time / 시간 모름, gender)  
 3. See result at `/fortune/result` (사주 4주 · 오행 · 일운)
 

@@ -2,6 +2,10 @@
 
 프로젝트 진행 현황 로그. 커밋 직전 갱신 (`claude_Template` git 규칙).
 
+## 2026-07-19 (port fix)
+
+- **fix:** 프론트 포트 6000 → **6100** — Chromium `ERR_UNSAFE_PORT` (X11 예약 포트 차단)
+
 ## 2026-07-19
 
 - **docs(test):** Task 5 로컬 MVP 품질 게이트
