@@ -1,7 +1,7 @@
 """phase 2 models
 
 Revision ID: 002
-Revises: 001
+Revises: 001_initial
 Create Date: 2026-05-13
 """
 from alembic import op
@@ -9,7 +9,7 @@ import sqlalchemy as sa
 import sqlmodel  # noqa: F401
 
 revision = '002'
-down_revision = '001'
+down_revision = '001_initial'
 branch_labels = None
 depends_on = None
 

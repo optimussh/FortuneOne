@@ -4,6 +4,20 @@
 
 ## 2026-07-19
 
+- **docs(test):** Task 5 로컬 MVP 품질 게이트
+  - `cd backend; python -m pytest -v` → **13 passed**
+  - `python -c "from app.main import app"` → import ok FortuneOne
+  - `frontend`: `.next` clear 후 `npx tsc --noEmit` → exit 0
+  - `docker compose up --build` → **OK**
+    - db healthy :5432, frontend :6000 → HTTP 200
+    - backend :8000 → `GET /api/health` `{"status":"ok","service":"FortuneOne"}`
+    - `POST /api/fortune/saju` → HTTP 200
+  - Compose 기동 픽스 (테스트 게이트용, 기능 추가 아님):
+    - `frontend/.dockerignore` (node_modules 제외 — 컨텍스트 470MB 완화)
+    - alembic `002` `down_revision` → `001_initial` (KeyError: '001')
+    - `database.py` SQLModel `AsyncSession` (`.exec` 지원)
+    - `bcrypt>=4.0.1,<4.1` pin (passlib × bcrypt 5.x 기동 실패)
+  - README.md FortuneOne 최소 문서 (ports 6000/8000/5432, guest/auth, pytest, design/plan 링크)
 - **feat(auth):** Task 4 로컬 로그인·사주 프로필
   - `FortuneProfile` 모델 + `GET/POST/GET/DELETE /api/profiles` (JWT 필수)
   - 선택: `POST /api/profiles/{id}/saju` 프로필 기반 재계산
