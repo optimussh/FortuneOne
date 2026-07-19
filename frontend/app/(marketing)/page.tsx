@@ -1,63 +1,26 @@
-import Link from "next/link";
+import { SajuForm } from "@/components/fortune/SajuForm";
 
-/** Placeholder home until Task 3 marketing rewrite. */
 export default function HomePage() {
   return (
-    <main
-      style={{
-        maxWidth: 720,
-        margin: "0 auto",
-        padding: "80px 24px",
-        textAlign: "center",
-      }}
-    >
-      <h1
-        style={{
-          fontSize: 40,
-          fontWeight: 800,
-          marginBottom: 16,
-          background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
-          WebkitBackgroundClip: "text",
-          WebkitTextFillColor: "transparent",
-        }}
-      >
-        FortuneOne
-      </h1>
-      <p style={{ fontSize: 18, color: "var(--muted)", lineHeight: 1.7, marginBottom: 32 }}>
-        사주 · 운세 로컬 MVP
-        <br />
-        서비스 페이지는 준비 중입니다.
-      </p>
-      <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
-        <Link
-          href="/login"
+    <div className="mx-auto flex w-full max-w-5xl flex-col items-center gap-8 px-4 py-10 sm:py-16">
+      <div className="max-w-xl text-center">
+        <h1
+          className="mb-3 text-4xl font-extrabold tracking-tight sm:text-5xl"
           style={{
-            fontSize: 14,
-            fontWeight: 600,
-            padding: "10px 20px",
-            borderRadius: 8,
-            color: "#fff",
-            background: "var(--primary)",
-            textDecoration: "none",
+            background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
           }}
         >
-          로그인
-        </Link>
-        <Link
-          href="/register"
-          style={{
-            fontSize: 14,
-            fontWeight: 600,
-            padding: "10px 20px",
-            borderRadius: 8,
-            color: "var(--primary)",
-            border: "1px solid var(--primary)",
-            textDecoration: "none",
-          }}
-        >
-          회원가입
-        </Link>
+          FortuneOne
+        </h1>
+        <p className="text-base leading-relaxed text-[var(--muted)] sm:text-lg">
+          생년월일을 입력하고 사주 원국과 오늘의 운세를 바로 확인해 보세요.
+          <br className="hidden sm:block" />
+          로그인 없이 게스트로 이용할 수 있습니다.
+        </p>
       </div>
-    </main>
+      <SajuForm />
+    </div>
   );
 }

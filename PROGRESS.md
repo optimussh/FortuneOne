@@ -4,6 +4,11 @@
 
 ## 2026-07-19
 
+- **feat(web):** Task 3 게스트 사주 입력·결과 UI (port 6000)
+  - `SajuForm` 랜딩: 양력 날짜, 선택 시각 + 시간 모름, 성별 → `POST /api/fortune/saju`
+  - 성공 응답 `sessionStorage` key `fortune:last` 저장 후 `/fortune/result`
+  - `SajuResult`: 사주 4주, 오행 바, 일운(요약·점수·행운 색/방향)
+  - `postFortuneSaju` + 타입 (`lib/api.ts`); `tsc --noEmit` 통과
 - **feat(fortune):** Task 2 사주 원국·일운 공개 API
   - `SajuEngine` (sajupy 래퍼) + 규칙 기반 일운 (`day_master` + `as_of` 결정론)
   - `POST /api/fortune/saju` 공개(무인증); `time_unknown` → 정오 12:00, `time_assumed`
