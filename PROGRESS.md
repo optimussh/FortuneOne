@@ -4,6 +4,11 @@
 
 ## 2026-07-19
 
+- **feat(fortune):** Task 2 사주 원국·일운 공개 API
+  - `SajuEngine` (sajupy 래퍼) + 규칙 기반 일운 (`day_master` + `as_of` 결정론)
+  - `POST /api/fortune/saju` 공개(무인증); `time_unknown` → 정오 12:00, `time_assumed`
+  - pytest: `tests/test_saju_engine.py`, `tests/test_fortune_api.py` (8 passed)
+  - deps: `sajupy>=0.2.0`, `pytest>=8.0.0`
 - **refactor:** Task 1 잔여 강의 UI/미사용 컴포넌트 제거
   - Frontend: `(user-dashboard)/my-learning` 전체 삭제, charts / KPICard / DataTable 삭제
   - Backend: Follow 모델(`profile.py`) 및 base/alembic import 정리

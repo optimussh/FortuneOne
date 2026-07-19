@@ -5,7 +5,7 @@ from contextlib import asynccontextmanager
 import os
 
 from app.core.config import settings
-from app.api import auth
+from app.api import auth, fortune
 from app.core.database import engine, async_session_maker
 from app.core.security import get_password_hash
 from app.models.base import SQLModel
@@ -60,6 +60,7 @@ app.add_middleware(
 app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
 
 app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
+app.include_router(fortune.router, prefix="/api/fortune", tags=["fortune"])
 
 @app.get("/")
 async def root():
