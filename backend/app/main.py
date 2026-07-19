@@ -5,7 +5,7 @@ from contextlib import asynccontextmanager
 import os
 
 from app.core.config import settings
-from app.api import auth, dashboard, admin, courses, payments
+from app.api import auth
 from app.core.database import engine, async_session_maker
 from app.core.security import get_password_hash
 from app.models.base import SQLModel
@@ -60,11 +60,12 @@ app.add_middleware(
 app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
 
 app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
-app.include_router(dashboard.router, prefix="/api/dashboard", tags=["dashboard"])
-app.include_router(admin.router, prefix="/api/admin", tags=["admin"])
-app.include_router(courses.router, prefix="/api/courses", tags=["courses"])
-app.include_router(payments.router, prefix="/api/payments", tags=["payments"])
 
 @app.get("/")
 async def root():
     return {"message": f"{settings.PROJECT_NAME} - Running smoothly"}
+
+
+@app.get("/api/health")
+async def health():
+    return {"status": "ok", "service": "FortuneOne"}

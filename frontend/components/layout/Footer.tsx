@@ -31,12 +31,12 @@ export function Footer() {
               marginBottom: 12,
             }}
           >
-            노우브릿지
+            FortuneOne
           </div>
           <p style={{ fontSize: 13, color: "var(--muted)", lineHeight: 1.7 }}>
-            지식의 다리를 잇다.
+            사주 · 운세 서비스
             <br />
-            누구나 배우고, 누구나 가르칠 수 있는 플랫폼.
+            (로컬 MVP 준비 중)
           </p>
         </div>
 
@@ -44,11 +44,11 @@ export function Footer() {
         <div>
           <h4 style={{ fontSize: 14, fontWeight: 700, marginBottom: 12 }}>서비스</h4>
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            <Link href="/courses" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
-              강의 탐색
+            <Link href="/" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
+              홈
             </Link>
-            <Link href="/instructor/courses" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
-              강의 만들기
+            <Link href="/login" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
+              로그인
             </Link>
           </div>
         </div>
@@ -78,7 +78,7 @@ export function Footer() {
           color: "var(--muted)",
         }}
       >
-        © {new Date().getFullYear()} 노우브릿지. All rights reserved.
+        © {new Date().getFullYear()} FortuneOne. All rights reserved.
       </div>
     </footer>
   );

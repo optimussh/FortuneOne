@@ -4,6 +4,11 @@
 
 ## 2026-07-19
 
+- **refactor:** 강의 도메인 제거 (Task 1)
+  - Backend: courses/payments/mentoring/admin/dashboard 라우터 삭제, `/api/health` 추가
+  - Models: course/clip/category/mentor/payment/review/roadmap 삭제, User 관계 정리
+  - Frontend: courses / instructor / admin 라우트 삭제, Header/Footer → `/` · `/login`
+  - 마케팅 홈은 플레이스홀더 (Task 3에서 교체)
 - **docs:** FortuneOne 로컬 MVP 설계 스펙 + 구현 플랜 작성
   - `docs/superpowers/specs/2026-07-19-fortuneone-local-mvp-design.md`
   - `docs/superpowers/plans/2026-07-19-fortuneone-local-mvp.md`

@@ -1,10 +1,7 @@
-from typing import Optional, TYPE_CHECKING
-from sqlmodel import SQLModel, Field, Relationship
+from typing import Optional
+from sqlmodel import SQLModel, Field
 from datetime import datetime
 
-if TYPE_CHECKING:
-    from .course import Course, Enrollment
-    from .mentor import MentorProfile
 
 class UserBase(SQLModel):
     email: str = Field(unique=True, index=True)
@@ -26,11 +23,6 @@ class User(UserBase, table=True):
     career_level: str = ""
     company: str = ""
     bio: str = ""
-
-    # Relationships
-    courses: list["Course"] = Relationship(back_populates="instructor")
-    enrollments: list["Enrollment"] = Relationship(back_populates="user")
-    mentor_profile: Optional["MentorProfile"] = Relationship(back_populates="user")
 
 class UserCreate(SQLModel):
     email: str

@@ -42,13 +42,13 @@ export function Header() {
             textDecoration: "none",
           }}
         >
-          노우브릿지
+          FortuneOne
         </Link>
 
         {/* Desktop nav */}
         <div style={{ display: "flex", alignItems: "center", gap: 28 }}>
           <Link
-            href="/courses"
+            href="/"
             style={{
               fontSize: 15,
               fontWeight: 500,
@@ -57,35 +57,8 @@ export function Header() {
               transition: "color 0.2s",
             }}
           >
-            강의 탐색
+            홈
           </Link>
-
-          {user && (
-            <>
-              <Link
-                href="/my-learning"
-                style={{
-                  fontSize: 15,
-                  fontWeight: 500,
-                  color: "var(--foreground)",
-                  textDecoration: "none",
-                }}
-              >
-                내 학습
-              </Link>
-              <Link
-                href="/instructor/courses"
-                style={{
-                  fontSize: 15,
-                  fontWeight: 500,
-                  color: "var(--foreground)",
-                  textDecoration: "none",
-                }}
-              >
-                강의 만들기
-              </Link>
-            </>
-          )}
 
           {user ? (
             <div style={{ position: "relative" }}>
@@ -134,7 +107,7 @@ export function Header() {
                     {user.email}
                   </div>
                   <Link
-                    href="/my-learning"
+                    href="/"
                     onClick={() => setMenuOpen(false)}
                     style={{
                       display: "block",
@@ -145,21 +118,7 @@ export function Header() {
                       borderRadius: 8,
                     }}
                   >
-                    내 학습
-                  </Link>
-                  <Link
-                    href="/instructor/courses"
-                    onClick={() => setMenuOpen(false)}
-                    style={{
-                      display: "block",
-                      padding: "8px 12px",
-                      fontSize: 14,
-                      color: "var(--foreground)",
-                      textDecoration: "none",
-                      borderRadius: 8,
-                    }}
-                  >
-                    강의 관리
+                    홈
                   </Link>
                   <button
                     onClick={() => {
