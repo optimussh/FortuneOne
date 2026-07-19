@@ -2,6 +2,15 @@
 
 프로젝트 진행 현황 로그. 커밋 직전 갱신 (`claude_Template` git 규칙).
 
+## 2026-07-19 (product features)
+
+- **fix/ops:** 포트 **6100** 기동 (Next dev). 백엔드는 로컬 uvicorn :8000 (compose 백엔드 재빌드 전 코드 반영)
+- **feat:** 용신·대운·부족한 오행·행운 아이템(제휴 mock) 사주 응답 확장
+- **feat:** 타로 / 띠별 일운 / 궁합 API + 페이지 (`/tarot` `/today` `/compatibility`)
+- **feat:** 네비·홈 제품 랜딩, FortuneOne 브랜딩, OAuth 데드 버튼 제거
+- **test:** pytest **18 passed**
+- **verify:** `GET /` 6100 → 200, health/zodiac 200
+
 ## 2026-07-19 (port fix)
 
 - **fix:** 프론트 포트 6000 → **6100** — Chromium `ERR_UNSAFE_PORT` (X11 예약 포트 차단)

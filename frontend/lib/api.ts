@@ -8,7 +8,6 @@ export async function apiFetch(path: string, options: RequestInit = {}) {
   if (token) {
     headers["Authorization"] = `Bearer ${token}`;
   }
-  // Don't set Content-Type for FormData (file upload)
   if (!(options.body instanceof FormData)) {
     headers["Content-Type"] = headers["Content-Type"] || "application/json";
   }
@@ -27,6 +26,16 @@ export type SajuRequestBody = {
   minute: number;
   gender: "male" | "female";
   time_unknown: boolean;
+};
+
+export type AffiliateItem = {
+  id: string;
+  title: string;
+  reason: string;
+  price_hint: string;
+  url: string;
+  partner: string;
+  element: string;
 };
 
 export type SajuResponse = {
@@ -51,32 +60,115 @@ export type SajuResponse = {
     scores: Record<string, number>;
     lucky: Record<string, string>;
   };
+  weak_elements?: string[];
+  strong_elements?: string[];
+  yongsin?: {
+    element: string;
+    element_ko: string;
+    reason: string;
+    lifestyle: string[];
+  } | null;
+  daeun?: {
+    start_age: number;
+    end_age: number;
+    label: string;
+    note: string;
+    is_current: boolean;
+  }[];
+  lucky_items?: AffiliateItem[];
 };
 
 export const FORTUNE_STORAGE_KEY = "fortune:last";
 
-export async function postFortuneSaju(body: SajuRequestBody): Promise<SajuResponse> {
-  const base = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
-  const res = await fetch(`${base}/api/fortune/saju`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
+function parseApiError(text: string, fallback: string): string {
+  try {
+    const data = JSON.parse(text) as { detail?: string | { msg?: string }[] };
+    if (typeof data?.detail === "string") return data.detail;
+    if (Array.isArray(data?.detail))
+      return data.detail.map((d) => d.msg).filter(Boolean).join(", ") || fallback;
+  } catch {
+    /* ignore */
+  }
+  return text || fallback;
+}
+
+async function publicJson<T>(path: string, init?: RequestInit): Promise<T> {
+  const res = await fetch(`${API_URL}${path}`, {
+    ...init,
+    headers: {
+      "Content-Type": "application/json",
+      ...(init?.headers as Record<string, string>),
+    },
   });
   if (!res.ok) {
-    let message = "사주 계산에 실패했습니다";
-    const text = await res.text();
-    try {
-      const data = JSON.parse(text) as { detail?: string | { msg?: string }[] };
-      if (typeof data?.detail === "string") message = data.detail;
-      else if (Array.isArray(data?.detail))
-        message = data.detail.map((d) => d.msg).filter(Boolean).join(", ") || message;
-      else if (text) message = text;
-    } catch {
-      if (text) message = text;
-    }
-    throw new Error(message);
+    throw new Error(parseApiError(await res.text(), "요청에 실패했습니다"));
   }
   return res.json();
+}
+
+export async function postFortuneSaju(body: SajuRequestBody): Promise<SajuResponse> {
+  return publicJson<SajuResponse>("/api/fortune/saju", {
+    method: "POST",
+    body: JSON.stringify(body),
+  });
+}
+
+export type TarotCard = {
+  id: string;
+  name: string;
+  arcana: string;
+  reversed: boolean;
+  meaning: string;
+  position: string;
+};
+
+export async function postTarot(count: number, question: string) {
+  return publicJson<{ question: string; cards: TarotCard[]; summary: string }>(
+    "/api/fortune/tarot",
+    { method: "POST", body: JSON.stringify({ count, question }) }
+  );
+}
+
+export type ZodiacItem = {
+  zodiac: string;
+  zodiac_en: string;
+  date: string;
+  score: number;
+  summary: string;
+  lucky_color: string;
+  do: string;
+  dont: string;
+};
+
+export async function getZodiacToday() {
+  return publicJson<{ date: string; items: ZodiacItem[] }>("/api/fortune/zodiac/today");
+}
+
+export async function postCompatibility(a: SajuRequestBody, b: SajuRequestBody) {
+  return publicJson<{
+    score: number;
+    summary: string;
+    a_day_master: string;
+    b_day_master: string;
+  }>("/api/fortune/compatibility", {
+    method: "POST",
+    body: JSON.stringify({
+      a: {
+        solar_date: a.solar_date,
+        hour: a.hour,
+        minute: a.minute,
+        gender: a.gender,
+        time_unknown: a.time_unknown,
+      },
+      b: {
+        solar_date: b.solar_date,
+        hour: b.hour,
+        minute: b.minute,
+        gender: b.gender,
+        time_unknown: b.time_unknown,
+      },
+    }),
+  });
 }
 
 export type FortuneProfile = {
@@ -99,18 +191,6 @@ export type FortuneProfileCreateBody = {
   time_unknown: boolean;
   gender: "male" | "female";
 };
-
-function parseApiError(text: string, fallback: string): string {
-  try {
-    const data = JSON.parse(text) as { detail?: string | { msg?: string }[] };
-    if (typeof data?.detail === "string") return data.detail;
-    if (Array.isArray(data?.detail))
-      return data.detail.map((d) => d.msg).filter(Boolean).join(", ") || fallback;
-  } catch {
-    /* ignore */
-  }
-  return text || fallback;
-}
 
 export async function listFortuneProfiles(): Promise<FortuneProfile[]> {
   const res = await apiFetch("/api/profiles");

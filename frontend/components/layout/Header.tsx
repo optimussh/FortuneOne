@@ -4,6 +4,13 @@ import Link from "next/link";
 import { useAuth } from "@/lib/auth-context";
 import { useState } from "react";
 
+const NAV = [
+  { href: "/", label: "사주" },
+  { href: "/today", label: "띠별 운세" },
+  { href: "/tarot", label: "타로" },
+  { href: "/compatibility", label: "궁합" },
+];
+
 export function Header() {
   const { user, logout } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -15,68 +22,77 @@ export function Header() {
         top: 0,
         zIndex: 50,
         backdropFilter: "blur(12px)",
-        backgroundColor: "rgba(255,255,255,0.85)",
+        backgroundColor: "rgba(255,255,255,0.9)",
         borderBottom: "1px solid var(--border)",
       }}
     >
       <nav
         style={{
-          maxWidth: 1200,
+          maxWidth: 1100,
           margin: "0 auto",
-          padding: "0 24px",
+          padding: "0 16px",
           height: 64,
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
+          gap: 12,
         }}
       >
-        {/* Logo */}
         <Link
           href="/"
           style={{
-            fontSize: 22,
+            fontSize: 20,
             fontWeight: 800,
             background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
             textDecoration: "none",
+            flexShrink: 0,
           }}
         >
           FortuneOne
         </Link>
 
-        {/* Desktop nav */}
-        <div style={{ display: "flex", alignItems: "center", gap: 28 }}>
-          <Link
-            href="/"
-            style={{
-              fontSize: 15,
-              fontWeight: 500,
-              color: "var(--foreground)",
-              textDecoration: "none",
-              transition: "color 0.2s",
-            }}
-          >
-            홈
-          </Link>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
+            flexWrap: "wrap",
+            justifyContent: "flex-end",
+          }}
+        >
+          {NAV.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              style={{
+                fontSize: 13,
+                fontWeight: 600,
+                color: "var(--foreground)",
+                textDecoration: "none",
+                padding: "6px 8px",
+              }}
+            >
+              {item.label}
+            </Link>
+          ))}
 
           {user ? (
             <div style={{ position: "relative" }}>
               <button
+                type="button"
                 onClick={() => setMenuOpen(!menuOpen)}
                 style={{
-                  width: 36,
-                  height: 36,
+                  width: 34,
+                  height: 34,
                   borderRadius: "50%",
                   background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
                   color: "#fff",
                   border: "none",
                   cursor: "pointer",
-                  fontSize: 14,
+                  fontSize: 13,
                   fontWeight: 700,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
                 }}
               >
                 {user.email[0].toUpperCase()}
@@ -86,40 +102,25 @@ export function Header() {
                   style={{
                     position: "absolute",
                     right: 0,
-                    top: 44,
-                    background: "var(--card-bg, #fff)",
+                    top: 42,
+                    background: "#fff",
                     border: "1px solid var(--border)",
                     borderRadius: 12,
                     padding: 8,
-                    minWidth: 200,
+                    minWidth: 180,
                     boxShadow: "0 8px 30px rgba(0,0,0,0.12)",
                   }}
                 >
                   <div
                     style={{
                       padding: "8px 12px",
-                      fontSize: 13,
+                      fontSize: 12,
                       color: "var(--muted)",
                       borderBottom: "1px solid var(--border)",
-                      marginBottom: 4,
                     }}
                   >
                     {user.email}
                   </div>
-                  <Link
-                    href="/"
-                    onClick={() => setMenuOpen(false)}
-                    style={{
-                      display: "block",
-                      padding: "8px 12px",
-                      fontSize: 14,
-                      color: "var(--foreground)",
-                      textDecoration: "none",
-                      borderRadius: 8,
-                    }}
-                  >
-                    홈
-                  </Link>
                   <Link
                     href="/me"
                     onClick={() => setMenuOpen(false)}
@@ -127,14 +128,14 @@ export function Header() {
                       display: "block",
                       padding: "8px 12px",
                       fontSize: 14,
-                      color: "var(--foreground)",
                       textDecoration: "none",
-                      borderRadius: 8,
+                      color: "var(--foreground)",
                     }}
                   >
                     내 프로필
                   </Link>
                   <button
+                    type="button"
                     onClick={() => {
                       logout();
                       setMenuOpen(false);
@@ -148,7 +149,6 @@ export function Header() {
                       color: "var(--danger)",
                       background: "none",
                       border: "none",
-                      borderRadius: 8,
                       cursor: "pointer",
                     }}
                   >
@@ -158,18 +158,17 @@ export function Header() {
               )}
             </div>
           ) : (
-            <div style={{ display: "flex", gap: 8 }}>
+            <div style={{ display: "flex", gap: 6 }}>
               <Link
                 href="/login"
                 style={{
-                  fontSize: 14,
+                  fontSize: 13,
                   fontWeight: 600,
-                  padding: "8px 16px",
+                  padding: "6px 12px",
                   borderRadius: 8,
                   color: "var(--primary)",
-                  textDecoration: "none",
                   border: "1px solid var(--primary)",
-                  transition: "all 0.2s",
+                  textDecoration: "none",
                 }}
               >
                 로그인
@@ -177,17 +176,16 @@ export function Header() {
               <Link
                 href="/register"
                 style={{
-                  fontSize: 14,
+                  fontSize: 13,
                   fontWeight: 600,
-                  padding: "8px 16px",
+                  padding: "6px 12px",
                   borderRadius: 8,
                   color: "#fff",
                   background: "var(--primary)",
                   textDecoration: "none",
-                  transition: "all 0.2s",
                 }}
               >
-                회원가입
+                가입
               </Link>
             </div>
           )}

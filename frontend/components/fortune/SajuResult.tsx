@@ -72,6 +72,8 @@ export function SajuResult({ data }: { data: SajuResponse }) {
   const maxElement = Math.max(1, ...Object.values(data.elements));
   const scores = data.daily.scores ?? {};
   const lucky = data.daily.lucky ?? {};
+  const daeun = data.daeun ?? [];
+  const items = data.lucky_items ?? [];
 
   const handleSaveProfile = async () => {
     setSaving(true);
@@ -116,9 +118,7 @@ export function SajuResult({ data }: { data: SajuResponse }) {
       <Card className="border-[var(--border)] bg-[var(--card-bg)]">
         <CardHeader className="pb-3">
           <CardTitle className="text-lg">사주 원국 (사주팔자)</CardTitle>
-          <CardDescription className="text-[var(--muted)]">
-            천간 · 지지
-          </CardDescription>
+          <CardDescription className="text-[var(--muted)]">천간 · 지지</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-4 gap-2 sm:gap-3">
@@ -157,32 +157,82 @@ export function SajuResult({ data }: { data: SajuResponse }) {
         </CardContent>
       </Card>
 
+      {data.yongsin && (
+        <Card className="border-[var(--border)] bg-[var(--card-bg)]">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-lg">용신 · 보완 조언</CardTitle>
+            <CardDescription className="text-[var(--muted)]">
+              부족한 오행 보강 힌트 (간편 분석)
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-3 text-sm leading-relaxed">
+            <p>
+              <span className="font-bold text-[var(--primary)]">
+                {data.yongsin.element_ko}
+              </span>
+              {" — "}
+              {data.yongsin.reason}
+            </p>
+            {data.yongsin.lifestyle?.length > 0 && (
+              <ul className="list-inside list-disc text-[var(--muted)]">
+                {data.yongsin.lifestyle.map((t) => (
+                  <li key={t}>{t}</li>
+                ))}
+              </ul>
+            )}
+          </CardContent>
+        </Card>
+      )}
+
+      {daeun.length > 0 && (
+        <Card className="border-[var(--border)] bg-[var(--card-bg)]">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-lg">대운 흐름</CardTitle>
+            <CardDescription className="text-[var(--muted)]">
+              10년 단위 간편 사이클 (참고용)
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="flex flex-col gap-2">
+            {daeun.map((p) => (
+              <div
+                key={p.label}
+                className={`rounded-xl border px-3 py-3 text-sm ${
+                  p.is_current
+                    ? "border-[var(--primary)] bg-[var(--primary-light)]"
+                    : "border-[var(--border)]"
+                }`}
+              >
+                <div className="font-semibold">
+                  {p.label}
+                  {p.is_current && (
+                    <span className="ml-2 text-xs text-[var(--primary)]">현재</span>
+                  )}
+                </div>
+                <p className="mt-1 text-[var(--muted)]">{p.note}</p>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      )}
+
       <Card className="border-[var(--border)] bg-[var(--card-bg)]">
         <CardHeader className="pb-3">
           <CardTitle className="text-lg">오늘의 운세</CardTitle>
-          <CardDescription className="text-[var(--muted)]">
-            {data.daily.date}
-          </CardDescription>
+          <CardDescription className="text-[var(--muted)]">{data.daily.date}</CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-5">
-          <p className="leading-relaxed text-[var(--foreground)]">{data.daily.summary}</p>
-
+          <p className="leading-relaxed">{data.daily.summary}</p>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
             {Object.entries(scores).map(([key, value]) => (
               <div
                 key={key}
                 className="rounded-xl border border-[var(--border)] bg-[var(--background)] px-3 py-3 text-center"
               >
-                <div className="text-xs text-[var(--muted)]">
-                  {SCORE_LABELS[key] ?? key}
-                </div>
-                <div className="mt-1 text-2xl font-bold text-[var(--primary)]">
-                  {value}
-                </div>
+                <div className="text-xs text-[var(--muted)]">{SCORE_LABELS[key] ?? key}</div>
+                <div className="mt-1 text-2xl font-bold text-[var(--primary)]">{value}</div>
               </div>
             ))}
           </div>
-
           <div className="flex flex-wrap gap-4 rounded-xl border border-[var(--border)] bg-[var(--primary-light)] px-4 py-3 text-sm">
             {lucky.color && (
               <div>
@@ -192,13 +242,47 @@ export function SajuResult({ data }: { data: SajuResponse }) {
             )}
             {lucky.direction && (
               <div>
-                <span className="text-[var(--muted)]">행운 방향 · </span>
+                <span className="text-[var(--muted)]">방향 · </span>
                 <span className="font-semibold">{lucky.direction}</span>
+              </div>
+            )}
+            {lucky.number && (
+              <div>
+                <span className="text-[var(--muted)]">숫자 · </span>
+                <span className="font-semibold">{lucky.number}</span>
               </div>
             )}
           </div>
         </CardContent>
       </Card>
+
+      {items.length > 0 && (
+        <Card className="border-[var(--border)] bg-[var(--card-bg)]">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-lg">오늘의 행운 아이템</CardTitle>
+            <CardDescription className="text-[var(--muted)]">
+              부족한 오행 맞춤 추천 (제휴 링크 데모)
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="grid gap-3 sm:grid-cols-2">
+            {items.map((it) => (
+              <a
+                key={it.id}
+                href={it.url}
+                target="_blank"
+                rel="noopener noreferrer sponsored"
+                className="rounded-xl border border-[var(--border)] p-3 transition hover:border-[var(--primary)]"
+              >
+                <div className="font-semibold">{it.title}</div>
+                <div className="mt-1 text-xs text-[var(--muted)]">{it.reason}</div>
+                <div className="mt-2 text-xs font-medium text-[var(--primary)]">
+                  {it.price_hint} · {it.partner}
+                </div>
+              </a>
+            ))}
+          </CardContent>
+        </Card>
+      )}
 
       {(saveMsg || saveErr) && (
         <div
@@ -224,6 +308,9 @@ export function SajuResult({ data }: { data: SajuResponse }) {
         <Button asChild variant="outline">
           <Link href="/">다시 입력</Link>
         </Button>
+        <Button asChild variant="outline">
+          <Link href="/tarot">타로 보기</Link>
+        </Button>
         {!authLoading && user && (
           <Button onClick={() => void handleSaveProfile()} disabled={saving}>
             {saving ? "저장 중…" : "프로필 저장"}
@@ -231,7 +318,7 @@ export function SajuResult({ data }: { data: SajuResponse }) {
         )}
         {!authLoading && !user && (
           <Button asChild variant="secondary">
-            <Link href="/login">로그인 후 저장</Link>
+            <Link href="/login?next=/fortune/result">로그인 후 저장</Link>
           </Button>
         )}
       </div>
@@ -243,9 +330,7 @@ export function SajuResultEmpty() {
   return (
     <div className="mx-auto flex max-w-md flex-col items-center gap-4 px-4 py-20 text-center">
       <h1 className="text-xl font-bold">결과가 없습니다</h1>
-      <p className="text-sm text-[var(--muted)]">
-        사주 입력 후 결과를 확인할 수 있습니다.
-      </p>
+      <p className="text-sm text-[var(--muted)]">사주 입력 후 결과를 확인할 수 있습니다.</p>
       <Button asChild>
         <Link href="/">사주 입력하러 가기</Link>
       </Button>

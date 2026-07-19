@@ -5,9 +5,10 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "노우브릿지 - 지식의 다리를 잇다",
-  description: "노우브릿지에서 실무 중심의 온라인 강의를 만나보세요. 누구나 강의를 만들고, 배울 수 있는 지식 공유 플랫폼입니다.",
-  keywords: ["온라인 강의", "프로그래밍", "지식 공유", "노우브릿지", "개발 강의"],
+  title: "FortuneOne — 사주 · 운세 · 타로",
+  description:
+    "사주 원국, 오늘의 운세, 띠별 운세, 타로, 궁합. 회원가입 없이 바로 확인하세요.",
+  keywords: ["사주", "운세", "타로", "궁합", "띠별 운세", "FortuneOne"],
 };
 
 export default function RootLayout({

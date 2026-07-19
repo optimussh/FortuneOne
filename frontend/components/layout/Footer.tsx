@@ -34,9 +34,9 @@ export function Footer() {
             FortuneOne
           </div>
           <p style={{ fontSize: 13, color: "var(--muted)", lineHeight: 1.7 }}>
-            사주 · 운세 서비스
+            사주 · 운세 · 타로 · 궁합
             <br />
-            (로컬 MVP 준비 중)
+            로컬 제품 데모
           </p>
         </div>
 
@@ -45,7 +45,16 @@ export function Footer() {
           <h4 style={{ fontSize: 14, fontWeight: 700, marginBottom: 12 }}>서비스</h4>
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
             <Link href="/" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
-              홈
+              사주
+            </Link>
+            <Link href="/today" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
+              띠별 운세
+            </Link>
+            <Link href="/tarot" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
+              타로
+            </Link>
+            <Link href="/compatibility" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
+              궁합
             </Link>
             <Link href="/login" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
               로그인
