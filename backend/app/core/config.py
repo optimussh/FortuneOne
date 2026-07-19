@@ -2,8 +2,8 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 from typing import Optional
 
 class Settings(BaseSettings):
-    PROJECT_NAME: str = "노우브릿지 - 온라인 강의 플랫폼"
-    VERSION: str = "1.0.0"
+    PROJECT_NAME: str = "FortuneOne"
+    VERSION: str = "0.1.0"
     
     # Security
     SECRET_KEY: str = "your-super-secret-key-2026"
@@ -16,7 +16,7 @@ class Settings(BaseSettings):
     # External APIs
     RESEND_API_KEY: Optional[str] = None
     
-    FRONTEND_URL: str = "http://localhost:3000"
+    FRONTEND_URL: str = "http://localhost:6000"
 
     # Toss Payments
     TOSS_CLIENT_KEY: Optional[str] = None

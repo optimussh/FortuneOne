@@ -1,6 +1,9 @@
-# Next.js 15 + FastAPI + shadcn/ui Full-stack SaaS Template (2026)
+# FortuneOne
 
-This template provides a robust starting point for a modern SaaS application, integrating a high-performance FastAPI backend with a beautiful Next.js 15 App Router frontend.
+운세 플랫폼 (사주 원국 + 오늘의 운세). Next.js 15 + FastAPI + PostgreSQL.
+
+설계: `docs/superpowers/specs/2026-07-19-fortuneone-local-mvp-design.md`  
+구현 플랜: `docs/superpowers/plans/2026-07-19-fortuneone-local-mvp.md`
 
 ## 🚀 Quick Start
 
@@ -19,7 +22,7 @@ Ensure you have [Docker](https://www.docker.com/) installed.
 
 ## 🌐 Endpoints
 
-- **Frontend Application**: [http://localhost:3000](http://localhost:3000)
+- **Frontend Application**: [http://localhost:6000](http://localhost:6000)
 - **Backend API & Swagger UI**: [http://localhost:8000/docs](http://localhost:8000/docs)
 - **Database (Postgres)**: Exposed on port `5432`
 

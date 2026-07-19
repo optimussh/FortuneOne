@@ -8,7 +8,7 @@ class EmailService:
         # resend.Emails.send(...)
         
         # Mocking for local development:
-        verification_link = f"http://localhost:3000/verify-email?token={user_id}-mock-token"
+        verification_link = f"http://localhost:6000/verify-email?token={user_id}-mock-token"
         print(f"==================================================")
         print(f"MOCK EMAIL SENT TO: {email}")
         print(f"SUBJECT: Please verify your email")
