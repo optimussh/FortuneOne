@@ -4,6 +4,9 @@
 
 ## 2026-07-19
 
+- **refactor:** Task 1 잔여 강의 UI/미사용 컴포넌트 제거
+  - Frontend: `(user-dashboard)/my-learning` 전체 삭제, charts / KPICard / DataTable 삭제
+  - Backend: Follow 모델(`profile.py`) 및 base/alembic import 정리
 - **refactor:** 강의 도메인 제거 (Task 1)
   - Backend: courses/payments/mentoring/admin/dashboard 라우터 삭제, `/api/health` 추가
   - Models: course/clip/category/mentor/payment/review/roadmap 삭제, User 관계 정리

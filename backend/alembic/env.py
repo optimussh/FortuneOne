@@ -10,7 +10,6 @@ from sqlmodel import SQLModel
 
 # import your models here so metadata is populated
 from app.models.user import *
-from app.models.profile import *
 from app.core.config import settings
 
 # this is the Alembic Config object, which provides
