@@ -22,21 +22,24 @@ async def lifespan(app: FastAPI):
     async with engine.begin() as conn:
         await conn.run_sync(SQLModel.metadata.create_all)
         
-    # Create initial admin user if it doesn't exist
-    async with async_session_maker() as session:
-        result = await session.exec(select(User).where(User.email == "admin@example.com"))
-        admin_user = result.first()
-        if not admin_user:
-            admin_user = User(
-                email="admin@example.com",
-                full_name="Admin User",
-                hashed_password=get_password_hash("admin123"),
-                is_superuser=True,
-                is_verified=True
-            )
-            session.add(admin_user)
-            await session.commit()
-            
+    # Optional seed admin (never block startup on hash/DB issues)
+    try:
+        async with async_session_maker() as session:
+            result = await session.exec(select(User).where(User.email == "admin@example.com"))
+            admin_user = result.first()
+            if not admin_user:
+                admin_user = User(
+                    email="admin@example.com",
+                    full_name="Admin User",
+                    hashed_password=get_password_hash("admin123"),
+                    is_superuser=True,
+                    is_verified=True,
+                )
+                session.add(admin_user)
+                await session.commit()
+    except Exception as exc:  # pragma: no cover
+        print(f"[startup] admin seed skipped: {exc}")
+
     yield
 
 app = FastAPI(

@@ -15,29 +15,12 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - DATABASE_URL=postgresql+asyncpg://user:password@db:5432/saasdb
+      # SQLite file inside container volume
+      - DATABASE_URL=sqlite+aiosqlite:///./data/fortuneone.db
       - SECRET_KEY=your-super-secret-key-2026
-      - RESEND_API_KEY=re_xxxxxxxxxxxxxxxx  # 교체 필요
       - FRONTEND_URL=http://localhost:6100
-    depends_on:
-      db:
-        condition: service_healthy
-
-  db:
-    image: postgres:16
-    environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: saasdb
-    ports:
-      - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U user -d saasdb"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
+      - backend_data:/app/data
 
 volumes:
-  postgres_data:
+  backend_data:

@@ -12,21 +12,21 @@
 
 ## 빠른 실행 (로컬 권장)
 
-DB만 Docker로 켠 뒤 앱은 로컬:
+**기본 DB = SQLite** (`backend/data/fortuneone.db`). Postgres 불필요.
 
 ```bash
-docker compose up -d db
-
 # terminal 1
 cd backend
 pip install -r requirements.txt
-uvicorn app.main:app --reload --port 8000
+uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 
 # terminal 2
 cd frontend
 npm install
 npm run dev   # http://localhost:6100
 ```
+
+회원가입·로그인·사주 프로필은 SQLite 파일에 저장됩니다.
 
 전체 Docker:
 

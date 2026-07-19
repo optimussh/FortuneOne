@@ -10,8 +10,9 @@ class Settings(BaseSettings):
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 7 # 7 days
     
-    # Database
-    DATABASE_URL: str = "postgresql+asyncpg://user:password@localhost:5432/saasdb"
+    # Database — local default: SQLite file (회원가입·프로필 저장)
+    # Postgres example: postgresql+asyncpg://user:password@localhost:5432/saasdb
+    DATABASE_URL: str = "sqlite+aiosqlite:///./data/fortuneone.db"
     
     # External APIs
     RESEND_API_KEY: Optional[str] = None
