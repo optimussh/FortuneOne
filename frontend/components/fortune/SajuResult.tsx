@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import {
   Card,
@@ -9,7 +10,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import type { SajuResponse, StemBranch } from "@/lib/api";
+import { useAuth } from "@/lib/auth-context";
+import {
+  createFortuneProfile,
+  type SajuResponse,
+  type StemBranch,
+} from "@/lib/api";
 
 const PILLAR_LABELS: { key: keyof SajuResponse["pillars"]; label: string }[] = [
   { key: "year", label: "년주" },
@@ -58,9 +64,36 @@ function PillarCell({
 }
 
 export function SajuResult({ data }: { data: SajuResponse }) {
+  const { user, loading: authLoading } = useAuth();
+  const [saving, setSaving] = useState(false);
+  const [saveMsg, setSaveMsg] = useState<string | null>(null);
+  const [saveErr, setSaveErr] = useState<string | null>(null);
+
   const maxElement = Math.max(1, ...Object.values(data.elements));
   const scores = data.daily.scores ?? {};
   const lucky = data.daily.lucky ?? {};
+
+  const handleSaveProfile = async () => {
+    setSaving(true);
+    setSaveMsg(null);
+    setSaveErr(null);
+    try {
+      const gender = data.input.gender === "female" ? "female" : "male";
+      await createFortuneProfile({
+        label: "나",
+        solar_date: data.input.solar_date,
+        hour: data.input.hour,
+        minute: data.input.minute,
+        time_unknown: data.input.time_assumed,
+        gender,
+      });
+      setSaveMsg("프로필이 저장되었습니다.");
+    } catch (err) {
+      setSaveErr(err instanceof Error ? err.message : "저장에 실패했습니다");
+    } finally {
+      setSaving(false);
+    }
+  };
 
   return (
     <div className="mx-auto flex w-full max-w-2xl flex-col gap-6 px-4 py-8 sm:py-12">
@@ -167,10 +200,40 @@ export function SajuResult({ data }: { data: SajuResponse }) {
         </CardContent>
       </Card>
 
-      <div className="flex justify-center gap-3 pb-8">
+      {(saveMsg || saveErr) && (
+        <div
+          className={`rounded-lg border px-4 py-3 text-center text-sm ${
+            saveErr
+              ? "border-red-200 bg-red-50 text-red-700"
+              : "border-green-200 bg-green-50 text-green-800"
+          }`}
+        >
+          {saveErr ?? saveMsg}
+          {saveMsg && (
+            <>
+              {" "}
+              <Link href="/me" className="font-semibold underline">
+                내 프로필 보기
+              </Link>
+            </>
+          )}
+        </div>
+      )}
+
+      <div className="flex flex-wrap justify-center gap-3 pb-8">
         <Button asChild variant="outline">
           <Link href="/">다시 입력</Link>
         </Button>
+        {!authLoading && user && (
+          <Button onClick={() => void handleSaveProfile()} disabled={saving}>
+            {saving ? "저장 중…" : "프로필 저장"}
+          </Button>
+        )}
+        {!authLoading && !user && (
+          <Button asChild variant="secondary">
+            <Link href="/login">로그인 후 저장</Link>
+          </Button>
+        )}
       </div>
     </div>
   );

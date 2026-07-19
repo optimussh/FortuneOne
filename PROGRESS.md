@@ -4,6 +4,12 @@
 
 ## 2026-07-19
 
+- **feat(auth):** Task 4 로컬 로그인·사주 프로필
+  - `FortuneProfile` 모델 + `GET/POST/GET/DELETE /api/profiles` (JWT 필수)
+  - 선택: `POST /api/profiles/{id}/saju` 프로필 기반 재계산
+  - Frontend `/me` 목록·다시 보기·삭제; 결과 화면 로그인 시 「프로필 저장」
+  - 게스트 플로우는 무인증 유지; 미로그인 시 결과에서 「로그인 후 저장」 링크만
+  - pytest: `tests/test_profiles_api.py` 401 커버 (전체 13 passed)
 - **feat(web):** Task 3 게스트 사주 입력·결과 UI (port 6000)
   - `SajuForm` 랜딩: 양력 날짜, 선택 시각 + 시간 모름, 성별 → `POST /api/fortune/saju`
   - 성공 응답 `sessionStorage` key `fortune:last` 저장 후 `/fortune/result`

@@ -120,6 +120,20 @@ export function Header() {
                   >
                     홈
                   </Link>
+                  <Link
+                    href="/me"
+                    onClick={() => setMenuOpen(false)}
+                    style={{
+                      display: "block",
+                      padding: "8px 12px",
+                      fontSize: 14,
+                      color: "var(--foreground)",
+                      textDecoration: "none",
+                      borderRadius: 8,
+                    }}
+                  >
+                    내 프로필
+                  </Link>
                   <button
                     onClick={() => {
                       logout();

@@ -79,4 +79,65 @@ export async function postFortuneSaju(body: SajuRequestBody): Promise<SajuRespon
   return res.json();
 }
 
+export type FortuneProfile = {
+  id: number;
+  user_id: number;
+  label: string;
+  solar_date: string;
+  hour: number | null;
+  minute: number | null;
+  time_unknown: boolean;
+  gender: string;
+  created_at: string;
+};
+
+export type FortuneProfileCreateBody = {
+  label: string;
+  solar_date: string;
+  hour?: number | null;
+  minute?: number | null;
+  time_unknown: boolean;
+  gender: "male" | "female";
+};
+
+function parseApiError(text: string, fallback: string): string {
+  try {
+    const data = JSON.parse(text) as { detail?: string | { msg?: string }[] };
+    if (typeof data?.detail === "string") return data.detail;
+    if (Array.isArray(data?.detail))
+      return data.detail.map((d) => d.msg).filter(Boolean).join(", ") || fallback;
+  } catch {
+    /* ignore */
+  }
+  return text || fallback;
+}
+
+export async function listFortuneProfiles(): Promise<FortuneProfile[]> {
+  const res = await apiFetch("/api/profiles");
+  if (!res.ok) {
+    throw new Error(parseApiError(await res.text(), "프로필 목록을 불러오지 못했습니다"));
+  }
+  return res.json();
+}
+
+export async function createFortuneProfile(
+  body: FortuneProfileCreateBody
+): Promise<FortuneProfile> {
+  const res = await apiFetch("/api/profiles", {
+    method: "POST",
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) {
+    throw new Error(parseApiError(await res.text(), "프로필 저장에 실패했습니다"));
+  }
+  return res.json();
+}
+
+export async function deleteFortuneProfile(id: number): Promise<void> {
+  const res = await apiFetch(`/api/profiles/${id}`, { method: "DELETE" });
+  if (!res.ok) {
+    throw new Error(parseApiError(await res.text(), "프로필 삭제에 실패했습니다"));
+  }
+}
+
 export { API_URL };

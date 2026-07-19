@@ -5,11 +5,12 @@ from contextlib import asynccontextmanager
 import os
 
 from app.core.config import settings
-from app.api import auth, fortune
+from app.api import auth, fortune, profiles
 from app.core.database import engine, async_session_maker
 from app.core.security import get_password_hash
 from app.models.base import SQLModel
 from app.models.user import User
+from app.models.fortune_profile import FortuneProfile  # noqa: F401 — create_all
 from sqlmodel import select
 
 UPLOAD_DIR = os.path.join(os.path.dirname(__file__), "..", "uploads")
@@ -61,6 +62,7 @@ app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
 
 app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
 app.include_router(fortune.router, prefix="/api/fortune", tags=["fortune"])
+app.include_router(profiles.router, prefix="/api/profiles", tags=["profiles"])
 
 @app.get("/")
 async def root():
