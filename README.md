@@ -28,6 +28,15 @@ npm run dev   # http://localhost:6100
 
 회원가입·로그인·사주 프로필은 SQLite 파일에 저장됩니다.
 
+### 데모 계정 (로컬)
+
+| 역할 | 이메일 | 비밀번호 |
+|------|--------|----------|
+| Admin | `admin@fortuneone.local` | `admin1234` |
+| Test | `test@fortuneone.local` | `test1234` |
+
+서버 기동 시 없으면 자동 생성되며, 사주 프로필(기본 생년월일)도 함께 붙습니다.
+
 전체 Docker:
 
 ```bash

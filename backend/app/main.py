@@ -23,23 +23,63 @@ async def lifespan(app: FastAPI):
     async with engine.begin() as conn:
         await conn.run_sync(SQLModel.metadata.create_all)
         
-    # Optional seed admin (never block startup on hash/DB issues)
+    # Seed local demo accounts (never block startup)
     try:
+        from datetime import date
+        from app.models.fortune_profile import FortuneProfile
+
+        seeds = [
+            {
+                "email": "admin@fortuneone.local",
+                "password": "admin1234",
+                "full_name": "Admin",
+                "is_superuser": True,
+                "solar_date": date(1990, 1, 1),
+                "gender": "male",
+            },
+            {
+                "email": "test@fortuneone.local",
+                "password": "test1234",
+                "full_name": "Test User",
+                "is_superuser": False,
+                "solar_date": date(1995, 6, 15),
+                "gender": "female",
+            },
+        ]
         async with async_session_maker() as session:
-            result = await session.exec(select(User).where(User.email == "admin@example.com"))
-            admin_user = result.first()
-            if not admin_user:
-                admin_user = User(
-                    email="admin@example.com",
-                    full_name="Admin User",
-                    hashed_password=get_password_hash("admin123"),
-                    is_superuser=True,
-                    is_verified=True,
+            for s in seeds:
+                result = await session.exec(select(User).where(User.email == s["email"]))
+                user = result.first()
+                if not user:
+                    user = User(
+                        email=s["email"],
+                        full_name=s["full_name"],
+                        hashed_password=get_password_hash(s["password"]),
+                        is_superuser=s["is_superuser"],
+                        is_verified=True,
+                        is_active=True,
+                    )
+                    session.add(user)
+                    await session.commit()
+                    await session.refresh(user)
+                pr = await session.exec(
+                    select(FortuneProfile).where(FortuneProfile.user_id == user.id)
                 )
-                session.add(admin_user)
-                await session.commit()
+                if not pr.first():
+                    session.add(
+                        FortuneProfile(
+                            user_id=user.id,
+                            label="나",
+                            solar_date=s["solar_date"],
+                            hour=12,
+                            minute=0,
+                            time_unknown=True,
+                            gender=s["gender"],
+                        )
+                    )
+                    await session.commit()
     except Exception as exc:  # pragma: no cover
-        print(f"[startup] admin seed skipped: {exc}")
+        print(f"[startup] seed accounts skipped: {exc}")
 
     yield
 
