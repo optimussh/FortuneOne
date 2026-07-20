@@ -21,6 +21,9 @@ def test_build_full_report_has_long_sections():
     assert len(rep["life_reading"]["groups"]) == 4
     body = rep["life_reading"]["groups"][0]["sections"][0]["body"]
     assert len(body) > 80
+    assert "tojeong" in rep
+    assert len(rep["tojeong"]["months"]) == 12
+    assert "mingshi" in rep
 
 
 def test_full_report_endpoint():
@@ -38,3 +41,5 @@ def test_full_report_endpoint():
     data = res.json()
     assert "report" in data
     assert data["report"]["new_year_2026"]["year"] == 2026
+    assert data["report"]["tojeong"]["year"] == 2026
+    assert len(data["report"]["tojeong"]["months"]) == 12

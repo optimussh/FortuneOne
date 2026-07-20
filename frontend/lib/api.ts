@@ -268,6 +268,46 @@ export type ReportGroup = {
   sections?: ReportSection[];
 };
 
+export type MingshiColumn = {
+  key: string;
+  label: string;
+  stem: string;
+  branch: string;
+  stem_god: string;
+  branch_god: string;
+};
+
+export type MingshiTable = {
+  day_master: string;
+  columns: MingshiColumn[];
+};
+
+export type TojeongReport = {
+  year: number;
+  title: string;
+  subtitle: string;
+  header: {
+    display_name: string;
+    birth_text: string;
+    time_text: string;
+    pillars_line: string;
+    day_master: string;
+    elements_line: string;
+  };
+  mingshi: MingshiTable;
+  elements: Record<string, number>;
+  overall: { title: string; body: string };
+  months: { month: number; title: string; body: string }[];
+  domains: { id: string; title: string; body: string }[];
+  lucky: {
+    lucky_number: number;
+    unlucky_number: number;
+    lucky_color: string;
+    unlucky_color: string;
+    body: string;
+  };
+};
+
 export type FullReport = {
   day_master: string;
   elements: Record<string, number>;
@@ -285,6 +325,7 @@ export type FullReport = {
     day: StemBranch;
     hour: StemBranch | null;
   };
+  mingshi?: MingshiTable;
   daily: {
     date: string;
     title: string;
@@ -313,6 +354,7 @@ export type FullReport = {
       sections: ReportSection[];
     }[];
   };
+  tojeong?: TojeongReport;
 };
 
 export async function getPrimaryFullReport(): Promise<{

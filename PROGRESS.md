@@ -2,6 +2,15 @@
 
 프로젝트 진행 현황 로그. 커밋 직전 갱신 (`claude_Template` git 규칙).
 
+## 2026-07-20 (tojeong tab — full proposal)
+
+- **feat(tojeong):** 십성 명식표 `sipsung.py` · 연간 토정 리포트 `tojeong.py` (종합·월12·영역6·행운)
+- **feat(report):** `build_full_report`에 `mingshi` + `tojeong` 포함 (프로필 이름·시진 반영)
+- **feat(web):** `/me` 탭 **2026 토정** (서브탭 종합/월별/영역/숫자·색) · `?tab=tojeong`
+- **feat(hub):** CTA 「2026 토정 보기」 → `/me?tab=tojeong`
+- **test:** `tests/test_tojeong.py` 안정 시드·12개월·full-report 연동
+- **docs:** `2026-07-20-tojeong-tab-proposal.md` → Implemented
+
 ## 2026-07-19 (retention A + tarot UX + p2/p3)
 
 - **feat:** 데일리 허브 `/hub` · 출석 스트릭 · 운세 일기 · 주제 운세 4종

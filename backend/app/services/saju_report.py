@@ -488,7 +488,16 @@ def build_full_report(
     gender: str,
     *,
     as_of: date | None = None,
+    display_name: str = "",
+    calendar_type: str = "solar",
+    time_slot: str | None = None,
+    hour: int | None = None,
+    time_unknown: bool = True,
+    tojeong_year: int = 2026,
 ) -> dict[str, Any]:
+    from app.services.sipsung import mingshi_table
+    from app.services.tojeong import build_tojeong
+
     return {
         "pillars": {
             "year": {"stem": result.pillars.year.stem, "branch": result.pillars.year.branch},
@@ -500,6 +509,7 @@ def build_full_report(
                 else None
             ),
         },
+        "mingshi": mingshi_table(result),
         "day_master": result.day_master,
         "elements": result.elements,
         "weak_elements": result.weak_elements,
@@ -518,4 +528,15 @@ def build_full_report(
         "new_year_2026": build_year_fortune(result, birth, 2026),
         "five_element": build_five_element_themes(result, birth),
         "life_reading": build_life_reading(result, birth, gender),
+        "tojeong": build_tojeong(
+            result,
+            birth,
+            gender,
+            year=tojeong_year,
+            display_name=display_name,
+            calendar_type=calendar_type,
+            time_slot=time_slot,
+            hour=hour,
+            time_unknown=time_unknown,
+        ),
     }

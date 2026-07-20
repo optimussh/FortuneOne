@@ -252,7 +252,16 @@ async def primary_full_report(
             detail="저장된 사주 프로필이 없습니다. 사주 정보를 먼저 등록해 주세요.",
         )
     eng = _profile_calc(profile)
-    report = build_full_report(eng, profile.solar_date, profile.gender)
+    report = build_full_report(
+        eng,
+        profile.solar_date,
+        profile.gender,
+        display_name=getattr(profile, "display_name", "") or "",
+        calendar_type=getattr(profile, "calendar_type", None) or "solar",
+        time_slot=getattr(profile, "time_slot", None),
+        hour=profile.hour,
+        time_unknown=profile.time_unknown,
+    )
     return {
         "profile": _to_read(profile),
         "report": report,
@@ -269,7 +278,16 @@ async def profile_full_report(
     if not profile or profile.user_id != current_user.id:
         raise HTTPException(status_code=404, detail="프로필을 찾을 수 없습니다")
     eng = _profile_calc(profile)
-    report = build_full_report(eng, profile.solar_date, profile.gender)
+    report = build_full_report(
+        eng,
+        profile.solar_date,
+        profile.gender,
+        display_name=getattr(profile, "display_name", "") or "",
+        calendar_type=getattr(profile, "calendar_type", None) or "solar",
+        time_slot=getattr(profile, "time_slot", None),
+        hour=profile.hour,
+        time_unknown=profile.time_unknown,
+    )
     return {
         "profile": _to_read(profile),
         "report": report,

@@ -170,12 +170,31 @@ export default function HubPage() {
               {lucky.direction && <span>방향 {lucky.direction}</span>}
               {lucky.number && <span>숫자 {lucky.number}</span>}
             </div>
-            <Button asChild size="sm" variant="outline">
-              <Link href="/me">자세히 읽기 (상세 사주)</Link>
-            </Button>
+            <div className="flex flex-wrap gap-2">
+              <Button asChild size="sm" variant="outline">
+                <Link href="/me">자세히 읽기 (상세 사주)</Link>
+              </Button>
+              <Button asChild size="sm">
+                <Link href="/me?tab=tojeong">2026 토정 보기</Link>
+              </Button>
+            </div>
           </CardContent>
         </Card>
       )}
+
+      <Card className="mb-6 border-[var(--primary)] bg-[var(--primary-light)]">
+        <CardContent className="flex items-center justify-between gap-3 py-4">
+          <div>
+            <p className="text-sm font-bold">2026 명품 토정</p>
+            <p className="mt-0.5 text-xs text-[var(--muted)]">
+              종합운 · 월별 12 · 영역운 · 행운 숫자·색
+            </p>
+          </div>
+          <Button asChild size="sm">
+            <Link href="/me?tab=tojeong">바로 보기</Link>
+          </Button>
+        </CardContent>
+      </Card>
 
       <div className="mb-6 grid grid-cols-3 gap-2 sm:grid-cols-3">
         {TOPICS.map((t) => (
@@ -247,6 +266,9 @@ export default function HubPage() {
       <div className="mt-8 flex flex-wrap justify-center gap-3 text-sm">
         <Link href="/me" className="text-[var(--primary)] underline">
           상세 사주
+        </Link>
+        <Link href="/me?tab=tojeong" className="text-[var(--primary)] underline">
+          2026 토정
         </Link>
         <Link href="/today" className="text-[var(--primary)] underline">
           띠별
