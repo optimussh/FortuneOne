@@ -177,24 +177,42 @@ export default function HubPage() {
               <Button asChild size="sm">
                 <Link href="/me?tab=tojeong">2026 토정 보기</Link>
               </Button>
+              <Button asChild size="sm" variant="secondary">
+                <Link href="/me?tab=wealth">2026 부자되기</Link>
+              </Button>
             </div>
           </CardContent>
         </Card>
       )}
 
-      <Card className="mb-6 border-[var(--primary)] bg-[var(--primary-light)]">
-        <CardContent className="flex items-center justify-between gap-3 py-4">
-          <div>
-            <p className="text-sm font-bold">2026 명품 토정</p>
-            <p className="mt-0.5 text-xs text-[var(--muted)]">
-              종합운 · 월별 12 · 영역운 · 행운 숫자·색
-            </p>
-          </div>
-          <Button asChild size="sm">
-            <Link href="/me?tab=tojeong">바로 보기</Link>
-          </Button>
-        </CardContent>
-      </Card>
+      <div className="mb-6 grid gap-3 sm:grid-cols-2">
+        <Card className="border-[var(--primary)] bg-[var(--primary-light)]">
+          <CardContent className="flex items-center justify-between gap-3 py-4">
+            <div>
+              <p className="text-sm font-bold">2026 명품 토정</p>
+              <p className="mt-0.5 text-xs text-[var(--muted)]">
+                종합운 · 월별 12 · 영역운 · 행운 숫자·색
+              </p>
+            </div>
+            <Button asChild size="sm">
+              <Link href="/me?tab=tojeong">바로 보기</Link>
+            </Button>
+          </CardContent>
+        </Card>
+        <Card className="border-amber-500/50 bg-amber-50">
+          <CardContent className="flex items-center justify-between gap-3 py-4">
+            <div>
+              <p className="text-sm font-bold text-amber-900">2026 부자되기</p>
+              <p className="mt-0.5 text-xs text-amber-800/80">
+                재물 총론 · 월 등급 · 일자 캘린더
+              </p>
+            </div>
+            <Button asChild size="sm" className="bg-amber-700 hover:bg-amber-800">
+              <Link href="/me?tab=wealth">바로 보기</Link>
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
 
       <div className="mb-6 grid grid-cols-3 gap-2 sm:grid-cols-3">
         {TOPICS.map((t) => (
@@ -269,6 +287,9 @@ export default function HubPage() {
         </Link>
         <Link href="/me?tab=tojeong" className="text-[var(--primary)] underline">
           2026 토정
+        </Link>
+        <Link href="/me?tab=wealth" className="text-[var(--primary)] underline">
+          2026 부자되기
         </Link>
         <Link href="/today" className="text-[var(--primary)] underline">
           띠별

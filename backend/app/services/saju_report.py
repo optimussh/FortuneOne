@@ -497,6 +497,7 @@ def build_full_report(
 ) -> dict[str, Any]:
     from app.services.sipsung import mingshi_table
     from app.services.tojeong import build_tojeong
+    from app.services.wealth_year import build_wealth_year
 
     return {
         "pillars": {
@@ -529,6 +530,17 @@ def build_full_report(
         "five_element": build_five_element_themes(result, birth),
         "life_reading": build_life_reading(result, birth, gender),
         "tojeong": build_tojeong(
+            result,
+            birth,
+            gender,
+            year=tojeong_year,
+            display_name=display_name,
+            calendar_type=calendar_type,
+            time_slot=time_slot,
+            hour=hour,
+            time_unknown=time_unknown,
+        ),
+        "wealth_year": build_wealth_year(
             result,
             birth,
             gender,

@@ -2,6 +2,16 @@
 
 프로젝트 진행 현황 로그. 커밋 직전 갱신 (`claude_Template` git 규칙).
 
+## 2026-07-20 (wealth year P1–P4 — 부자되기)
+
+- **feat(wealth):** `wealth_year.py` — 2026 부자되기 총론·재물운·월등급12·일자캘린더·장문
+- **P3:** 음력(sajupy)·신살 태그·대운 스트립·오행 비중·신강/신약
+- **P4:** TXT/인쇄 export · monetization preview 메타(구슬/단건, enabled=false)
+- **feat(web):** `/me?tab=wealth` · `WealthYearPanel` · 허브 CTA
+- **API:** `full-report.wealth_year`
+- **test:** `tests/test_wealth_year.py`
+- **docs:** `2026-07-20-wealth-rich-year.md`
+
 ## 2026-07-20 (tojeong tab — full proposal)
 
 - **feat(tojeong):** 십성 명식표 `sipsung.py` · 연간 토정 리포트 `tojeong.py` (종합·월12·영역6·행운)

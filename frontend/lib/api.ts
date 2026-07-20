@@ -355,6 +355,130 @@ export type FullReport = {
     }[];
   };
   tojeong?: TojeongReport;
+  wealth_year?: WealthYearReport;
+};
+
+export type WealthGrade = {
+  id: string;
+  label: string;
+  rank: number;
+  color: string;
+};
+
+export type WealthDay = {
+  day: number;
+  date: string;
+  weekday: string;
+  weekday_index: number;
+  score: number;
+  score_label: string;
+  shinsal: string[];
+  body: string;
+  body_long?: string;
+};
+
+export type WealthYearReport = {
+  year: number;
+  title: string;
+  subtitle: string;
+  header: {
+    display_name: string;
+    gender: string;
+    gender_ko: string;
+    age: number;
+    age_text: string;
+    solar_text: string;
+    lunar_text: string;
+    time_text: string;
+    calendar_type: string;
+    pillars_line: string;
+    day_master: string;
+    year_ganzhi: string;
+  };
+  mingshi: MingshiTable;
+  elements: {
+    counts: Record<string, number>;
+    scaled: Record<string, number>;
+    labels: Record<string, string>;
+    day_master_element: string;
+    day_master_element_ko: string;
+    strength_ratio: string;
+    strength: string;
+    display_line: string;
+  };
+  daeun: {
+    start_base_age: number;
+    intro: string;
+    periods: {
+      index: number;
+      start_age: number;
+      end_age: number;
+      age_label: string;
+      stem: string;
+      branch: string;
+      stem_branch: string;
+      stem_line: string;
+      branch_line: string;
+      note: string;
+      is_current: boolean;
+    }[];
+  };
+  overview: { title: string; body: string };
+  year_money: { title: string; body: string };
+  month_guide: {
+    title: string;
+    intro: string;
+    grades_legend: WealthGrade[];
+    months: {
+      month: number;
+      title: string;
+      body: string;
+      grade: string;
+      grade_label: string;
+      grade_rank: number;
+      grade_color: string;
+      ganzhi: string;
+    }[];
+  };
+  calendar: {
+    title: string;
+    note: string;
+    score_legend: { score: number; label: string }[];
+    months: {
+      month: number;
+      year: number;
+      title: string;
+      ganzhi: string;
+      grade_label: string;
+      days: WealthDay[];
+    }[];
+  };
+  monetization: {
+    enabled: boolean;
+    mode: string;
+    message: string;
+    concepts: {
+      id: string;
+      name: string;
+      unit_price_krw?: number;
+      packs?: {
+        count: number;
+        bonus_pct: number;
+        price_krw: number;
+        bonus_count?: number;
+      }[];
+      spend_hints?: Record<string, number>;
+      price_krw?: number;
+      covers?: string;
+    }[];
+    free_preview: Record<string, boolean | number>;
+  };
+  export: {
+    format: string;
+    filename_hint: string;
+    body: string;
+  };
+  disclaimer: string;
 };
 
 export async function getPrimaryFullReport(): Promise<{

@@ -23,6 +23,7 @@ import {
   type SajuFormValue,
 } from "@/lib/saju-form";
 import { SajuDetailForm } from "@/components/fortune/SajuDetailForm";
+import { WealthYearPanel } from "@/components/fortune/WealthYearPanel";
 import {
   Card,
   CardContent,
@@ -271,6 +272,7 @@ const TABS = [
   { id: "daily", label: "오늘의 운세" },
   { id: "newyear", label: "2026 신년" },
   { id: "tojeong", label: "2026 토정" },
+  { id: "wealth", label: "2026 부자되기" },
   { id: "five", label: "오행 사주" },
   { id: "life", label: "인생풀이" },
 ] as const;
@@ -527,6 +529,18 @@ function MePageInner() {
         <Card className="border-[var(--border)]">
           <CardContent className="py-8 text-center text-sm text-[var(--muted)]">
             토정 리포트를 불러오지 못했습니다. 새로고침 후 다시 시도해 주세요.
+          </CardContent>
+        </Card>
+      )}
+
+      {tab === "wealth" && report.wealth_year && (
+        <WealthYearPanel data={report.wealth_year} />
+      )}
+
+      {tab === "wealth" && !report.wealth_year && (
+        <Card className="border-[var(--border)]">
+          <CardContent className="py-8 text-center text-sm text-[var(--muted)]">
+            부자되기 리포트를 불러오지 못했습니다. API를 재시작한 뒤 새로고침 해 주세요.
           </CardContent>
         </Card>
       )}
