@@ -1,4 +1,4 @@
-/** Shared saju form constants (2-hour 시 branches). */
+/** Shared saju form constants — 12 시진 (KST 30분 보정 표). */
 
 export const RELATION_OPTIONS = [
   "본인",
@@ -11,20 +11,21 @@ export const RELATION_OPTIONS = [
   "기타",
 ] as const;
 
+/** 널리 쓰이는 KST 기준 12시진 (자시 23:30 시작). hour = 엔진 대표 시각 */
 export const SAJU_HOURS = [
   { key: "unknown", label: "모름 (태어난 시간)", hour: null as number | null },
-  { key: "zi", label: "자시 (23:00–01:00)", hour: 0 },
-  { key: "chou", label: "축시 (01:00–03:00)", hour: 2 },
-  { key: "yin", label: "인시 (03:00–05:00)", hour: 4 },
-  { key: "mao", label: "묘시 (05:00–07:00)", hour: 6 },
-  { key: "chen", label: "진시 (07:00–09:00)", hour: 8 },
-  { key: "si", label: "사시 (09:00–11:00)", hour: 10 },
-  { key: "wu", label: "오시 (11:00–13:00)", hour: 12 },
-  { key: "wei", label: "미시 (13:00–15:00)", hour: 14 },
-  { key: "shen", label: "신시 (15:00–17:00)", hour: 16 },
-  { key: "you", label: "유시 (17:00–19:00)", hour: 18 },
-  { key: "xu", label: "술시 (19:00–21:00)", hour: 20 },
-  { key: "hai", label: "해시 (21:00–23:00)", hour: 22 },
+  { key: "zi", label: "자시 (子) 23:30–01:29", hour: 0 },
+  { key: "chou", label: "축시 (丑) 01:30–03:29", hour: 2 },
+  { key: "yin", label: "인시 (寅) 03:30–05:29", hour: 4 },
+  { key: "mao", label: "묘시 (卯) 05:30–07:29", hour: 6 },
+  { key: "chen", label: "진시 (辰) 07:30–09:29", hour: 8 },
+  { key: "si", label: "사시 (巳) 09:30–11:29", hour: 10 },
+  { key: "wu", label: "오시 (午) 11:30–13:29", hour: 12 },
+  { key: "wei", label: "미시 (未) 13:30–15:29", hour: 14 },
+  { key: "shen", label: "신시 (申) 15:30–17:29", hour: 16 },
+  { key: "you", label: "유시 (酉) 17:30–19:29", hour: 18 },
+  { key: "xu", label: "술시 (戌) 19:30–21:29", hour: 20 },
+  { key: "hai", label: "해시 (亥) 21:30–23:29", hour: 22 },
 ] as const;
 
 export const YEARS = Array.from({ length: 2026 - 1920 + 1 }, (_, i) => 2026 - i);

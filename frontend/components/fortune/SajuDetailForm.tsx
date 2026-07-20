@@ -137,7 +137,7 @@ export function SajuDetailForm({ value, onChange, showRelation = true, compact }
       </div>
 
       <div>
-        <label style={labelStyle}>태어난 시간 (2시간 시辰)</label>
+        <label style={labelStyle}>태어난 시간 · 12시진 (KST)</label>
         <select
           style={selectStyle}
           value={value.time_slot}
@@ -149,6 +149,10 @@ export function SajuDetailForm({ value, onChange, showRelation = true, compact }
             </option>
           ))}
         </select>
+        <p style={{ marginTop: 6, fontSize: 11, color: "var(--muted)", lineHeight: 1.5 }}>
+          자시 23:30 시작 표(일반 통용). 한국 표준시(동경 135°) 기준이며, 지역 진태양시 보정은
+          포함하지 않습니다.
+        </p>
       </div>
 
       <div>
