@@ -231,8 +231,9 @@ export async function updateFortuneProfile(
   id: number,
   body: Partial<FortuneProfileCreateBody>
 ): Promise<FortuneProfile> {
+  // PUT for wider compatibility (some proxies reject PATCH)
   const res = await apiFetch(`/api/profiles/${id}`, {
-    method: "PATCH",
+    method: "PUT",
     body: JSON.stringify(body),
   });
   if (!res.ok) {

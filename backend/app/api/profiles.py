@@ -160,7 +160,11 @@ async def create_profile(
     return _to_read(profile)
 
 
-@router.patch("/{profile_id}", response_model=FortuneProfileRead)
+@router.api_route(
+    "/{profile_id}",
+    methods=["PATCH", "PUT"],
+    response_model=FortuneProfileRead,
+)
 async def update_profile(
     profile_id: int,
     body: FortuneProfileUpdate,
