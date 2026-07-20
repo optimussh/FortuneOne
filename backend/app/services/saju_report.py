@@ -1,8 +1,8 @@
 """
-Long-form Korean saju reports.
+Long-form Korean saju reports — unique paragraphs per section (no filler reuse).
 
-- Stable (same birth/day_master → same text): 신년 연도 운세, 오행 심층, 인생풀이/평생
-- Variable (date-dependent): 오늘의 운세, (확장 시) 주/월 운세
+Stable (same chart → same text): 신년, 오행 심층, 인생풀이
+Variable by date: 오늘의 운세
 """
 
 from __future__ import annotations
@@ -10,66 +10,72 @@ from __future__ import annotations
 from datetime import date
 from typing import Any
 
-from app.services.saju_engine import (
-    ELEMENT_KO,
-    STEM_ELEMENT,
-    SajuResult,
-)
+from app.services.saju_engine import ELEMENT_KO, STEM_ELEMENT, SajuResult
 
 ELEMENT_TONE: dict[str, dict[str, str]] = {
     "wood": {
         "adj": "생장·확장",
         "mood": "시작과 성장",
         "career": "기획, 교육, 의료, 콘텐츠, 환경, 스타트업, 브랜딩",
-        "love": "솔직하고 따뜻한 표현, 성장하는 관계",
-        "wealth": "씨앗형 투자와 장기 복리",
-        "social": "네트워킹과 아이디어 공유",
-        "body": "간·담·눈·근육의 긴장 완화",
-        "virtue": "인(仁)과 추진력",
+        "love": "솔직하고 따뜻한 표현",
+        "wealth": "장기 복리와 씨앗형 투자",
+        "social": "네트워킹과 아이디어 연결",
+        "body": "간·담·눈의 긴장, 근육 과사용",
+        "virtue": "인(仁)·추진",
+        "color": "청·록",
+        "dir": "동·동남",
     },
     "fire": {
         "adj": "열정·표현",
         "mood": "가시성과 영향력",
-        "career": "마케팅, 공연, 영업, 미디어, 브랜드, 교육 강의",
-        "love": "설렘과 적극적 어필, 따뜻한 관심",
-        "wealth": "단기 성과와 가시적 수익 사이클",
-        "social": "리더십·분위기 메이킹",
-        "body": "심장·소장·혈압·수면 리듬",
-        "virtue": "예(禮)와 표현력",
+        "career": "마케팅, 공연, 영업, 미디어, 강의, 브랜드",
+        "love": "설렘과 적극적 관심",
+        "wealth": "단기 성과 사이클과 가시 수익",
+        "social": "분위기 리더십",
+        "body": "심장·수면·과열성 피로",
+        "virtue": "예(禮)·표현",
+        "color": "적·주황",
+        "dir": "남",
     },
     "earth": {
         "adj": "안정·신뢰",
         "mood": "기반과 지속",
-        "career": "운영, 재무, 부동산, 행정, HR, 품질, 물류",
-        "love": "신뢰와 책임감 있는 동반",
-        "wealth": "저축·자산 축적·리스크 완충",
-        "social": "중재자·버팀목 역할",
-        "body": "비위·소화·습관적 과식 주의",
-        "virtue": "신(信)과 꾸준함",
+        "career": "운영, 재무, 부동산, 행정, HR, 품질",
+        "love": "책임과 신뢰 기반 관계",
+        "wealth": "저축·자산 완충·리스크 관리",
+        "social": "중재자·버팀목",
+        "body": "비위·소화·습관적 과식",
+        "virtue": "신(信)·꾸준함",
+        "color": "황·베이지",
+        "dir": "중앙·서남",
     },
     "metal": {
         "adj": "결단·정리",
         "mood": "구조와 완성",
-        "career": "법률, 엔지니어링, 감사, 전략, 전문직, 분석",
-        "love": "원칙과 진정성, 경계가 있는 애정",
-        "wealth": "효율·구조화·고부가 가치 포지션",
-        "social": "명확한 기준과 약속 이행",
-        "body": "폐·호흡·피부·건조함 관리",
-        "virtue": "의(義)와 절제",
+        "career": "법률, 엔지니어링, 감사, 전략, 분석 전문직",
+        "love": "원칙과 진정성 있는 애정",
+        "wealth": "효율·고부가 포지션·구조화",
+        "social": "기준과 약속 이행",
+        "body": "폐·호흡·피부 건조",
+        "virtue": "의(義)·절제",
+        "color": "백·은",
+        "dir": "서·서북",
     },
     "water": {
         "adj": "흐름·직관",
         "mood": "유연과 성찰",
-        "career": "연구, 상담, 데이터, 해외, 예술, 전략 기획",
+        "career": "연구, 상담, 데이터, 해외, 예술, 전략",
         "love": "깊이 있는 공감과 경청",
-        "wealth": "현금흐름·정보 우위·순환 투자",
-        "social": "조용한 영향력과 조율",
+        "wealth": "현금흐름·정보 우위·순환",
+        "social": "조용한 조율과 영향력",
         "body": "신장·수분·과로성 피로",
-        "virtue": "지(智)와 유연성",
+        "virtue": "지(智)·유연",
+        "color": "흑·남색",
+        "dir": "북",
     },
 }
 
-STEM_NATURE: dict[str, str] = {
+STEM_NATURE = {
     "甲": "큰 나무처럼 곧고 개척적인",
     "乙": "꽃과 덩굴처럼 유연하고 섬세한",
     "丙": "태양처럼 밝고 확산적인",
@@ -82,18 +88,8 @@ STEM_NATURE: dict[str, str] = {
     "癸": "이슬처럼 섬세하고 흡수력 있는",
 }
 
-# Deterministic filler paragraphs keyed by stem index (stable)
-_EXTRA_BLOCKS = [
-    "일상에서는 ‘속도와 방향’을 동시에 점검하는 습관이 중요합니다. 아침에 오늘 꼭 끝낼 일 한 가지를 정하고, 저녁에 실행 여부를 짧게 기록해 두면 운의 흐름을 스스로 다스리는 힘이 생깁니다. 주변의 평가에 흔들리기보다, 자신의 기준표를 만들어 두는 편이 장기적으로 유리합니다.",
-    "인간관계에서는 과한 설명보다 정확한 한 문장이 오해를 줄입니다. 상대의 의도를 추측하기 전에 사실 확인을 한 번 거치면, 불필요한 감정 소모를 막을 수 있습니다. 특히 가까운 사람일수록 ‘당연한 마음’을 말로 표현하는 연습이 관계를 단단하게 합니다.",
-    "재물과 커리어는 한 번의 도약보다 계단식 상승이 안전합니다. 준비된 시기에 움직이는 것과 조급한 시기에 움직이는 것은 겉보기에 비슷해 보여도 결과가 다릅니다. 문서화·기록·피드백 루프를 갖추면 같은 노력으로도 성과의 재현성이 높아집니다.",
-    "몸과 마음은 분리되지 않습니다. 수면, 수분, 가벼운 움직임이 무너지면 판단력도 함께 흐려집니다. 바쁜 시기일수록 의도적으로 쉬는 시간을 캘린더에 넣는 것이 오히려 생산성을 지킵니다. 작은 루틴이 큰 운의 받침이 됩니다.",
-    "인생의 전환점에서는 ‘무엇을 더할지’보다 ‘무엇을 멈출지’가 더 중요한 질문이 됩니다. 익숙하지만 소진되는 패턴을 내려놓을 때 새로운 기회가 들어올 자리가 생깁니다. 용신에 해당하는 생활 요소를 공간·일정·인간관계에 조금씩 배치해 보세요.",
-]
-
 
 def _seed(*parts: Any) -> int:
-    """Stable hash — same parts always same int (no Python hash randomization)."""
     s = 2166136261
     for p in parts:
         for ch in str(p):
@@ -102,124 +98,114 @@ def _seed(*parts: Any) -> int:
     return s
 
 
-def _stable_seed_from_chart(result: SajuResult, birth: date, *extra: Any) -> int:
-    """Identity-stable: day_master + pillars + birth + extras (no 'today')."""
-    pillars = (
-        f"{result.pillars.year.stem}{result.pillars.year.branch}"
-        f"{result.pillars.month.stem}{result.pillars.month.branch}"
-        f"{result.pillars.day.stem}{result.pillars.day.branch}"
+def _stable(result: SajuResult, birth: date, *extra: Any) -> int:
+    p = result.pillars
+    key = (
+        f"{p.year.stem}{p.year.branch}{p.month.stem}{p.month.branch}"
+        f"{p.day.stem}{p.day.branch}"
     )
-    return _seed(result.day_master, pillars, birth.isoformat(), *extra)
+    return _seed(result.day_master, key, birth.isoformat(), *extra)
 
 
 def _pick(seed: int, options: list[str]) -> str:
     return options[seed % len(options)] if options else ""
 
 
-def _expand(base: str, seed: int, target_min: int = 520, target_max: int = 980) -> str:
-    """Pad narrative to ~500–1000 chars deterministically."""
-    text = base.strip()
-    i = 0
-    while len(text) < target_min and i < 12:
-        block = _EXTRA_BLOCKS[(seed + i * 3) % len(_EXTRA_BLOCKS)]
-        text = text + "\n\n" + block
-        i += 1
-    if len(text) > target_max:
-        # cut at sentence boundary near target_max
-        cut = text[:target_max]
-        for sep in ("。", ".", "다.", "요.", "\n"):
-            pos = cut.rfind(sep)
-            if pos > target_min - 80:
-                return cut[: pos + len(sep)].strip()
-        return cut.strip()
-    return text
+def _el(r: SajuResult) -> str:
+    return STEM_ELEMENT.get(r.day_master, "earth")
 
 
-def _el(result: SajuResult) -> str:
-    return STEM_ELEMENT.get(result.day_master, "earth")
+def _t(r: SajuResult) -> dict[str, str]:
+    return ELEMENT_TONE[_el(r)]
 
 
-def _tone(result: SajuResult) -> dict[str, str]:
-    return ELEMENT_TONE[_el(result)]
+def _weak(r: SajuResult) -> str:
+    if not r.weak_elements:
+        return "비교적 고른 편"
+    return ", ".join(ELEMENT_KO.get(e, e) for e in r.weak_elements)
 
 
-def _weak_ko(result: SajuResult) -> str:
-    if not result.weak_elements:
-        return "비교적 고른 균형"
-    return ", ".join(ELEMENT_KO.get(e, e) for e in result.weak_elements)
-
-
-def _strong_ko(result: SajuResult) -> str:
-    if not result.strong_elements:
+def _strong(r: SajuResult) -> str:
+    if not r.strong_elements:
         return "고른 분포"
-    return ", ".join(ELEMENT_KO.get(e, e) for e in result.strong_elements)
+    return ", ".join(ELEMENT_KO.get(e, e) for e in r.strong_elements)
 
 
-def _elems_line(result: SajuResult) -> str:
-    parts = [f"{ELEMENT_KO[k]} {result.elements.get(k, 0)}" for k in ("wood", "fire", "earth", "metal", "water")]
-    return " / ".join(parts)
+def _elems(r: SajuResult) -> str:
+    return " / ".join(
+        f"{ELEMENT_KO[k]} {r.elements.get(k, 0)}"
+        for k in ("wood", "fire", "earth", "metal", "water")
+    )
 
 
-# ── Variable: daily (date-dependent) ──────────────────────────────────────
+def _pillars_line(r: SajuResult) -> str:
+    p = r.pillars
+    h = f"{p.hour.stem}{p.hour.branch}" if p.hour else "시주미상"
+    return f"년{p.year.stem}{p.year.branch} 월{p.month.stem}{p.month.branch} 일{p.day.stem}{p.day.branch} 시{h}"
+
+
+# ── Daily (changes by date) ───────────────────────────────────────────────
 
 
 def build_daily_long(result: SajuResult, as_of: date | None = None) -> dict[str, Any]:
     d = as_of or date.today()
-    t = _tone(result)
-    seed = _seed(result.day_master, d.isoformat(), "daily_v2")
-    scores = result.daily.scores
+    t = _t(result)
+    seed = _seed(result.day_master, d.isoformat(), "daily_v3")
+    sc = result.daily.scores
     nature = STEM_NATURE.get(result.day_master, "균형 잡힌")
-
-    overview = _expand(
-        f"【{d.year}년 {d.month}월 {d.day}일 총운】 일간 {result.day_master}({nature} 기질)을 중심으로 보면, "
-        f"오늘은 {t['mood']}의 결이 하루의 바탕을 이룹니다. 원국에서 강한 기운은 {_strong_ko(result)}, "
-        f"보완이 필요한 쪽은 {_weak_ko(result)}입니다. 오행 분포는 {_elems_line(result)}로 나타납니다. "
-        f"총운 {scores.get('overall', 70)}점을 기준으로, 오전에는 집중·정리, 오후에는 대인·조율 리듬이 잘 맞을 수 있습니다. "
-        f"{t['adj']}의 강점을 쓰되, 부족한 기운은 생활 루틴(색·방향·휴식)으로 메우는 하루가 유리합니다. "
-        f"작은 약속도 명확히 하고, 감정 소모가 큰 논쟁은 하루 미루는 편이 득이 됩니다.",
+    tip = _pick(
         seed,
-        480,
-        900,
+        [
+            "오전에 중요한 결정을 배치해 보세요.",
+            "오후 대인 일정을 앞당기면 흐름이 좋습니다.",
+            "저녁엔 정보 입력보다 정리가 유리합니다.",
+            "짧은 산책이 판단 오류를 줄여 줍니다.",
+        ],
     )
-    wealth = _expand(
-        f"【재물·실속】 금전 운 {scores.get('money', 65)}점. {t['wealth']} 관점이 오늘의 키워드입니다. "
-        f"큰 지출·계약은 자료를 한 번 더 검토한 뒤 진행하고, ‘새는 돈’(구독·수수료·미사용 서비스) 점검이 "
-        f"실질 점수를 올립니다. 오후 숫자 업무(정산·견적·예산) 배치를 권합니다.",
-        seed + 1,
-        480,
-        900,
+
+    overview = (
+        f"【{d.month}월 {d.day}일 총운】 일간 {result.day_master}({nature}) 기준으로 오늘의 바탕은 "
+        f"‘{t['mood']}’입니다. 원국 강약은 강 {_strong(result)} · 약 {_weak(result)}이며, "
+        f"오행 분포는 {_elems(result)}입니다. 총운 {sc.get('overall', 70)}점대에서는 "
+        f"{t['adj']} 강점을 쓰되 과속은 금물입니다. {tip} "
+        f"감정 소모 큰 논쟁은 하루 미루고, 약속은 짧게 확인하세요. "
+        f"행운 색 {result.daily.lucky.get('color', t['color'])}, 방향 {result.daily.lucky.get('direction', t['dir'])}을 "
+        f"동선에 살짝 반영해도 좋습니다. "
+        f"오늘 해석은 날짜가 바뀌면 달라질 수 있는 ‘일운’ 영역입니다."
     )
-    love = _expand(
-        f"【애정·관계】 관계 운 {scores.get('love', 65)}점. {t['love']}이 핵심입니다. "
-        f"가까운 사람에게는 짧은 안부라도 진심을 담아 전하면 오해가 풀리기 쉽습니다. "
-        f"솔로는 공통 관심사 대화가, 커플은 ‘옳고 그름’보다 서로의 피로도를 먼저 살피는 태도가 유리합니다. "
-        f"밤 시간대 중요 결정은 피하고 휴식을 우선하세요.",
-        seed + 2,
-        480,
-        900,
+    wealth = (
+        f"【재물】 점수 {sc.get('money', 65)}. 키워드는 {t['wealth']}입니다. "
+        f"큰 결제·계약은 숫자 재확인 후, 충동 소비 대신 ‘목록 구매’를 권합니다. "
+        f"고정비·구독·수수료처럼 새는 구멍을 막으면 체감 운이 올라갑니다. "
+        f"수입 아이디어는 메모만 하고 저녁에 실현 가능성을 검토하세요. "
+        f"금전 부탁에는 원칙과 한도를 분명히 하세요. "
+        f"{_pick(seed + 1, ['현금 흐름표 한 줄 업데이트', '불필요 구독 1건 점검', '견적 비교 한 번'])}을 실천 과제로 둡니다."
     )
-    work = _expand(
-        f"【일·건강】 건강 {scores.get('health', 65)}점. {t['career']} 계열 업무 방식이 잘 맞습니다. "
-        f"완성도보다 ‘한 칸 전진’이 중요하고, 회의 전 결론 문장을 적어 두면 영향력이 커집니다. "
-        f"수분·스트레칭으로 컨디션을 유지하고, {t['body']} 관련 무리는 줄이세요. "
-        f"행운 색 {result.daily.lucky.get('color', '청색')}, 방향 {result.daily.lucky.get('direction', '동')}을 "
-        f"동선·소품에 살짝 반영해 보세요.",
-        seed + 3,
-        480,
-        900,
+    love = (
+        f"【관계】 점수 {sc.get('love', 65)}. {t['love']}이 오늘의 관계 톤입니다. "
+        f"가까운 이에게는 추측 대신 확인 질문이 오해를 줄입니다. "
+        f"솔로는 공통 관심사 대화가, 커플은 ‘이기고 지는 말’보다 피로도 배려가 유리합니다. "
+        f"밤늦은 감정 논쟁은 피하고, 사실-느낌-요청 순으로 말해 보세요. "
+        f"{_pick(seed + 2, ['짧은 감사 인사', '경청 후 한 줄 공감', '함께 짧은 산책'])} 한 가지면 충분합니다."
+    )
+    work = (
+        f"【일·건강】 건강 {sc.get('health', 65)}. {t['career']} 방식의 업무가 잘 맞습니다. "
+        f"100% 완성보다 ‘제출 가능한 80%’를 먼저 내보내세요. "
+        f"회의 전 결론 문장 메모가 영향력을 키웁니다. "
+        f"몸 쪽은 {t['body']} 관련 무리를 줄이고 수분·스트레칭을 챙기세요. "
+        f"야근 강행보다 내일로 넘겨도 되는 일을 분류하는 날이 효율적입니다."
     )
     advice = (
-        f"【오늘 가이드】 {t['adj']} 강점 활용 + {_weak_ko(result)} 보강. "
-        f"피하기: 감정 큰 결정·검증 없는 금전 약속. "
-        f"실천: 아침 10분 계획 + 저녁 감사 한 가지. "
-        f"일간 {result.day_master}의 {nature} 성향을 존중하며 페이스를 조절하세요."
+        f"【가이드】 강점 {t['adj']} 활용 · 보완 {_weak(result)}. "
+        f"피하기: 감정 큰 결정, 검증 없는 금전 약속. "
+        f"실천: 아침 10분 계획 + 저녁 감사 한 줄. "
+        f"일간 {result.day_master}의 {nature} 페이스를 존중하세요."
     )
-    advice = _expand(advice, seed + 4, 400, 700)
 
     return {
         "date": d.isoformat(),
         "title": f"{d.month}월 {d.day}일 오늘의 운세",
-        "scores": scores,
+        "scores": sc,
         "lucky": result.daily.lucky,
         "sections": [
             {"id": "overview", "title": "총운 해설", "body": overview},
@@ -231,318 +217,239 @@ def build_daily_long(result: SajuResult, as_of: date | None = None) -> dict[str,
     }
 
 
-# ── Stable: new year / five element / life ────────────────────────────────
+# ── Stable yearly ─────────────────────────────────────────────────────────
 
 
 def build_new_year_2026(result: SajuResult, birth: date) -> dict[str, Any]:
-    return build_year_fortune(result, birth, year=2026)
+    return build_year_fortune(result, birth, 2026)
 
 
 def build_year_fortune(result: SajuResult, birth: date, year: int = 2026) -> dict[str, Any]:
-    """Deterministic yearly fortune — same chart+year → same text forever."""
-    t = _tone(result)
-    seed = _stable_seed_from_chart(result, birth, f"year_{year}")
+    t = _t(result)
+    seed = _stable(result, birth, f"year_{year}_v3")
     nature = STEM_NATURE.get(result.day_master, "균형 잡힌")
     age = year - birth.year
     yong = result.yongsin.element_ko if result.yongsin else "균형"
+    yong_r = result.yongsin.reason if result.yongsin else "오행 균형을 의식한 선택이 유익합니다."
+    pillars = _pillars_line(result)
 
-    h1 = _expand(
-        f"【{year}년 한 해의 주제 · 정통 사주 관점】 "
-        f"일간 {result.day_master}—{nature} 기질—을 가진 당신에게 {year}년은 ‘{t['mood']}’가 "
-        f"핵심 테마로 작동하는 해입니다. 만 나이 약 {age}세 전후, 원국의 강한 기운({_strong_ko(result)})은 "
-        f"성과의 엔진이 되고, 약한 기운({_weak_ko(result)})은 보완 과제로 반복 등장할 수 있습니다. "
-        f"오행 분포 {_elems_line(result)}를 기준으로 보면, {t['virtue']}를 의식한 선택이 "
-        f"한 해의 마찰을 줄입니다. 상반기는 기반·관계 정리, 하반기는 선택과 확장의 결이 두드러질 수 있으니 "
-        f"연초에 ‘올해 꼭 끝낼 일 3가지 / 내려놓을 일 3가지’를 문서로 남겨 두십시오. "
-        f"용신 힌트({yong})를 공간·옷·일정·만남에 꾸준히 배치하면 심리적 안정과 판단력이 함께 올라갑니다. "
-        f"{year}년의 키워드는 속도보다 방향, 과시보다 지속 가능한 루틴입니다. "
-        f"같은 사주 원국과 동일 연도 기준으로 이 해석은 항상 동일하게 유지되도록 설계되어 있습니다.",
-        seed,
-        700,
-        1000,
+    h1 = (
+        f"【{year}년 한 해의 주제 · 정통 사주】 "
+        f"원국 {pillars}, 일간 {result.day_master}({nature})인 당신에게 {year}년은 "
+        f"‘{t['mood']}’가 주제로 작동하는 해입니다. 대략 만 {age}세 전후 시점으로, "
+        f"강한 기운 {_strong(result)}은 성과의 엔진이 되고 약한 기운 {_weak(result)}은 "
+        f"보완 과제로 반복 등장할 수 있습니다. 오행 {_elems(result)} 분포 위에서 "
+        f"{t['virtue']}를 의식한 선택이 마찰을 줄입니다. "
+        f"용신 관점의 {yong}—{yong_r} "
+        f"연초에는 ‘끝낼 일 3 / 내려놓을 일 3’을 문서로 남겨 방향을 고정하세요. "
+        f"이 해의 승부처는 속도가 아니라 방향과 지속 가능한 루틴입니다. "
+        f"같은 생년월일시와 같은 연도({year})로 다시 조회해도 이 주제 해석은 동일하게 유지됩니다."
     )
-    h2 = _expand(
-        f"【{year}년 상·하반기 흐름】 "
-        f"상반기(1–6월)에는 학습, 재정 점검, 건강 베이스라인, 인간관계 경계 설정에 힘을 주세요. "
-        f"{t['wealth']} 관점의 재설계가 연말 안정감으로 이어집니다. 충동 이직·무리한 확장은 "
-        f"상반기보다 하반기 검증 후가 낫습니다. "
-        f"하반기(7–12월)에는 준비해 둔 프로젝트가 가시화되기 쉽고, {t['career']} 분야에서 "
-        f"이름·포트폴리오·실적을 드러내면 기회가 붙습니다. 다만 과로는 말년 피로로 누적되므로 "
-        f"휴식 일정을 캘린더에 선점하세요. 분기마다 목표를 재분류하면 대운 흐름과도 맞물리기 쉽습니다. "
-        f"일간 {result.day_master}의 {nature} 성향은 ‘한 번에 끝내기’보다 ‘방향 고정 후 반복 개선’에서 "
-        f"진가를 발휘합니다.",
-        seed + 11,
-        700,
-        1000,
+    h2 = (
+        f"【{year} 상·하반기】 "
+        f"상반기(1–6월)는 학습, 재정 점검, 건강 베이스라인, 관계 경계 설정에 무게를 두는 편이 맞습니다. "
+        f"{t['wealth']} 원칙으로 가계를 재설계하면 연말 완충력이 커집니다. "
+        f"충동 이직·무리한 확장은 상반기보다 하반기 검증 후가 안전합니다. "
+        f"하반기(7–12월)는 준비해 둔 일이 가시화되기 쉽고, {t['career']} 영역에서 "
+        f"실적·이름·포트폴리오를 드러내면 기회가 붙습니다. "
+        f"다만 과로는 누적 피로로 돌아오므로 휴식 일정을 미리 캘린더에 넣으세요. "
+        f"분기마다 목표를 ‘버릴 것/키울 것’으로 재분류하면 대운 리듬과도 맞물리기 쉽습니다. "
+        f"일간 {result.day_master}의 {nature} 성향은 ‘한 방’보다 ‘방향 고정 후 반복 개선’에서 진가를 냅니다."
     )
-    h3 = _expand(
-        f"【{year}년 재물·애정·사회】 "
-        f"재물은 ‘한 번에 크게’보다 ‘매월 규칙적으로’가 정답에 가깝습니다. "
-        f"고정비 재협상, 비상금 3–6개월 치, 소득원 분산을 목표로 잡으세요. "
-        f"애정·가족에서는 {t['love']}이 관계를 살리는 열쇠이며, 결혼·동거·이사 등 고관여 결정은 "
+    h3 = (
+        f"【{year} 재물·애정·사회】 "
+        f"재물은 한 번에 크게보다 매월 규칙이 정답에 가깝습니다. "
+        f"고정비 재협상, 비상금 3–6개월, 소득 분산을 연간 목표로 잡으세요. "
+        f"애정·가족에서는 {t['love']}이 관계를 살리는 열쇠이며, 결혼·동거·이사 같은 고관여 결정은 "
         f"감정 고조기보다 한 템포 쉬어 조율하는 편이 안전합니다. "
-        f"사회적 평판은 {t['social']} 역할에서 쌓이니, 모임·협업에서 약속을 지키는 태도가 "
-        f"연말 평판 자산이 됩니다. 약한 오행({_weak_ko(result)})을 상징하는 생활 요소를 "
-        f"보강하면 결정 피로가 줄어 재물·관계 판단이 맑아지는 경우가 많습니다.",
-        seed + 22,
-        700,
-        1000,
+        f"사회적으로는 {t['social']} 역할에서 평판이 쌓이니, 작은 약속도 지켜 연말 신뢰 자산으로 만드세요. "
+        f"약한 오행({_weak(result)})을 상징하는 생활 요소—색({t['color']})·방향({t['dir']})·루틴—을 "
+        f"보강하면 결정 피로가 줄어 재물·관계 판단이 맑아지는 경우가 많습니다. "
+        f"이 영역 해석 역시 {year}년·동일 원국 기준 고정 텍스트입니다."
     )
-    h4 = _expand(
-        f"【{year}년 실천 로드맵 · 평생 운세와의 연결】 "
-        f"1월: 목표·예산·건강 측정. 3–4월: 스킬·자격·포트폴리오 보강({t['career']}). "
-        f"6월: 중간 점검—버린 일/키울 일. 9–10월: 가시적 성과·협상·계약. "
-        f"12월: 감사 정리와 다음 해 씨앗. "
-        f"이 로드맵은 초년·중년·말년의 큰 흐름 위에서 {year}년만의 ‘한 계단’을 오르는 설계입니다. "
-        f"평생 운세의 기질({nature})과 모순되지 않게, {t['adj']}의 강점은 드러내고 "
-        f"약점은 시스템(루틴·사람·도구)으로 보완하십시오. "
-        f"동일 생년월일시·동일 연도 입력 시 본 신년 해설의 핵심 문장은 변하지 않습니다.",
-        seed + 33,
-        700,
-        1000,
+    h4 = (
+        f"【{year} 실천 로드맵】 "
+        f"1월: 목표·예산·건강 수치 측정. 3–4월: {t['career']} 관련 스킬·자격·포트폴리오 보강. "
+        f"6월: 중간 점검으로 버릴 일과 키울 일 재분류. 9–10월: 성과 공개·협상·계약. "
+        f"12월: 감사 정리와 다음 해 씨앗 심기. "
+        f"이 로드맵은 인생풀이의 초·중·말년 큰 흐름 위에서 {year}년이라는 한 계단을 오르는 설계입니다. "
+        f"{t['adj']} 강점은 드러내고, 약점은 사람·도구·습관으로 보완하십시오. "
+        f"용신 {yong}을 일정표에 월 1회 이상 의도적으로 배치하는 것만으로도 한 해의 중심이 잡힙니다. "
+        f"동일 사주·동일 연도면 본 로드맵의 골격은 변하지 않습니다."
     )
 
     return {
         "year": year,
         "title": f"{year} 신년 운세 심층 해설",
-        "subtitle": f"일간 {result.day_master} · {t['mood']} · 고정 해석",
+        "subtitle": f"일간 {result.day_master} · {t['mood']} · 연도 고정 해석",
         "sections": [
             {"id": "theme", "title": "한 해의 주제 (정통 사주)", "body": h1},
             {"id": "half", "title": "상·하반기 흐름", "body": h2},
             {"id": "life", "title": "재물·애정·사회운", "body": h3},
-            {"id": "roadmap", "title": "실천 로드맵·평생과의 연결", "body": h4},
+            {"id": "roadmap", "title": "실천 로드맵", "body": h4},
         ],
     }
+
+
+# ── Stable five-element ───────────────────────────────────────────────────
 
 
 def build_five_element_themes(result: SajuResult, birth: date | None = None) -> dict[str, Any]:
-    """Stable traditional five-element deep dive."""
     birth = birth or date(1990, 1, 1)
-    t = _tone(result)
+    t = _t(result)
     nature = STEM_NATURE.get(result.day_master, "균형 잡힌")
-    seed = _stable_seed_from_chart(result, birth, "five_v2")
+    seed = _stable(result, birth, "five_v3")
     yong = result.yongsin.element_ko if result.yongsin else "균형"
-    yong_reason = result.yongsin.reason if result.yongsin else "오행 균형을 맞추는 방향이 유익합니다."
-
-    g1 = _expand(
-        f"【총평 · 정통 사주 원국】 당신의 일간은 {result.day_master}으로, {nature} 성향이 사주의 중심축입니다. "
-        f"년·월·일·시 네 기둥의 기운이 모여 고유한 패턴을 이루며, 오행 분포는 {_elems_line(result)}입니다. "
-        f"두드러지는 기운은 {_strong_ko(result)}, 비어 있거나 약한 쪽은 {_weak_ko(result)}로 읽힙니다. "
-        f"전체 톤은 {t['adj']}이며, 성공 패턴은 ‘한 번에 완성’보다 ‘방향 설정 후 반복 개선’에 가깝습니다. "
-        f"용신 관점에서는 {yong}이(가) 균형을 돕는 열쇠로 보이며, {yong_reason} "
-        f"스스로를 몰아붙이기보다 강점은 드러내고 약점은 루틴·협력·도구로 보완할 때 "
-        f"장기 성과가 안정됩니다. 명리학에서 말하는 일간의 주체성—‘내가 세상을 어떻게 해석하는가’—이 "
-        f"이 사주의 첫 문장입니다. 동일 원국이면 이 총평의 골격은 항상 같습니다.",
+    yong_r = result.yongsin.reason if result.yongsin else "오행 균형을 맞추는 방향이 유익합니다."
+    pillars = _pillars_line(result)
+    life = _pick(
         seed,
-        750,
-        1000,
+        ["기준표를 스스로 만드는 사람", "관계를 통해 성장하는 사람", "구조를 세우는 사람", "흐름을 읽는 사람"],
     )
-    g1b = _expand(
-        f"【재물 특성 · 평생 재물 패턴】 재물은 {t['wealth']} 방식으로 모이고 새기 쉽습니다. "
-        f"충동 매매·과시성 소비가 약점이 될 수 있으므로 월 단위 예산을 숫자로 고정하세요. "
-        f"수입이 늘어나는 시기는 대개 전문성·신뢰가 외부에 알려질 때이며, "
-        f"공동 투자·보증은 문서와 한도를 명확히 하지 않으면 인간관계 갈등으로 번질 수 있습니다. "
-        f"오행상 {_weak_ko(result)}을 상징하는 색·공간·취미를 생활에 넣으면 결정 피로가 줄어 "
-        f"재물 판단이 맑아지는 경우가 많습니다. 평생 관점에서는 ‘한 방’보다 ‘재현 가능한 현금흐름’이 "
-        f"이 사주의 재물 해법입니다. 비상금·분산·기록—이 세 가지는 시대가 바뀌어도 유효한 용신적 실천입니다.",
-        seed + 7,
-        750,
-        1000,
-    )
-    g1c = _expand(
-        f"【애정 특성 · 관계의 구조】 사랑에서는 {t['love']}이 매력이자 숙제입니다. "
-        f"초반 호감은 빠르게 생겨도, 지속 관계에서는 소통 방식의 차이가 갈등을 만듭니다. "
-        f"상대에게 추측하게 두지 말고 원하는 바를 구체적으로 말하는 연습이 필요합니다. "
-        f"질투·불안이 올라올 때는 상대 추궁보다 자신의 일정·수면·스트레스를 먼저 점검하세요. "
-        f"좋은 인연은 대개 일·취미·학습의 연장선에서 자연스럽게 연결됩니다. "
-        f"부부·동반 관계에서는 로맨스보다 운영 체계(가계·역할·경계)가 애정을 지탱합니다. "
-        f"일간 {result.day_master}의 {nature} 기질을 이해해 주는 상대와는 회복 속도가 빠릅니다.",
-        seed + 14,
-        750,
-        1000,
-    )
-    # Combine wealth+love into one group body as design had 3 groups - keep 3 groups but each much longer
-    g1_full = g1 + "\n\n" + g1b + "\n\n" + g1c
-    if len(g1_full) > 2800:
-        g1_full = g1_full[:2800]
 
-    g2 = _expand(
-        f"【직업 특성】 적성 분야로는 {t['career']}가 잘 맞습니다. "
-        f"조직 안에서는 {t['social']} 역할로 존재감이 생기고, "
-        f"프리랜스·창업이라면 전문 영역을 좁혀 ‘이 문제는 이 사람에게’라는 포지션이 유리합니다. "
-        f"이직·전직 시 연봉만이 아니라 성장 곡선·동료 문화·출퇴근 리듬을 함께 보세요. "
-        f"사주상 강한 기운({_strong_ko(result)})을 쓰는 업무를 맡으면 피로 대비 성과 효율이 높습니다. "
-        f"평생 직업은 하나가 아니라 역량의 연속이므로, 3년 단위로 이력의 스토리를 재정의하세요. "
-        f"정체기에는 스킬을, 도약기에는 협상·공개 성과를 노리는 리듬이 이 사주와 잘 맞습니다.",
-        seed + 21,
-        700,
-        1000,
+    g1 = (
+        f"【총평 · 정통 사주】 원국 {pillars}. 일간 {result.day_master}은 {nature} 성향의 중심축입니다. "
+        f"오행 분포 {_elems(result)}에서 두드러짐은 {_strong(result)}, 보완점은 {_weak(result)}입니다. "
+        f"전체 톤은 {t['adj']}이며, 성공 패턴은 한 번에 완성보다 방향 설정 후 반복 개선에 가깝습니다. "
+        f"용신 {yong}: {yong_r} "
+        f"명리에서 일간은 ‘내가 세상을 해석하는 방식’이므로, 이 사주는 {life}으로 읽히는 경우가 많습니다. "
+        f"강점은 드러내고 약점은 루틴·협력·도구로 보완할 때 장기 성과가 안정됩니다. "
+        f"동일 원국이면 이 총평 골격은 항상 같습니다.\n\n"
+        f"【재물 성향】 재물 패턴은 {t['wealth']} 쪽에 가깝습니다. "
+        f"충동 매매·과시 소비가 독이 되기 쉬우니 월 예산을 숫자로 고정하세요. "
+        f"수입 상승기는 대개 전문성·신뢰가 외부에 알려질 때이며, 동업·보증은 문서·한도·종료 조건이 필수입니다. "
+        f"약한 오행({_weak(result)})을 상징하는 생활 요소를 보강하면 결정 피로가 줄어 금전 판단이 맑아질 수 있습니다. "
+        f"평생 관점의 해법은 ‘한 방’이 아니라 ‘재현 가능한 현금흐름’입니다.\n\n"
+        f"【애정 성향】 관계에서는 {t['love']}이 매력이자 숙제입니다. "
+        f"초반 호감 이후에는 소통 방식 차이가 갈등의 원인이 됩니다. "
+        f"추측 대신 구체적 요청, 질투가 올라올 때는 상대 추궁보다 수면·일정·스트레스부터 점검하세요. "
+        f"좋은 인연은 일·취미·학습의 연장선에서 자연스럽게 연결되는 경우가 많습니다. "
+        f"장기 동반에서는 로맨스보다 가계·역할·경계 같은 운영 체계가 애정을 지탱합니다."
     )
-    g2b = _expand(
-        f"【기질 특성 · 평생의 의사결정 스타일】 기질의 핵심은 {t['mood']}입니다. "
-        f"압박이 들어올 때 당신은 {_pick(seed, ['먼저 구조를 짜고', '관계를 조율하고', '정보를 모은 뒤', '원칙을 세운 뒤'])} "
-        f"움직이는 편입니다. 장점은 한 번 방향을 잡으면 꾸준함이 생긴다는 점이고, "
-        f"단점은 완벽을 기다리다 시작이 늦거나, 확신이 과해 피드백을 닫는 순간이 있다는 점입니다. "
-        f"의사결정 전에 ‘반대 의견 한 줄’을 스스로 써 보는 습관이 기질을 성숙하게 만듭니다. "
+
+    g2 = (
+        f"【직업】 적성 키워드는 {t['career']}입니다. "
+        f"조직에서는 {t['social']} 역할로 존재감이 생기고, 독립·창업이라면 전문 영역을 좁혀 "
+        f"‘이 문제는 이 사람에게’라는 포지션이 유리합니다. "
+        f"이직 시 연봉만이 아니라 성장 곡선·동료 문화·출퇴근 리듬을 함께 보세요. "
+        f"강한 기운({_strong(result)})을 쓰는 업무일수록 피로 대비 효율이 높습니다. "
+        f"평생 직업은 하나가 아니라 역량의 연속이므로 3년 단위로 이력 스토리를 재정의하세요. "
+        f"정체기엔 스킬, 도약기엔 협상·공개 성과를 노리는 리듬이 이 사주와 잘 맞습니다.\n\n"
+        f"【기질·의사결정】 기질 핵심은 {t['mood']}입니다. "
+        f"압박 시 {_pick(seed, ['구조를 먼저 짜고', '관계를 조율한 뒤', '정보를 모은 다음', '원칙을 세운 뒤'])} "
+        f"움직이는 편입니다. 장점은 방향이 잡히면 꾸준하다는 점, 단점은 완벽 대기로 시작이 늦거나 "
+        f"확신이 과해 피드백을 닫을 수 있다는 점입니다. "
+        f"결정 전 ‘반대 의견 한 줄’을 스스로 쓰면 기질이 성숙해집니다. "
         f"{t['virtue']}를 의식하면 극단으로 치우치지 않습니다. "
-        f"동일 사주에서는 이 기질 서술이 고정되어, 매일 바뀌는 일운과 구분됩니다.",
-        seed + 28,
-        700,
-        1000,
+        f"이 기질 서술은 일운과 달리 원국 고정 해석입니다."
     )
-    g2_full = g2 + "\n\n" + g2b
 
-    g3 = _expand(
-        f"【성격 특성】 겉으로 드러나는 인상과 속마음은 결이 다를 수 있습니다. "
-        f"겉은 {t['adj']}해 보여도, 속으로는 안정과 인정을 동시에 원하는 타입입니다. "
-        f"스트레스 해소에는 {_pick(seed + 3, ['혼자만의 정리 시간', '가벼운 운동', '기록과 메모', '자연·산책'])}이 "
-        f"특히 효과적입니다. 화를 삼키기보다 ‘사실-감정-요청’ 세 문장으로 표현하면 관계가 덜 꼬입니다. "
-        f"건강 면에서는 {t['body']}에 주기적 관심을 두는 것이 좋고, 과로는 판단 오류로 이어지기 쉽습니다. "
-        f"성격은 운명을 가두는 틀이 아니라, 다루는 법에 따라 확장되는 도구입니다.",
-        seed + 35,
-        700,
-        1000,
+    g3 = (
+        f"【성격】 겉의 {t['adj']} 인상과 속의 안정·인정 욕구가 함께 있을 수 있습니다. "
+        f"스트레스 해소에는 {_pick(seed + 5, ['혼자 정리하는 시간', '가벼운 유산소', '메모·저널', '자연 속 걷기'])}이 "
+        f"특히 잘 맞습니다. 감정은 삼키기보다 사실-감정-요청 순으로 표현할 때 관계가 덜 꼬입니다. "
+        f"건강 면에서는 {t['body']}에 주기적 관심을 두세요. 과로는 판단 오류로 이어지기 쉽습니다. "
+        f"성격은 운명을 가두는 틀이 아니라, 다루는 법에 따라 확장되는 도구입니다.\n\n"
+        f"【사회·평판】 사회적으로 {t['social']} 포지션이 자연스럽습니다. "
+        f"다수와의 얕은 연결보다 소수와의 깊은 신뢰가 자산이 됩니다. "
+        f"모임에서는 경청 후 한 가지 제안이 호감을 주고, 평판은 재능보다 약속 이행에서 쌓입니다. "
+        f"갈등 시 공개 자리 승부보다 1:1 사실 확인이 장기 자본을 지킵니다. "
+        f"용신 {yong}을 의식한 만남·장소 선택은 인연의 질을 높이는 현실적 방법입니다. "
+        f"동일 사주 기준 이 사회 해석도 고정됩니다."
     )
-    g3b = _expand(
-        f"【사회적 특성 · 평판과 인연】 사회적으로는 {t['social']} 포지션이 자연스럽습니다. "
-        f"많은 사람과 얕게 어울리기보다, 신뢰할 수 있는 소수와의 깊은 연결이 자산을 만듭니다. "
-        f"모임에서는 경청 후 한 가지 제안을 하는 패턴이 호감을 줍니다. "
-        f"평판은 재능보다 ‘약속 이행’에서 쌓이므로 작은 기한도 지키세요. "
-        f"갈등이 생기면 공개 자리에서 이기려 하지 말고 1:1로 사실 관계를 맞추는 편이 "
-        f"장기 사회적 자본을 지킵니다. 용신 {yong}을 의식한 만남·장소 선택은 "
-        f"인연의 질을 높이는 현실적 방법이 됩니다. "
-        f"이 사회적 해석 역시 동일 원국 기준 고정 텍스트입니다.",
-        seed + 42,
-        700,
-        1000,
-    )
-    g3_full = g3 + "\n\n" + g3b
 
     return {
-        "title": "오행·정통 사주 심층 해설 (고정)",
+        "title": "오행·정통 사주 심층 해설 (원국 고정)",
         "day_master": result.day_master,
         "elements": result.elements,
         "groups": [
-            {
-                "id": "core_wealth_love",
-                "title": "총평 · 재물 · 애정 특성",
-                "body": g1_full if len(g1_full) <= 3000 else g1_full[:3000],
-            },
-            {
-                "id": "career_temperament",
-                "title": "직업 · 기질 특성",
-                "body": g2_full if len(g2_full) <= 2200 else g2_full[:2200],
-            },
-            {
-                "id": "personality_social",
-                "title": "성격 · 사회적 특성",
-                "body": g3_full if len(g3_full) <= 2200 else g3_full[:2200],
-            },
+            {"id": "core_wealth_love", "title": "총평 · 재물 · 애정 특성", "body": g1},
+            {"id": "career_temperament", "title": "직업 · 기질 특성", "body": g2},
+            {"id": "personality_social", "title": "성격 · 사회적 특성", "body": g3},
         ],
     }
 
 
+# ── Stable life reading ───────────────────────────────────────────────────
+
+
 def build_life_reading(result: SajuResult, birth: date, gender: str) -> dict[str, Any]:
-    """Lifetime reading — fully deterministic for same birth chart."""
-    t = _tone(result)
+    t = _t(result)
     nature = STEM_NATURE.get(result.day_master, "균형 잡힌")
-    seed = _stable_seed_from_chart(result, birth, gender, "life_v2")
+    seed = _stable(result, birth, gender, "life_v3")
     yong = result.yongsin.element_ko if result.yongsin else "균형"
+    pillars = _pillars_line(result)
+    g_word = "남" if gender == "male" else "여"
 
-    early = _expand(
-        f"【초년운 (대략 0–30대) · 평생 운세】 "
-        f"초년에는 {nature} 기질이 형성되며 환경과 부모·스승의 영향이 크게 각인됩니다. "
-        f"핵심 과제는 정체성 확립과 기초 체력·학업·사회 규범 학습입니다. "
-        f"실수가 두렵더라도 다양한 시도를 남겨 두는 것이 중년의 선택지를 넓힙니다. "
-        f"초년에 겪은 부족함({_weak_ko(result)})은 약점이 아니라 이후 전문 영역의 동기가 되기도 합니다. "
-        f"가족 갈등은 단절보다 ‘거리 두기 + 자기 루틴’으로 완충하는 편이 후일에 도움이 됩니다. "
-        f"오행상 {_strong_ko(result)}이 일찍 드러나면 주변의 기대를 받기 쉽고, "
-        f"그에 따른 부담을 스스로 조절하는 법을 배워야 합니다. "
-        f"동일 생년월일시 기준 이 초년 서술은 고정됩니다.",
-        seed,
-        700,
-        1000,
+    early = (
+        f"【초년 · 평생 운세】 원국 {pillars}, 일간 {result.day_master}({nature}), {g_word}성 기준. "
+        f"초년(대략 0–30대)은 기질이 형성되고 부모·스승·환경의 각인이 큰 시기입니다. "
+        f"과제는 정체성 확립과 기초 체력·학습·사회 규범 익히기입니다. "
+        f"실수가 두려워 시도를 줄이면 중년 선택지가 좁아집니다. "
+        f"초년의 부족감({_weak(result)})은 약점이 아니라 전문 영역의 동기가 되기도 합니다. "
+        f"가족 갈등은 단절보다 거리 두기와 자기 루틴으로 완충하는 편이 낫습니다. "
+        f"{_strong(result)}이 일찍 드러나면 기대를 받기 쉽고, 그 부담을 스스로 조절하는 법을 배워야 합니다. "
+        f"동일 생년월일시라면 이 초년 서술은 바뀌지 않습니다."
     )
-    mid = _expand(
-        f"【중년운 (대략 30–50대)】 "
-        f"중년은 성과와 책임이 겹치는 시기입니다. {t['career']} 분야에서 직함·수입·영향력이 구체화되기 쉽고, "
-        f"동시에 건강·가족 부양 부담이 올라갑니다. 성패는 ‘거절할 줄 아는 용기’와 ‘장기 파트너십’에 달려 있습니다. "
-        f"대운 변화 구간에서는 이직·이사·사업 확장을 한 가지씩만 처리하세요. "
-        f"중년에 쌓은 평판과 현금 흐름이 말년의 여유를 결정합니다. "
-        f"{t['wealth']} 원칙을 지키면 소득 변동기를 완충할 수 있고, "
-        f"{t['love']}을 놓치면 성공해도 고립감을 느낄 수 있습니다. "
-        f"일간 {result.day_master}의 {nature} 성향은 중년에 ‘전문성 브랜드’로  thrives 하기 쉽습니다."
-        .replace(" thrives ", "자리 잡"),
-        seed + 9,
-        700,
-        1000,
+    mid = (
+        f"【중년】 30–50대는 성과와 책임이 겹칩니다. {t['career']} 분야에서 직함·수입·영향력이 구체화되기 쉽고, "
+        f"동시에 건강·부양 부담이 올라갑니다. 성패의 키는 거절의 용기와 장기 파트너십입니다. "
+        f"대운이 바뀌는 구간에서는 이직·이사·확장을 한 번에 몰지 말고 한 가지씩 처리하세요. "
+        f"중년에 쌓은 평판과 현금흐름이 말년 여유를 만듭니다. "
+        f"{t['wealth']} 원칙을 지키면 소득 변동기를 완충하고, {t['love']}을 놓치면 성공해도 고립감을 느낄 수 있습니다. "
+        f"일간 {result.day_master}의 {nature} 성향은 중년에 ‘전문성 브랜드’로 자리 잡기 쉽습니다. "
+        f"이 중년 해석 역시 동일 원국 고정입니다."
     )
-    late = _expand(
-        f"【말년운 (대략 50대 이후)】 "
-        f"말년에는 확장보다 정리와 전승이 테마입니다. 건강 관리, 자산 배분, 관계의 화해·경계가 삶의 질을 가릅니다. "
-        f"젊은 세대에게 경험을 나누는 역할({t['social']})에서 보람을 느끼기 쉽습니다. "
+    late = (
+        f"【말년】 50대 이후는 확장보다 정리와 전승이 주제입니다. "
+        f"건강, 자산 배분, 관계의 화해와 경계가 삶의 질을 가릅니다. "
+        f"{t['social']} 역할로 경험을 나누는 일에서 보람을 느끼기 쉽습니다. "
         f"고독을 두려워하기보다 취미·학습·봉사로 일상을 구조화하면 정신 건강이 안정됩니다. "
-        f"재산은 ‘보관’만이 아니라 ‘의미 있는 사용’의 관점으로 보세요. "
-        f"용신 {yong}을 의식한 주거·여행·인간관계는 말년의 만족도를 높입니다. "
-        f"평생 운세의 마지막 장은 ‘성취의 크기’보다 ‘후회 없는 선택’으로 읽히는 사주입니다.",
-        seed + 18,
-        700,
-        1000,
+        f"재산은 보관만이 아니라 의미 있는 사용의 문제로 전환됩니다. "
+        f"용신 {yong}을 의식한 주거·여행·인간관계가 만족도를 높입니다. "
+        f"평생 운세의 마지막 장은 성취의 크기보다 후회 없는 선택으로 읽히는 사주입니다."
     )
 
-    money = _expand(
-        f"【금전운 · 평생】 금전 패턴은 {t['wealth']}에 가깝습니다. "
-        f"큰 한 방을 노리기보다 현금흐름·비상금·분산의 삼각형을 지키세요. "
-        f"동업·보증은 관계를 상하게 하는 대표 원인이므로 문서·한도·종료 조건을 필수화하세요. "
-        f"수입 정체기에는 지출 구조부터, 호황기에는 생활 수준 인플레이션을 경계하세요.\n\n"
-        f"【행운·기회】 행운은 무작위로 보이지만 실제로는 ‘준비된 노출’에서 옵니다. "
-        f"{t['mood']}가 드러나는 활동—포트폴리오, 발표, 커뮤니티—에 정기적으로 모습을 보이세요. "
-        f"용신 {yong}을 의식한 일정은 심리적 안정과 판단력을 높입니다.\n\n"
-        f"【팔복·삶의 여유】 복은 돈만이 아니라 시간·건강·관계·수면의 합입니다. "
-        f"주 1회 완전 오프 반나절, 감사 일기, 정기 검진, 가까운 이들과의 식사가 "
-        f"팔복궁을 채우는 현실적 방법입니다. 이 금전·행운 해석은 동일 사주에서 고정됩니다.",
-        seed + 27,
-        750,
-        1000,
+    money = (
+        f"【금전 · 평생 패턴】 금전 결은 {t['wealth']}에 가깝습니다. "
+        f"한 방보다 현금흐름·비상금·분산의 삼각형이 안전합니다. "
+        f"동업·보증은 관계 파손의 대표 원인이므로 문서·한도·종료 조건을 필수화하세요. "
+        f"정체기엔 지출 구조부터, 호황기엔 생활비 인플레이션을 경계합니다.\n\n"
+        f"【행운】 행운은 준비된 노출에서 옵니다. {t['mood']}가 드러나는 활동"
+        f"(포트폴리오, 발표, 커뮤니티)에 정기적으로 모습을 보이세요. "
+        f"용신 {yong}을 일정에 넣으면 안정과 판단력이 함께 올라갑니다.\n\n"
+        f"【여유·팔복】 복은 돈만이 아니라 시간·건강·관계·수면의 합입니다. "
+        f"주 1회 완전 오프, 감사 기록, 검진, 가까운 식사 루틴이 여유를 만듭니다. "
+        f"동일 사주에서 이 금전·행운 해석은 고정됩니다."
     )
 
-    love = _expand(
-        f"【연애운 · 평생 패턴】 연애에서는 {t['love']}이 매력 포인트입니다. "
-        f"초반 이상화 후 급격한 실망을 줄이려면 3개월 안에 가치관(돈·가족·시간·갈등 해결)을 "
-        f"대화로 맞춰 보는 것이 좋습니다. 집착과 회피 사이를 오가지 않도록 연락·만남 빈도를 합의하세요.\n\n"
-        f"【궁합 관점】 궁합은 점수가 아니라 갈등 회복 속도입니다. "
-        f"당신과 잘 맞는 상대는 {_strong_ko(result)} 기운을 이해해 주고 "
-        f"{_weak_ko(result)} 영역을 비난하지 않는 사람입니다. "
-        f"너무 비슷한 기질끼리만 모이면 성장이 멈출 수 있으니 건강한 차이도 존중하세요.\n\n"
-        f"【부부·동반자 궁】 장기 동반에서는 로맨스보다 운영 체계가 중요합니다. "
-        f"가계 역할, 집안일, 부모 부양, 주거 계획을 주기적으로 업데이트하세요. "
-        f"싸움 후 24시간 내 ‘사실 확인 + 사과 + 다음 약속’ 루틴이 부부궁을 단단하게 합니다. "
-        f"서로의 개별 공간·취미를 허용할 때 애착이 더 오래 갑니다. 고정 해석입니다.",
-        seed + 36,
-        750,
-        1000,
+    love = (
+        f"【연애 패턴】 {t['love']}이 매력 포인트입니다. "
+        f"이상화 후 급실망을 줄이려면 초반 3개월 안에 돈·가족·시간·갈등 해결 가치관을 맞춰 보세요. "
+        f"집착과 회피 사이를 오가지 않도록 연락·만남 빈도를 합의하세요.\n\n"
+        f"【궁합】 점수가 아니라 갈등 회복 속도가 핵심입니다. "
+        f"잘 맞는 상대는 {_strong(result)}을 이해해 주고 {_weak(result)}을 비난하지 않는 사람입니다. "
+        f"너무 비슷한 기질만 모이면 성장이 멈출 수 있어 건강한 차이도 필요합니다.\n\n"
+        f"【동반·부부】 장기 관계의 핵심은 운영 체계입니다. "
+        f"가계·역할·부모 부양·주거를 주기적으로 업데이트하고, "
+        f"다툼 후 24시간 내 사실 확인·사과·다음 약속을 루틴화하세요. "
+        f"개별 공간과 취미를 허용할 때 애착이 오래갑니다. 고정 해석입니다."
     )
 
-    career = _expand(
-        f"【성격과 강점 · 평생】 {nature} 성향 위에 {t['adj']} 에너지가 얹혀 있습니다. "
-        f"강점은 {_pick(seed, ['한 번 맡은 일의 책임감', '상황 파악 속도', '사람 사이의 조율', '완성도에 대한 집요함'])}이고, "
-        f"약점은 {_pick(seed + 1, ['과한 자기비판', '시작 지연', '감정 억제 후 폭발', '거절 못 함'])}으로 나타날 수 있습니다. "
-        f"약점을 ‘고치기’보다 ‘장치로 우회’할 때 성장이 빠릅니다.\n\n"
-        f"【적성】 적성 키워드는 {t['career']}입니다. "
-        f"같은 직무라도 사람 중심/데이터 중심/제작 중심 중 어디에 에너지를 쓰는지 관찰하세요. "
-        f"적성과 반대되는 일로 성공해도 소진이 빨라 중년 전환 비용이 커질 수 있습니다.\n\n"
-        f"【직업운】 직업 성장은 직선이 아니라 계단형입니다. "
-        f"정체기에는 스킬을, 도약기에는 협상·이직·공개 성과를 노리세요. "
-        f"조직이라면 멘토 1·동료 2·후배 1 구도가 안정적이고, "
-        f"독립·창업이라면 6개월 생활비와 최소 고객 검증을 선행 조건으로 두세요. "
-        f"평생 직업은 역량의 연속—동일 사주에서 이 직업 서술은 고정됩니다.",
-        seed + 45,
-        750,
-        1000,
+    career = (
+        f"【성격·강점】 {nature} 바탕에 {t['adj']} 에너지가 얹혀 있습니다. "
+        f"강점: {_pick(seed, ['책임감', '상황 파악 속도', '조율력', '완성 집요함'])}. "
+        f"약점: {_pick(seed + 1, ['자기비판 과다', '시작 지연', '감정 억압 후 폭발', '거절 어려움'])}. "
+        f"약점은 고치기보다 장치(체크리스트·동료·시간 제한)로 우회할 때 성장이 빠릅니다.\n\n"
+        f"【적성】 {t['career']}. 같은 직무라도 사람/데이터/제작 중 어디에 에너지가 쓰이는지 관찰하세요. "
+        f"적성 반대 일로 성공해도 소진이 빨라 중년 전환 비용이 커질 수 있습니다.\n\n"
+        f"【직업 리듬】 성장은 계단형입니다. 정체기엔 스킬, 도약기엔 협상·공개 성과. "
+        f"조직은 멘토·동료·후배 구도가, 독립은 6개월 생활비와 최소 고객 검증이 선행 조건입니다. "
+        f"평생 직업은 역량의 연속—동일 사주에서 이 직업 서술은 고정입니다."
     )
 
     return {
-        "title": "인생풀이·평생 운세 상세 (고정)",
+        "title": "인생풀이·평생 운세 (원국 고정)",
         "subtitle": f"일간 {result.day_master} · 용신 {yong} · 동일 원국 동일 해석",
         "groups": [
             {
@@ -556,23 +463,19 @@ def build_life_reading(result: SajuResult, birth: date, gender: str) -> dict[str
             },
             {
                 "id": "fortune_wealth",
-                "title": "금전 · 행운 · 삶의 여유(팔복)",
-                "sections": [
-                    {"id": "money_luck", "title": "금전·행운·여유", "body": money},
-                ],
+                "title": "금전 · 행운 · 삶의 여유",
+                "sections": [{"id": "money_luck", "title": "금전·행운·여유", "body": money}],
             },
             {
                 "id": "love_bond",
                 "title": "연애 · 궁합 · 부부궁",
-                "sections": [
-                    {"id": "love_marriage", "title": "연애·궁합·동반", "body": love},
-                ],
+                "sections": [{"id": "love_marriage", "title": "연애·궁합·동반", "body": love}],
             },
             {
                 "id": "self_career",
                 "title": "성격 · 적성 · 직업운",
                 "sections": [
-                    {"id": "personality_career", "title": "성격·적성·직업", "body": career},
+                    {"id": "personality_career", "title": "성격·적성·직업", "body": career}
                 ],
             },
         ],
@@ -611,8 +514,8 @@ def build_full_report(
             if result.yongsin
             else None
         ),
-        "daily": build_daily_long(result, as_of),  # variable by date
-        "new_year_2026": build_year_fortune(result, birth, 2026),  # stable
-        "five_element": build_five_element_themes(result, birth),  # stable
-        "life_reading": build_life_reading(result, birth, gender),  # stable
+        "daily": build_daily_long(result, as_of),
+        "new_year_2026": build_year_fortune(result, birth, 2026),
+        "five_element": build_five_element_themes(result, birth),
+        "life_reading": build_life_reading(result, birth, gender),
     }
