@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
-import { getPrimaryFullReport, postTopicFortune } from "@/lib/api";
+import { getPrimaryFullReport, postTopicFortune, spendBeads } from "@/lib/api";
 
 const PRESETS = [
   { q: "이직해도 될까?", topic: "work" as const },
@@ -29,6 +29,16 @@ export default function AskPage() {
       if (!token) {
         setError("질문형 운세는 로그인 후 이용할 수 있습니다.");
         return;
+      }
+      // 무료 1회/일 → 초과 시 구슬 2 (모의)
+      let spendNote = "";
+      try {
+        const sp = await spendBeads({ action: "ask" });
+        spendNote = sp.free
+          ? "\n\n(오늘 무료 질문 사용)"
+          : `\n\n(구슬 ${sp.charged}개 사용 · 잔액 ${sp.beads})`;
+      } catch (spendErr) {
+        throw spendErr;
       }
       const pr = await getPrimaryFullReport();
       const body = {
@@ -55,7 +65,8 @@ export default function AskPage() {
           `${data.headline} (점수 ${data.score})\n\n` +
           data.sections.map((s) => `■ ${s.title}\n${s.body}`).join("\n\n") +
           `\n\n실천: ${data.lucky.action}\n\n` +
-          `(로컬 규칙 기반 답변 · 외부 LLM 연동 시 더 자연스러운 대화로 확장 가능)`
+          `(로컬 규칙 기반 답변 · 참고용이며 투자 권유가 아닙니다)` +
+          spendNote
       );
     } catch (e) {
       setError(e instanceof Error ? e.message : "실패");
@@ -68,7 +79,7 @@ export default function AskPage() {
     <main className="mx-auto max-w-xl px-4 py-10">
       <h1 className="text-center text-2xl font-extrabold">질문형 운세</h1>
       <p className="mt-2 text-center text-sm text-[var(--muted)]">
-        궁금한 걸 고르거나 직접 물어보세요 (규칙 기반 로컬 AI)
+        궁금한 걸 고르거나 직접 물어보세요 · 하루 1회 무료, 추가 시 구슬 2개
       </p>
 
       <div className="mt-6 flex flex-wrap justify-center gap-2">

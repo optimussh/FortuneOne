@@ -2,6 +2,14 @@
 
 프로젝트 진행 현황 로그. 커밋 직전 갱신 (`claude_Template` git 규칙).
 
+## 2026-07-20 (hybrid monetization)
+
+- **feat(shop):** 구슬 지갑 · 팩 모의구매 · 부자되기 단건 해금 · spend API
+- **feat(gate):** 부자되기 무료 미리보기(총론 일부·월 등급·7일) / 해금 시 전체
+- **feat:** 타로 일일 추가 뽑기 구슬 3 · 질문 무료 1/일 후 구슬 2 · 타 프로필 심화 5
+- **web:** `/shop` · 헤더 구슬 뱃지 · WealthYearPanel 해금 CTA
+- **note:** 실제 PG 없음 · mock purchase · 점수=참고 지표 면책
+
 ## 2026-07-20 (wealth year P1–P4 — 부자되기)
 
 - **feat(wealth):** `wealth_year.py` — 2026 부자되기 총론·재물운·월등급12·일자캘린더·장문

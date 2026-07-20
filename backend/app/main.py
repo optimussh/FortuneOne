@@ -5,13 +5,14 @@ from contextlib import asynccontextmanager
 import os
 
 from app.core.config import settings
-from app.api import auth, fortune, profiles, engagement, journal
+from app.api import auth, fortune, profiles, engagement, journal, shop
 from app.core.database import engine, async_session_maker
 from app.core.security import get_password_hash
 from app.models.base import SQLModel
 from app.models.user import User
 from app.models.fortune_profile import FortuneProfile  # noqa: F401
 from app.models import engagement as engagement_models  # noqa: F401
+from app.models import monetization as monetization_models  # noqa: F401
 from sqlmodel import select
 
 UPLOAD_DIR = os.path.join(os.path.dirname(__file__), "..", "uploads")
@@ -133,6 +134,7 @@ app.include_router(fortune.router, prefix="/api/fortune", tags=["fortune"])
 app.include_router(profiles.router, prefix="/api/profiles", tags=["profiles"])
 app.include_router(engagement.router, prefix="/api/engagement", tags=["engagement"])
 app.include_router(journal.router, prefix="/api/journal", tags=["journal"])
+app.include_router(shop.router, prefix="/api/shop", tags=["shop"])
 
 @app.get("/")
 async def root():

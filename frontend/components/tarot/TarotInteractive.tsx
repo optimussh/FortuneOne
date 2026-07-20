@@ -116,7 +116,12 @@ export function TarotInteractive({
       setSpreadTitle(data.spread_title);
       setPhase("picking");
     } catch (e) {
-      setError(e instanceof Error ? e.message : "섞기에 실패했습니다");
+      const msg = e instanceof Error ? e.message : "섞기에 실패했습니다";
+      setError(
+        msg.includes("구슬")
+          ? `${msg} · 상점에서 구슬을 충전할 수 있어요 (/shop)`
+          : msg
+      );
       setPhase("idle");
     }
   };

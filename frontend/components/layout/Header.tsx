@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useAuth } from "@/lib/auth-context";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getWallet } from "@/lib/api";
 
 const NAV = [
   { href: "/hub", label: "허브" },
@@ -15,6 +16,17 @@ const NAV = [
 export function Header() {
   const { user, logout } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [beads, setBeads] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (!user) {
+      setBeads(null);
+      return;
+    }
+    getWallet()
+      .then((w) => setBeads(w.beads))
+      .catch(() => setBeads(null));
+  }, [user]);
 
   return (
     <header
@@ -80,7 +92,23 @@ export function Header() {
           ))}
 
           {user ? (
-            <div style={{ position: "relative" }}>
+            <div style={{ position: "relative", display: "flex", alignItems: "center", gap: 8 }}>
+              <Link
+                href="/shop"
+                style={{
+                  fontSize: 12,
+                  fontWeight: 700,
+                  color: "#b45309",
+                  textDecoration: "none",
+                  padding: "4px 8px",
+                  borderRadius: 999,
+                  background: "#fef3c7",
+                  border: "1px solid #fcd34d",
+                }}
+                title="구슬 상점"
+              >
+                ✦ {beads ?? "…"}
+              </Link>
               <button
                 type="button"
                 onClick={() => setMenuOpen(!menuOpen)}
@@ -160,6 +188,19 @@ export function Header() {
                     }}
                   >
                     상세 사주
+                  </Link>
+                  <Link
+                    href="/shop"
+                    onClick={() => setMenuOpen(false)}
+                    style={{
+                      display: "block",
+                      padding: "8px 12px",
+                      fontSize: 14,
+                      textDecoration: "none",
+                      color: "var(--foreground)",
+                    }}
+                  >
+                    구슬 · 상점
                   </Link>
                   <button
                     type="button"

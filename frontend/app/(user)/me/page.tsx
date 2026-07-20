@@ -8,6 +8,7 @@ import {
   createFortuneProfile,
   getProfileFullReport,
   listFortuneProfiles,
+  spendBeads,
   type FullReport,
   type FortuneProfile,
   type MingshiTable,
@@ -534,7 +535,40 @@ function MePageInner() {
       )}
 
       {tab === "wealth" && report.wealth_year && (
-        <WealthYearPanel data={report.wealth_year} />
+        <>
+          {!report.wealth_year.access?.unlocked &&
+            !(profile.is_self || profile.label === "본인" || profile.label === "나") && (
+              <div className="mb-3 rounded-xl border border-violet-300 bg-violet-50 p-3 text-sm">
+                <p className="font-semibold text-violet-900">다른 사람 프로필 심화</p>
+                <p className="mt-1 text-xs text-violet-800">
+                  이 프로필의 부자되기 전체를 구슬 {5}개로 해금할 수 있습니다. (연간 단건 해금 시
+                  전원 포함)
+                </p>
+                <Button
+                  size="sm"
+                  className="mt-2"
+                  variant="outline"
+                  onClick={() => {
+                    void spendBeads({
+                      action: "profile_deep",
+                      year: 2026,
+                      profile_id: profile.id,
+                    })
+                      .then((r) => {
+                        setError(r.message);
+                        void load();
+                      })
+                      .catch((e) =>
+                        setError(e instanceof Error ? e.message : "해금 실패")
+                      );
+                  }}
+                >
+                  구슬로 이 프로필 해금
+                </Button>
+              </div>
+            )}
+          <WealthYearPanel data={report.wealth_year} onUnlocked={() => void load()} />
+        </>
       )}
 
       {tab === "wealth" && !report.wealth_year && (

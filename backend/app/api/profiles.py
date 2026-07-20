@@ -27,6 +27,7 @@ from app.models.user import User
 from app.services.saju_engine import SajuEngine
 from app.services.saju_report import build_full_report
 from app.services.saju_time import hour_from_slot, slot_from_hour, ymd_to_date
+from app.services.monetization import resolve_wealth_for_user
 
 router = APIRouter()
 _engine = SajuEngine()
@@ -262,6 +263,15 @@ async def primary_full_report(
         hour=profile.hour,
         time_unknown=profile.time_unknown,
     )
+    if report.get("wealth_year"):
+        is_self = bool(getattr(profile, "is_self", False) or profile.label in ("본인", "나"))
+        report["wealth_year"] = await resolve_wealth_for_user(
+            session,
+            current_user.id,
+            report["wealth_year"],
+            profile_id=profile.id,
+            profile_is_self=is_self,
+        )
     return {
         "profile": _to_read(profile),
         "report": report,
@@ -288,6 +298,15 @@ async def profile_full_report(
         hour=profile.hour,
         time_unknown=profile.time_unknown,
     )
+    if report.get("wealth_year"):
+        is_self = bool(getattr(profile, "is_self", False) or profile.label in ("본인", "나"))
+        report["wealth_year"] = await resolve_wealth_for_user(
+            session,
+            current_user.id,
+            report["wealth_year"],
+            profile_id=profile.id,
+            profile_is_self=is_self,
+        )
     return {
         "profile": _to_read(profile),
         "report": report,

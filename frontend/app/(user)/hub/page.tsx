@@ -291,6 +291,9 @@ export default function HubPage() {
         <Link href="/me?tab=wealth" className="text-[var(--primary)] underline">
           2026 부자되기
         </Link>
+        <Link href="/shop" className="text-[var(--primary)] underline">
+          구슬 상점
+        </Link>
         <Link href="/today" className="text-[var(--primary)] underline">
           띠별
         </Link>

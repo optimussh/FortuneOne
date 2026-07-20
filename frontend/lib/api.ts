@@ -374,7 +374,8 @@ export type WealthDay = {
   score_label: string;
   shinsal: string[];
   body: string;
-  body_long?: string;
+  body_long?: string | null;
+  long_locked?: boolean;
 };
 
 export type WealthYearReport = {
@@ -423,8 +424,8 @@ export type WealthYearReport = {
       is_current: boolean;
     }[];
   };
-  overview: { title: string; body: string };
-  year_money: { title: string; body: string };
+  overview: { title: string; body: string; locked?: boolean };
+  year_money: { title: string; body: string; locked?: boolean };
   month_guide: {
     title: string;
     intro: string;
@@ -438,6 +439,7 @@ export type WealthYearReport = {
       grade_rank: number;
       grade_color: string;
       ganzhi: string;
+      locked?: boolean;
     }[];
   };
   calendar: {
@@ -451,35 +453,100 @@ export type WealthYearReport = {
       ganzhi: string;
       grade_label: string;
       days: WealthDay[];
+      locked?: boolean;
+      preview?: boolean;
+      preview_note?: string;
+      lock_reason?: string;
     }[];
   };
-  monetization: {
-    enabled: boolean;
-    mode: string;
+  access?: {
+    unlocked: boolean;
+    tier: string;
     message: string;
-    concepts: {
+    price_krw?: number;
+    free_calendar_days?: number;
+  };
+  monetization: Record<string, unknown> & {
+    enabled?: boolean;
+    mode?: string;
+    message?: string;
+    unlocked?: boolean;
+    price_krw?: number;
+    packs?: {
       id: string;
-      name: string;
-      unit_price_krw?: number;
-      packs?: {
-        count: number;
-        bonus_pct: number;
-        price_krw: number;
-        bonus_count?: number;
-      }[];
-      spend_hints?: Record<string, number>;
-      price_krw?: number;
-      covers?: string;
+      count: number;
+      bonus_pct: number;
+      bonus_count: number;
+      total_beads: number;
+      price_krw: number;
+      label: string;
     }[];
-    free_preview: Record<string, boolean | number>;
+    costs?: Record<string, number>;
+    wealth_year?: { price_krw: number; label: string; covers: string };
   };
   export: {
     format: string;
     filename_hint: string;
     body: string;
+    locked?: boolean;
+    message?: string;
   };
   disclaimer: string;
 };
+
+export type WalletInfo = {
+  beads: number;
+  starter_beads: number;
+  catalog: Record<string, unknown>;
+  unlocks: Record<string, boolean>;
+  costs: Record<string, number>;
+  mock_payment: boolean;
+  note: string;
+};
+
+export async function getWallet(): Promise<WalletInfo> {
+  const res = await apiFetch("/api/shop/wallet");
+  if (!res.ok) throw new Error(parseApiError(await res.text(), "지갑 조회 실패"));
+  return res.json();
+}
+
+export async function buyBeadPack(pack_id: string) {
+  const res = await apiFetch("/api/shop/buy/beads", {
+    method: "POST",
+    body: JSON.stringify({ pack_id }),
+  });
+  if (!res.ok) throw new Error(parseApiError(await res.text(), "구슬 구매 실패"));
+  return res.json() as Promise<{ ok: boolean; beads: number; message: string; pack: unknown }>;
+}
+
+export async function buyWealthYear(year = 2026) {
+  const res = await apiFetch("/api/shop/buy/wealth-year", {
+    method: "POST",
+    body: JSON.stringify({ year }),
+  });
+  if (!res.ok) throw new Error(parseApiError(await res.text(), "부자되기 해금 실패"));
+  return res.json() as Promise<{ ok: boolean; message: string; beads: number }>;
+}
+
+export async function spendBeads(body: {
+  action: "tarot_extra" | "ask" | "profile_deep";
+  year?: number;
+  profile_id?: number;
+  force_paid?: boolean;
+}) {
+  const res = await apiFetch("/api/shop/spend", {
+    method: "POST",
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) throw new Error(parseApiError(await res.text(), "구슬 사용 실패"));
+  return res.json() as Promise<{
+    ok: boolean;
+    charged: number;
+    free?: boolean;
+    beads: number;
+    message: string;
+  }>;
+}
 
 export async function getPrimaryFullReport(): Promise<{
   profile: FortuneProfile;
@@ -636,6 +703,8 @@ export async function tarotShuffle(body: {
     need: number;
     labels: string[];
     deck_face_down: { slot_id: string }[];
+    beads_charged?: number;
+    beads?: number | null;
   }>;
 }
 

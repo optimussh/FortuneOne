@@ -196,11 +196,18 @@ async def calculate_saju(body: SajuRequest) -> SajuResponse:
 
 @router.post("/full-report")
 async def full_report(body: SajuRequest):
-    """Public long-form report: 일운 · 2026 신년 · 오행 · 인생풀이."""
+    """Public long-form report — wealth_year is free-preview gated."""
+    from app.services.monetization import apply_wealth_access
+
     result, hour, minute, time_assumed = _run_saju(body)
     _ = (hour, minute, time_assumed)
+    report = build_full_report(result, body.solar_date, body.gender)
+    if report.get("wealth_year"):
+        report["wealth_year"] = apply_wealth_access(
+            report["wealth_year"], unlocked=False, profile_is_self=True
+        )
     return {
-        "report": build_full_report(result, body.solar_date, body.gender),
+        "report": report,
         "input": {
             "solar_date": body.solar_date.isoformat(),
             "hour": 12 if body.time_unknown else body.hour,
@@ -266,12 +273,53 @@ class TarotShuffleBody(BaseModel):
     is_daily: bool = False
 
 
+class TarotShuffleBodyPaid(TarotShuffleBody):
+    """Optional: pay beads for extra draw after daily free used."""
+
+    use_beads: bool = False
+
+
 @router.post("/tarot/shuffle")
 async def tarot_shuffle(
     body: TarotShuffleBody,
     session: AsyncSession = Depends(get_session),
     user: Optional[User] = Depends(get_optional_user),
+    use_beads: bool = Query(False),
 ):
+    from app.api.engagement import today_kst
+    from app.services import monetization as mon
+
+    beads_charged = 0
+    beads_balance = None
+    # Daily free once; extra daily-style or re-draw needs beads when logged in
+    if user and body.is_daily:
+        today = today_kst()
+        existing = await session.exec(
+            select(DailyTarotDraw).where(
+                DailyTarotDraw.user_id == user.id,
+                DailyTarotDraw.draw_date == today,
+            )
+        )
+        already = existing.first() is not None
+        if already:
+            # require beads for extra
+            try:
+                wallet = await mon.spend_beads(
+                    session,
+                    user.id,
+                    mon.COSTS["tarot_extra"],
+                    reason="tarot_extra",
+                    meta="daily_redraw",
+                )
+                beads_charged = mon.COSTS["tarot_extra"]
+                beads_balance = wallet.beads
+            except ValueError as exc:
+                raise HTTPException(
+                    status_code=402,
+                    detail=str(exc)
+                    + f" · 오늘의 타로는 이미 뽑았습니다. 추가 뽑기는 구슬 {mon.COSTS['tarot_extra']}개.",
+                ) from exc
+
     try:
         data = create_shuffle(body.spread, body.question, is_daily=body.is_daily)
     except ValueError as exc:
@@ -288,6 +336,7 @@ async def tarot_shuffle(
         "is_daily": body.is_daily,
         "revealed": False,
         "expires_at": expires,
+        "extra_paid": beads_charged > 0,
     }
 
     public_deck = [{"slot_id": d["slot_id"]} for d in data["deck_face_down"]]
@@ -300,6 +349,8 @@ async def tarot_shuffle(
         "question": body.question,
         "is_daily": body.is_daily,
         "deck_face_down": public_deck,
+        "beads_charged": beads_charged,
+        "beads": beads_balance,
     }
 
 
