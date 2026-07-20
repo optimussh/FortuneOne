@@ -1,7 +1,7 @@
 # 2026 부자되기 (재물 연간 리포트)
 
 **Date:** 2026-07-20  
-**Status:** Implemented (P1–P4 product features; monetization preview only)
+**Status:** Implemented (P1–P4 + hybrid freemium gate + mock shop)
 
 ## Placement
 
