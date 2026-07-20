@@ -9,6 +9,13 @@ export const metadata: Metadata = {
   description:
     "사주 원국, 오늘의 운세, 띠별 운세, 타로, 궁합. 회원가입 없이 바로 확인하세요.",
   keywords: ["사주", "운세", "타로", "궁합", "띠별 운세", "FortuneOne"],
+  manifest: "/manifest.json",
+  themeColor: "#6366f1",
+  appleWebApp: {
+    capable: true,
+    title: "FortuneOne",
+    statusBarStyle: "default",
+  },
 };
 
 export default function RootLayout({

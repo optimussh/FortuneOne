@@ -2,6 +2,20 @@
 
 프로젝트 진행 현황 로그. 커밋 직전 갱신 (`claude_Template` git 규칙).
 
+## 2026-07-19 (retention A + tarot UX + p2/p3)
+
+- **feat:** 데일리 허브 `/hub` · 출석 스트릭 · 운세 일기 · 주제 운세 4종
+- **feat:** 타로 인터랙션 — 섞기 → 18장 뒷면 펼침 → 직접 선택 → 카드 비주얼 공개
+- **feat:** 오늘의 타로 1회 · 공유 카드 · 질문형 운세(규칙) · PWA manifest · start-dev.ps1
+- **API:** engagement, journal, tarot/shuffle|reveal, fortune/topic
+
+## 2026-07-19 (member full report)
+
+- **feat(auth):** 회원가입 시 필수 사주 정보(생년월일·성별·시간) 등록 + 프로필 자동 생성
+- **feat(report):** 오늘의 운세(장문) · 2026 신년 · 오행 3그룹 · 인생풀이 4그룹 상세 리포트
+- **feat(web):** `/me` 대시보드 탭 UI, 로그인 후 `/me` 이동, 사주 미등록 시 온보딩
+- **API:** `POST /api/fortune/full-report`, `GET /api/profiles/primary/full-report`
+
 ## 2026-07-19 (product features)
 
 - **fix/ops:** 포트 **6100** 기동 (Next dev). 백엔드는 로컬 uvicorn :8000 (compose 백엔드 재빌드 전 코드 반영)

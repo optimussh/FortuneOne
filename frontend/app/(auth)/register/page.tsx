@@ -3,13 +3,18 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { apiFetch, FORTUNE_STORAGE_KEY } from "@/lib/api";
+import { registerWithSaju } from "@/lib/api";
 
 export default function RegisterPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
+  const [solarDate, setSolarDate] = useState("");
+  const [hour, setHour] = useState(12);
+  const [minute, setMinute] = useState(0);
+  const [timeUnknown, setTimeUnknown] = useState(true);
+  const [gender, setGender] = useState<"male" | "female">("male");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -25,46 +30,48 @@ export default function RegisterPage() {
       setError("비밀번호는 6자 이상이어야 합니다");
       return;
     }
+    if (!solarDate) {
+      setError("생년월일(양력)을 입력해 주세요");
+      return;
+    }
 
     setIsLoading(true);
     try {
-      const res = await apiFetch("/api/auth/register", {
-        method: "POST",
-        body: JSON.stringify({
-          email,
-          password,
-          password_confirm: passwordConfirm,
-        }),
+      const data = await registerWithSaju({
+        email,
+        password,
+        password_confirm: passwordConfirm,
+        saju: {
+          solar_date: solarDate,
+          hour: timeUnknown ? 12 : hour,
+          minute: timeUnknown ? 0 : minute,
+          time_unknown: timeUnknown,
+          gender,
+          label: "나",
+        },
       });
-
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.detail || "회원가입에 실패했습니다");
-      }
-
-      const formData = new URLSearchParams();
-      formData.append("username", email);
-      formData.append("password", password);
-      const loginRes = await apiFetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: formData,
-      });
-      if (loginRes.ok) {
-        const data = await loginRes.json();
-        localStorage.setItem("token", data.access_token);
-      }
-
-      if (typeof window !== "undefined" && sessionStorage.getItem(FORTUNE_STORAGE_KEY)) {
-        router.push("/fortune/result");
-      } else {
-        router.push("/");
-      }
+      localStorage.setItem("token", data.access_token);
+      router.push("/hub");
+      router.refresh();
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "오류가 발생했습니다");
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const field: React.CSSProperties = {
+    width: "100%",
+    padding: "12px 14px",
+    borderRadius: 10,
+    border: "1px solid var(--border)",
+    fontSize: 15,
+  };
+  const label: React.CSSProperties = {
+    fontSize: 13,
+    fontWeight: 600,
+    display: "block",
+    marginBottom: 6,
   };
 
   return (
@@ -81,15 +88,15 @@ export default function RegisterPage() {
       <div
         style={{
           width: "100%",
-          maxWidth: 440,
+          maxWidth: 480,
           background: "var(--card-bg, #fff)",
           borderRadius: 20,
-          padding: "48px 40px",
+          padding: "40px 36px",
           border: "1px solid var(--border)",
           boxShadow: "0 8px 40px rgba(0,0,0,0.06)",
         }}
       >
-        <div style={{ textAlign: "center", marginBottom: 32 }}>
+        <div style={{ textAlign: "center", marginBottom: 28 }}>
           <Link
             href="/"
             style={{
@@ -104,65 +111,125 @@ export default function RegisterPage() {
             FortuneOne
           </Link>
           <p style={{ marginTop: 8, fontSize: 14, color: "var(--muted)" }}>
-            이메일로 가입 · 사주 저장
+            가입 시 기본 사주 정보를 함께 등록합니다
           </p>
         </div>
 
-        <form onSubmit={handleRegister} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+        <form onSubmit={handleRegister} style={{ display: "flex", flexDirection: "column", gap: 14 }}>
           <div>
-            <label style={{ fontSize: 13, fontWeight: 600, display: "block", marginBottom: 6 }}>
-              이메일
-            </label>
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "12px 14px",
-                borderRadius: 10,
-                border: "1px solid var(--border)",
-                fontSize: 15,
-              }}
-            />
+            <label style={label}>이메일</label>
+            <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} style={field} />
           </div>
           <div>
-            <label style={{ fontSize: 13, fontWeight: 600, display: "block", marginBottom: 6 }}>
-              비밀번호
-            </label>
+            <label style={label}>비밀번호 (6자 이상)</label>
             <input
               type="password"
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "12px 14px",
-                borderRadius: 10,
-                border: "1px solid var(--border)",
-                fontSize: 15,
-              }}
+              style={field}
             />
           </div>
           <div>
-            <label style={{ fontSize: 13, fontWeight: 600, display: "block", marginBottom: 6 }}>
-              비밀번호 확인
-            </label>
+            <label style={label}>비밀번호 확인</label>
             <input
               type="password"
               required
               value={passwordConfirm}
               onChange={(e) => setPasswordConfirm(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "12px 14px",
-                borderRadius: 10,
-                border: "1px solid var(--border)",
-                fontSize: 15,
-              }}
+              style={field}
             />
           </div>
+
+          <div
+            style={{
+              marginTop: 8,
+              paddingTop: 16,
+              borderTop: "1px solid var(--border)",
+            }}
+          >
+            <p style={{ fontSize: 14, fontWeight: 700, marginBottom: 12 }}>기본 사주 정보</p>
+            <div style={{ marginBottom: 12 }}>
+              <label style={label}>생년월일 (양력) *</label>
+              <input
+                type="date"
+                required
+                value={solarDate}
+                onChange={(e) => setSolarDate(e.target.value)}
+                style={field}
+              />
+            </div>
+            <div style={{ marginBottom: 12 }}>
+              <label style={label}>성별 *</label>
+              <div style={{ display: "flex", gap: 8 }}>
+                <button
+                  type="button"
+                  onClick={() => setGender("male")}
+                  style={{
+                    flex: 1,
+                    padding: 10,
+                    borderRadius: 10,
+                    border: gender === "male" ? "2px solid var(--primary)" : "1px solid var(--border)",
+                    background: gender === "male" ? "var(--primary-light)" : "#fff",
+                    fontWeight: 600,
+                    cursor: "pointer",
+                  }}
+                >
+                  남성
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setGender("female")}
+                  style={{
+                    flex: 1,
+                    padding: 10,
+                    borderRadius: 10,
+                    border: gender === "female" ? "2px solid var(--primary)" : "1px solid var(--border)",
+                    background: gender === "female" ? "var(--primary-light)" : "#fff",
+                    fontWeight: 600,
+                    cursor: "pointer",
+                  }}
+                >
+                  여성
+                </button>
+              </div>
+            </div>
+            <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, marginBottom: 10 }}>
+              <input
+                type="checkbox"
+                checked={timeUnknown}
+                onChange={(e) => setTimeUnknown(e.target.checked)}
+              />
+              태어난 시간 모름 (정오 가정)
+            </label>
+            {!timeUnknown && (
+              <div style={{ display: "flex", gap: 8 }}>
+                <div style={{ flex: 1 }}>
+                  <label style={label}>시</label>
+                  <input
+                    type="number"
+                    min={0}
+                    max={23}
+                    value={hour}
+                    onChange={(e) => setHour(Number(e.target.value))}
+                    style={field}
+                  />
+                </div>
+                <div style={{ flex: 1 }}>
+                  <label style={label}>분</label>
+                  <input
+                    type="number"
+                    min={0}
+                    max={59}
+                    value={minute}
+                    onChange={(e) => setMinute(Number(e.target.value))}
+                    style={field}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+
           {error && (
             <p style={{ color: "var(--danger)", fontSize: 13, textAlign: "center" }}>{error}</p>
           )}
@@ -183,11 +250,11 @@ export default function RegisterPage() {
               opacity: isLoading ? 0.7 : 1,
             }}
           >
-            {isLoading ? "가입 중…" : "회원가입"}
+            {isLoading ? "가입 중…" : "가입하고 내 운세 보기"}
           </button>
         </form>
 
-        <p style={{ marginTop: 24, textAlign: "center", fontSize: 14, color: "var(--muted)" }}>
+        <p style={{ marginTop: 20, textAlign: "center", fontSize: 14, color: "var(--muted)" }}>
           이미 계정이 있나요?{" "}
           <Link href="/login" style={{ color: "var(--primary)", fontWeight: 600 }}>
             로그인

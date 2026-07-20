@@ -1,13 +1,21 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { SajuForm } from "@/components/fortune/SajuForm";
+import { useAuth } from "@/lib/auth-context";
 
 const FEATURES = [
   {
-    href: "/",
-    title: "정통 사주 원국",
-    desc: "생년월일시 기반 사주팔자 · 오행 · 용신 · 대운",
+    href: "/hub",
+    title: "데일리 허브",
+    desc: "출석 · 오늘 운세 · 일기 · 주제 운세",
+  },
+  {
+    href: "/tarot",
+    title: "타로 직접 뽑기",
+    desc: "카드 펼침 후 직감으로 선택 · 이미지 공개",
   },
   {
     href: "/today",
@@ -15,18 +23,20 @@ const FEATURES = [
     desc: "12띠 일일 점수와 조언, 행운 컬러",
   },
   {
-    href: "/tarot",
-    title: "타로 스프레드",
-    desc: "1·3·5장 스프레드, 정·역방향 해석",
-  },
-  {
-    href: "/compatibility",
-    title: "궁합 분석",
-    desc: "두 사람의 일간·오행 보완 스코어",
+    href: "/ask",
+    title: "질문형 운세",
+    desc: "이직·연애·재물 등 골라 묻기",
   },
 ];
 
 export default function HomePage() {
+  const { user, loading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && user) router.replace("/hub");
+  }, [user, loading, router]);
+
   return (
     <main className="mx-auto w-full max-w-3xl px-4 pb-16 pt-8 sm:pt-12">
       <section className="mb-10 text-center">
@@ -39,8 +49,13 @@ export default function HomePage() {
           오늘의 운세
         </h1>
         <p className="mx-auto mt-3 max-w-lg text-sm leading-relaxed text-[var(--muted)] sm:text-base">
-          회원가입 없이 바로 확인하세요. 로그인하면 사주를 저장하고 언제든 다시 볼 수
-          있습니다.
+          회원가입 없이 바로 확인하세요. 로그인하면 매일 허브·스트릭·일기로 다시 찾게 됩니다.
+        </p>
+        <p className="mt-3 text-xs text-[var(--muted)]">
+          이미 회원이신가요?{" "}
+          <Link href="/login" className="font-semibold text-[var(--primary)] underline">
+            로그인 → 허브
+          </Link>
         </p>
       </section>
 

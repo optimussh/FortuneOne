@@ -1,0 +1,18 @@
+{
+  "name": "FortuneOne",
+  "short_name": "FortuneOne",
+  "description": "사주 · 운세 · 타로",
+  "start_url": "/hub",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#6366f1",
+  "lang": "ko",
+  "icons": [
+    {
+      "src": "/window.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

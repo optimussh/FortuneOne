@@ -1,20 +1,37 @@
-"""Public fortune endpoints — no auth required."""
+"""Public fortune endpoints — no auth required (some optional)."""
 
 from __future__ import annotations
 
-from datetime import date
-from typing import Literal
+import json
+from datetime import date, datetime
+from typing import Literal, Optional
 
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel, Field
+from sqlmodel import select
+from sqlmodel.ext.asyncio.session import AsyncSession
 
+from app.api.deps import get_current_user, get_optional_user
+from app.core.database import get_session
+from app.models.engagement import DailyTarotDraw, TarotSession
+from app.models.user import User
 from app.services.affiliate import recommend_for_elements
 from app.services.saju_engine import SajuEngine, compatibility_score
-from app.services.tarot_engine import draw_cards
+from app.services.saju_report import build_full_report
+from app.services.tarot_engine import (
+    SPREADS,
+    create_shuffle,
+    draw_cards,
+    reveal_picks,
+)
+from app.services.topic_fortune import TOPICS, build_topic_fortune
 from app.services.zodiac import daily_for_all, daily_for_birth_year
 
 router = APIRouter()
 _engine = SajuEngine()
+
+# In-process tarot shuffle sessions (works without migration; single-worker local)
+_TAROT_MEM: dict[str, dict] = {}
 
 
 class SajuRequest(BaseModel):
@@ -177,6 +194,23 @@ async def calculate_saju(body: SajuRequest) -> SajuResponse:
     return _to_saju_response(result, body, hour, minute, time_assumed)
 
 
+@router.post("/full-report")
+async def full_report(body: SajuRequest):
+    """Public long-form report: 일운 · 2026 신년 · 오행 · 인생풀이."""
+    result, hour, minute, time_assumed = _run_saju(body)
+    _ = (hour, minute, time_assumed)
+    return {
+        "report": build_full_report(result, body.solar_date, body.gender),
+        "input": {
+            "solar_date": body.solar_date.isoformat(),
+            "hour": 12 if body.time_unknown else body.hour,
+            "minute": 0 if body.time_unknown else body.minute,
+            "gender": body.gender,
+            "time_assumed": body.time_unknown,
+        },
+    }
+
+
 class TarotRequest(BaseModel):
     count: int = Field(default=1, ge=1, le=5)
     question: str = ""
@@ -189,6 +223,9 @@ class TarotCardOut(BaseModel):
     reversed: bool
     meaning: str
     position: str
+    image_key: str = ""
+    color: str = "#6366f1"
+    symbol: str = "✦"
 
 
 class TarotResponse(BaseModel):
@@ -199,6 +236,7 @@ class TarotResponse(BaseModel):
 
 @router.post("/tarot", response_model=TarotResponse)
 async def tarot_draw(body: TarotRequest) -> TarotResponse:
+    """Legacy instant draw — prefer /tarot/shuffle + /tarot/reveal."""
     cards = draw_cards(body.count, question=body.question)
     joined = " · ".join(f"{c.position}: {c.name}{' (역)' if c.reversed else ''}" for c in cards)
     summary = f"뽑힌 카드 — {joined}. 직관을 믿되 현실 행동으로 이어 보세요."
@@ -212,11 +250,164 @@ async def tarot_draw(body: TarotRequest) -> TarotResponse:
                 reversed=c.reversed,
                 meaning=c.meaning,
                 position=c.position,
+                image_key=c.image_key,
+                color=c.color,
+                symbol=c.symbol,
             )
             for c in cards
         ],
         summary=summary,
     )
+
+
+class TarotShuffleBody(BaseModel):
+    spread: Literal["daily_one", "three", "five", "yesno"] = "three"
+    question: str = ""
+    is_daily: bool = False
+
+
+@router.post("/tarot/shuffle")
+async def tarot_shuffle(
+    body: TarotShuffleBody,
+    session: AsyncSession = Depends(get_session),
+    user: Optional[User] = Depends(get_optional_user),
+):
+    try:
+        data = create_shuffle(body.spread, body.question, is_daily=body.is_daily)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+    expires = datetime.fromisoformat(data["expires_at"])
+    _TAROT_MEM[data["session_id"]] = {
+        "user_id": user.id if user else None,
+        "spread": data["spread"],
+        "question": body.question,
+        "need": data["need"],
+        "labels": data["labels"],
+        "deck": data["deck_face_down"],
+        "is_daily": body.is_daily,
+        "revealed": False,
+        "expires_at": expires,
+    }
+
+    public_deck = [{"slot_id": d["slot_id"]} for d in data["deck_face_down"]]
+    return {
+        "session_id": data["session_id"],
+        "spread": data["spread"],
+        "spread_title": data["spread_title"],
+        "need": data["need"],
+        "labels": data["labels"],
+        "question": body.question,
+        "is_daily": body.is_daily,
+        "deck_face_down": public_deck,
+    }
+
+
+class TarotRevealBody(BaseModel):
+    session_id: str
+    picked_slot_ids: list[str]
+
+
+@router.post("/tarot/reveal")
+async def tarot_reveal(
+    body: TarotRevealBody,
+    session: AsyncSession = Depends(get_session),
+):
+    row = _TAROT_MEM.get(body.session_id)
+    if not row or row["expires_at"] < datetime.utcnow():
+        raise HTTPException(status_code=400, detail="세션이 만료되었습니다. 다시 섞어 주세요.")
+    if row["revealed"]:
+        raise HTTPException(status_code=400, detail="이미 공개된 세션입니다")
+    if len(body.picked_slot_ids) != row["need"]:
+        raise HTTPException(status_code=400, detail=f"{row['need']}장을 선택해 주세요")
+
+    try:
+        result = reveal_picks(
+            row["deck"], body.picked_slot_ids, row["labels"], row["question"]
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+    row["revealed"] = True
+
+    if row["is_daily"] and row["user_id"] and result["cards"]:
+        from app.api.engagement import today_kst
+
+        today = today_kst()
+        try:
+            existing = await session.exec(
+                select(DailyTarotDraw).where(
+                    DailyTarotDraw.user_id == row["user_id"],
+                    DailyTarotDraw.draw_date == today,
+                )
+            )
+            if not existing.first():
+                c0 = result["cards"][0]
+                session.add(
+                    DailyTarotDraw(
+                        user_id=row["user_id"],
+                        draw_date=today,
+                        card_id=c0["id"],
+                        reversed=c0["reversed"],
+                        question=row["question"],
+                        meaning=c0["meaning"],
+                        name=c0["name"],
+                        image_key=c0.get("image_key", ""),
+                    )
+                )
+                await session.commit()
+        except Exception:
+            # table may not exist yet until server restart create_all
+            pass
+
+    return {"question": row["question"], "spread": row["spread"], **result}
+
+
+class TopicBody(SajuRequest):
+    topic: Literal["love", "money", "work", "health"] = "love"
+
+
+@router.post("/topic")
+async def topic_fortune(body: TopicBody):
+    if body.topic not in TOPICS:
+        raise HTTPException(status_code=400, detail="unknown topic")
+    result, _, _, _ = _run_saju(body)
+    return build_topic_fortune(result, body.topic)
+
+
+@router.get("/tarot/daily/today")
+async def daily_tarot_today(
+    current_user: User = Depends(get_current_user),
+    session: AsyncSession = Depends(get_session),
+):
+    from app.api.engagement import today_kst
+
+    today = today_kst()
+    result = await session.exec(
+        select(DailyTarotDraw).where(
+            DailyTarotDraw.user_id == current_user.id,
+            DailyTarotDraw.draw_date == today,
+        )
+    )
+    row = result.first()
+    if not row:
+        return {"drawn": False, "date": today.isoformat()}
+    return {
+        "drawn": True,
+        "date": today.isoformat(),
+        "card": {
+            "id": row.card_id,
+            "name": row.name,
+            "reversed": row.reversed,
+            "meaning": row.meaning,
+            "image_key": row.image_key,
+            "position": "현재",
+            "arcana": "major" if row.card_id.startswith("major") else "minor",
+            "color": "#6366f1",
+            "symbol": "✦",
+        },
+        "question": row.question,
+    }
 
 
 @router.get("/zodiac/today")

@@ -5,9 +5,10 @@ import { useAuth } from "@/lib/auth-context";
 import { useState } from "react";
 
 const NAV = [
+  { href: "/hub", label: "허브" },
   { href: "/", label: "사주" },
-  { href: "/today", label: "띠별 운세" },
   { href: "/tarot", label: "타로" },
+  { href: "/today", label: "띠별" },
   { href: "/compatibility", label: "궁합" },
 ];
 
@@ -122,6 +123,19 @@ export function Header() {
                     {user.email}
                   </div>
                   <Link
+                    href="/hub"
+                    onClick={() => setMenuOpen(false)}
+                    style={{
+                      display: "block",
+                      padding: "8px 12px",
+                      fontSize: 14,
+                      textDecoration: "none",
+                      color: "var(--foreground)",
+                    }}
+                  >
+                    데일리 허브
+                  </Link>
+                  <Link
                     href="/me"
                     onClick={() => setMenuOpen(false)}
                     style={{
@@ -132,7 +146,7 @@ export function Header() {
                       color: "var(--foreground)",
                     }}
                   >
-                    내 프로필
+                    상세 사주
                   </Link>
                   <button
                     type="button"

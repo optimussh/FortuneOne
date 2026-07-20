@@ -1,4 +1,4 @@
-"""Auth-required fortune profile CRUD."""
+"""Auth-required fortune profile CRUD + full report."""
 
 from __future__ import annotations
 
@@ -22,9 +22,30 @@ from app.models.fortune_profile import (
 )
 from app.models.user import User
 from app.services.saju_engine import SajuEngine
+from app.services.saju_report import build_full_report
 
 router = APIRouter()
 _engine = SajuEngine()
+
+
+def _profile_calc(profile: FortuneProfile):
+    hour = profile.hour if profile.hour is not None else 12
+    minute = profile.minute if profile.minute is not None else 0
+    time_assumed = profile.time_unknown
+    if time_assumed:
+        hour, minute = 12, 0
+    try:
+        return _engine.calculate(
+            solar_date=profile.solar_date,
+            hour=hour,
+            minute=minute,
+            gender=profile.gender,
+            time_assumed=time_assumed,
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    except Exception as exc:  # pragma: no cover
+        raise HTTPException(status_code=400, detail=f"사주 계산 실패: {exc}") from exc
 
 
 @router.get("", response_model=list[FortuneProfileRead])
@@ -61,6 +82,48 @@ async def create_profile(
     return profile
 
 
+@router.get("/primary/full-report")
+async def primary_full_report(
+    current_user: User = Depends(get_current_user),
+    session: AsyncSession = Depends(get_session),
+):
+    """첫 저장 프로필 기준 전체 리포트."""
+    result = await session.exec(
+        select(FortuneProfile)
+        .where(FortuneProfile.user_id == current_user.id)
+        .order_by(FortuneProfile.created_at.asc())
+    )
+    profile = result.first()
+    if not profile:
+        raise HTTPException(
+            status_code=404,
+            detail="저장된 사주 프로필이 없습니다. 사주 정보를 먼저 등록해 주세요.",
+        )
+    eng = _profile_calc(profile)
+    report = build_full_report(eng, profile.solar_date, profile.gender)
+    return {
+        "profile": FortuneProfileRead.model_validate(profile),
+        "report": report,
+    }
+
+
+@router.get("/{profile_id}/full-report")
+async def profile_full_report(
+    profile_id: int,
+    current_user: User = Depends(get_current_user),
+    session: AsyncSession = Depends(get_session),
+):
+    profile = await session.get(FortuneProfile, profile_id)
+    if not profile or profile.user_id != current_user.id:
+        raise HTTPException(status_code=404, detail="프로필을 찾을 수 없습니다")
+    eng = _profile_calc(profile)
+    report = build_full_report(eng, profile.solar_date, profile.gender)
+    return {
+        "profile": FortuneProfileRead.model_validate(profile),
+        "report": report,
+    }
+
+
 @router.get("/{profile_id}", response_model=FortuneProfileRead)
 async def get_profile(
     profile_id: int,
@@ -92,7 +155,6 @@ async def calculate_profile_saju(
     current_user: User = Depends(get_current_user),
     session: AsyncSession = Depends(get_session),
 ) -> SajuResponse:
-    """Load a saved profile and run the saju engine (auth)."""
     profile = await session.get(FortuneProfile, profile_id)
     if not profile or profile.user_id != current_user.id:
         raise HTTPException(status_code=404, detail="프로필을 찾을 수 없습니다")
@@ -103,19 +165,7 @@ async def calculate_profile_saju(
     if time_assumed:
         hour, minute = 12, 0
 
-    try:
-        result = _engine.calculate(
-            solar_date=profile.solar_date,
-            hour=hour,
-            minute=minute,
-            gender=profile.gender,
-            time_assumed=time_assumed,
-        )
-    except ValueError as exc:
-        raise HTTPException(status_code=400, detail=str(exc)) from exc
-    except Exception as exc:  # pragma: no cover
-        raise HTTPException(status_code=400, detail=f"사주 계산 실패: {exc}") from exc
-
+    result = _profile_calc(profile)
     hour_out = None
     if result.pillars.hour is not None:
         hour_out = StemBranchOut(

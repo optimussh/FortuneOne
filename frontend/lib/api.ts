@@ -220,4 +220,234 @@ export async function deleteFortuneProfile(id: number): Promise<void> {
   }
 }
 
+export type ReportSection = { id: string; title: string; body: string };
+export type ReportGroup = {
+  id: string;
+  title: string;
+  body?: string;
+  sections?: ReportSection[];
+};
+
+export type FullReport = {
+  day_master: string;
+  elements: Record<string, number>;
+  weak_elements: string[];
+  strong_elements: string[];
+  yongsin: {
+    element: string;
+    element_ko: string;
+    reason: string;
+    lifestyle: string[];
+  } | null;
+  pillars: {
+    year: StemBranch;
+    month: StemBranch;
+    day: StemBranch;
+    hour: StemBranch | null;
+  };
+  daily: {
+    date: string;
+    title: string;
+    scores: Record<string, number>;
+    lucky: Record<string, string>;
+    sections: ReportSection[];
+  };
+  new_year_2026: {
+    year: number;
+    title: string;
+    subtitle: string;
+    sections: ReportSection[];
+  };
+  five_element: {
+    title: string;
+    day_master: string;
+    elements: Record<string, number>;
+    groups: { id: string; title: string; body: string }[];
+  };
+  life_reading: {
+    title: string;
+    subtitle: string;
+    groups: {
+      id: string;
+      title: string;
+      sections: ReportSection[];
+    }[];
+  };
+};
+
+export async function getPrimaryFullReport(): Promise<{
+  profile: FortuneProfile;
+  report: FullReport;
+}> {
+  const res = await apiFetch("/api/profiles/primary/full-report");
+  if (!res.ok) {
+    throw new Error(parseApiError(await res.text(), "리포트를 불러오지 못했습니다"));
+  }
+  return res.json();
+}
+
+export async function postFullReport(body: SajuRequestBody): Promise<{
+  report: FullReport;
+  input: SajuResponse["input"];
+}> {
+  return publicJson("/api/fortune/full-report", {
+    method: "POST",
+    body: JSON.stringify(body),
+  });
+}
+
+export type RegisterWithSajuBody = {
+  email: string;
+  password: string;
+  password_confirm: string;
+  saju: {
+    solar_date: string;
+    hour: number;
+    minute: number;
+    time_unknown: boolean;
+    gender: "male" | "female";
+    label?: string;
+  };
+};
+
+export async function registerWithSaju(body: RegisterWithSajuBody): Promise<{
+  access_token: string;
+  profile: FortuneProfile | null;
+}> {
+  const res = await apiFetch("/api/auth/register", {
+    method: "POST",
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) {
+    throw new Error(parseApiError(await res.text(), "회원가입에 실패했습니다"));
+  }
+  return res.json();
+}
+
+// --- Engagement / journal / tarot interactive / topics ---
+
+export type StreakInfo = {
+  current_streak: number;
+  longest_streak: number;
+  last_checkin_date: string | null;
+  already_checked_in_today: boolean;
+  recent_7: boolean[];
+};
+
+export async function getStreak(): Promise<StreakInfo> {
+  const res = await apiFetch("/api/engagement/streak");
+  if (!res.ok) throw new Error(parseApiError(await res.text(), "스트릭 조회 실패"));
+  return res.json();
+}
+
+export async function postCheckin(source: "hub" | "daily" | "tarot" | "journal" = "hub") {
+  const res = await apiFetch("/api/engagement/checkin", {
+    method: "POST",
+    body: JSON.stringify({ source }),
+  });
+  if (!res.ok) throw new Error(parseApiError(await res.text(), "출석 실패"));
+  return res.json() as Promise<StreakInfo>;
+}
+
+export type JournalEntry = {
+  id: number;
+  entry_date: string;
+  mood: number | null;
+  body: string;
+  linked_overall_score: number | null;
+};
+
+export async function listJournal(): Promise<JournalEntry[]> {
+  const res = await apiFetch("/api/journal");
+  if (!res.ok) throw new Error(parseApiError(await res.text(), "일기 목록 실패"));
+  return res.json();
+}
+
+export async function upsertJournal(
+  entryDate: string,
+  body: { mood?: number | null; body: string }
+): Promise<JournalEntry> {
+  const res = await apiFetch(`/api/journal/${entryDate}`, {
+    method: "PUT",
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) throw new Error(parseApiError(await res.text(), "일기 저장 실패"));
+  return res.json();
+}
+
+export async function postTopicFortune(
+  topic: "love" | "money" | "work" | "health",
+  saju: SajuRequestBody
+) {
+  return publicJson<{
+    topic: string;
+    title: string;
+    score: number;
+    headline: string;
+    sections: ReportSection[];
+    lucky: { color: string; action: string };
+  }>("/api/fortune/topic", {
+    method: "POST",
+    body: JSON.stringify({ ...saju, topic }),
+  });
+}
+
+export type TarotRevealCard = {
+  id: string;
+  name: string;
+  arcana: string;
+  reversed: boolean;
+  meaning: string;
+  position: string;
+  image_key: string;
+  color: string;
+  symbol: string;
+};
+
+export async function tarotShuffle(body: {
+  spread: "daily_one" | "three" | "five" | "yesno";
+  question?: string;
+  is_daily?: boolean;
+}) {
+  // apiFetch attaches Bearer when logged in (daily tarot persistence)
+  const res = await apiFetch("/api/fortune/tarot/shuffle", {
+    method: "POST",
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) {
+    throw new Error(parseApiError(await res.text(), "카드 섞기 실패"));
+  }
+  return res.json() as Promise<{
+    session_id: string;
+    spread: string;
+    spread_title: string;
+    need: number;
+    labels: string[];
+    deck_face_down: { slot_id: string }[];
+  }>;
+}
+
+export async function tarotReveal(sessionId: string, picked_slot_ids: string[]) {
+  return publicJson<{
+    question: string;
+    spread: string;
+    cards: TarotRevealCard[];
+    summary: string;
+  }>("/api/fortune/tarot/reveal", {
+    method: "POST",
+    body: JSON.stringify({ session_id: sessionId, picked_slot_ids }),
+  });
+}
+
+export async function getDailyTarotToday() {
+  const res = await apiFetch("/api/fortune/tarot/daily/today");
+  if (!res.ok) throw new Error(parseApiError(await res.text(), "일일 타로 조회 실패"));
+  return res.json() as Promise<{
+    drawn: boolean;
+    date: string;
+    card?: TarotRevealCard;
+    question?: string;
+  }>;
+}
+
 export { API_URL };

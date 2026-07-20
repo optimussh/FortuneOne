@@ -3,7 +3,7 @@
 import { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { apiFetch, FORTUNE_STORAGE_KEY } from "@/lib/api";
+import { apiFetch } from "@/lib/api";
 
 function LoginForm() {
   const router = useRouter();
@@ -40,10 +40,9 @@ function LoginForm() {
       const next = searchParams.get("next");
       if (next) {
         router.push(next);
-      } else if (typeof window !== "undefined" && sessionStorage.getItem(FORTUNE_STORAGE_KEY)) {
-        router.push("/fortune/result");
       } else {
-        router.push("/");
+        // 로그인 후 데일리 허브
+        router.push("/hub");
       }
       router.refresh();
     } catch (err: unknown) {
