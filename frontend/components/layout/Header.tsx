@@ -136,6 +136,19 @@ export function Header() {
                     데일리 허브
                   </Link>
                   <Link
+                    href="/profiles"
+                    onClick={() => setMenuOpen(false)}
+                    style={{
+                      display: "block",
+                      padding: "8px 12px",
+                      fontSize: 14,
+                      textDecoration: "none",
+                      color: "var(--foreground)",
+                    }}
+                  >
+                    사주 정보 관리
+                  </Link>
+                  <Link
                     href="/me"
                     onClick={() => setMenuOpen(false)}
                     style={{

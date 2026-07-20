@@ -7,10 +7,21 @@ import { useAuth } from "@/lib/auth-context";
 import {
   createFortuneProfile,
   getPrimaryFullReport,
+  getProfileFullReport,
+  listFortuneProfiles,
   type FullReport,
   type FortuneProfile,
   type ReportSection,
 } from "@/lib/api";
+import {
+  defaultSajuForm,
+  formToHour,
+  formToSolarDate,
+  getActiveProfileId,
+  setActiveProfileId,
+  type SajuFormValue,
+} from "@/lib/saju-form";
+import { SajuDetailForm } from "@/components/fortune/SajuDetailForm";
 import {
   Card,
   CardContent,
@@ -19,7 +30,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 
 function SectionBlock({ title, body }: { title: string; body: string }) {
   return (
@@ -60,19 +70,28 @@ export default function MePage() {
 
   // onboarding if no profile
   const [needSaju, setNeedSaju] = useState(false);
-  const [solarDate, setSolarDate] = useState("");
-  const [gender, setGender] = useState<"male" | "female">("male");
-  const [timeUnknown, setTimeUnknown] = useState(true);
-  const [hour, setHour] = useState(12);
-  const [minute, setMinute] = useState(0);
   const [saving, setSaving] = useState(false);
+  const [onboardForm, setOnboardForm] = useState<SajuFormValue>(defaultSajuForm);
 
   const load = useCallback(async () => {
     setLoading(true);
     setError("");
     setNeedSaju(false);
     try {
-      const data = await getPrimaryFullReport();
+      const profiles = await listFortuneProfiles();
+      if (!profiles.length) {
+        setNeedSaju(true);
+        setReport(null);
+        setProfile(null);
+        return;
+      }
+      let aid = getActiveProfileId();
+      if (!aid || !profiles.some((p) => p.id === aid)) {
+        const self = profiles.find((p) => p.is_self || p.label === "본인" || p.label === "나");
+        aid = self?.id ?? profiles[0].id;
+        setActiveProfileId(aid);
+      }
+      const data = await getProfileFullReport(aid!);
       setProfile(data.profile);
       setReport(data.report);
     } catch (err) {
@@ -100,21 +119,30 @@ export default function MePage() {
 
   const saveSaju = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!solarDate) {
-      setError("생년월일을 입력하세요");
+    if (!onboardForm.display_name.trim()) {
+      setError("이름을 입력하세요");
       return;
     }
     setSaving(true);
     setError("");
     try {
-      await createFortuneProfile({
-        label: "나",
-        solar_date: solarDate,
-        hour: timeUnknown ? 12 : hour,
-        minute: timeUnknown ? 0 : minute,
-        time_unknown: timeUnknown,
-        gender,
+      const { hour, time_unknown } = formToHour(onboardForm);
+      const p = await createFortuneProfile({
+        label: onboardForm.label || "본인",
+        display_name: onboardForm.display_name.trim(),
+        birth_year: onboardForm.birth_year,
+        birth_month: onboardForm.birth_month,
+        birth_day: onboardForm.birth_day,
+        time_slot: onboardForm.time_slot,
+        calendar_type: onboardForm.calendar_type,
+        solar_date: formToSolarDate(onboardForm),
+        hour,
+        minute: 0,
+        time_unknown,
+        gender: onboardForm.gender,
+        is_self: true,
       });
+      setActiveProfileId(p.id);
       await load();
     } catch (err) {
       setError(err instanceof Error ? err.message : "저장 실패");
@@ -139,41 +167,13 @@ export default function MePage() {
           로그인 계정에 기본 사주를 등록하면 오늘의 운세·신년·인생풀이를 볼 수 있습니다.
         </p>
         <form onSubmit={saveSaju} className="mt-8 space-y-4 rounded-2xl border border-[var(--border)] p-5">
-          <div>
-            <label className="mb-1 block text-xs font-semibold">생년월일 (양력)</label>
-            <Input type="date" required value={solarDate} onChange={(e) => setSolarDate(e.target.value)} />
-          </div>
-          <div className="flex gap-2">
-            <Button type="button" variant={gender === "male" ? "default" : "outline"} onClick={() => setGender("male")}>
-              남성
-            </Button>
-            <Button
-              type="button"
-              variant={gender === "female" ? "default" : "outline"}
-              onClick={() => setGender("female")}
-            >
-              여성
-            </Button>
-          </div>
-          <label className="flex items-center gap-2 text-sm">
-            <input type="checkbox" checked={timeUnknown} onChange={(e) => setTimeUnknown(e.target.checked)} />
-            시간 모름
-          </label>
-          {!timeUnknown && (
-            <div className="flex gap-2">
-              <Input type="number" min={0} max={23} value={hour} onChange={(e) => setHour(Number(e.target.value))} />
-              <Input
-                type="number"
-                min={0}
-                max={59}
-                value={minute}
-                onChange={(e) => setMinute(Number(e.target.value))}
-              />
-            </div>
-          )}
+          <SajuDetailForm value={onboardForm} onChange={setOnboardForm} showRelation />
           {error && <p className="text-center text-sm text-red-600">{error}</p>}
           <Button type="submit" className="w-full" disabled={saving}>
             {saving ? "저장 중…" : "등록하고 운세 보기"}
+          </Button>
+          <Button asChild variant="outline" className="w-full">
+            <Link href="/profiles">프로필 관리로</Link>
           </Button>
         </form>
       </main>
@@ -200,9 +200,16 @@ export default function MePage() {
         <p className="text-xs font-semibold tracking-wide text-[var(--primary)]">MY SAJU</p>
         <h1 className="mt-1 text-2xl font-extrabold sm:text-3xl">나의 상세 운세</h1>
         <p className="mt-2 text-sm text-[var(--muted)]">
-          {profile.label} · 양력 {profile.solar_date}
-          {profile.time_unknown ? " · 시간 미상" : ""} · 일간{" "}
+          {profile.label} · {profile.display_name || ""} ·{" "}
+          {profile.calendar_type === "lunar" ? "음력" : "양력"} {profile.solar_date}
+          {profile.time_unknown ? " · 시간 모름" : ` · ${profile.time_slot || profile.hour + "시"}`}{" "}
+          · 일간{" "}
           <span className="font-bold text-[var(--primary)]">{report.day_master}</span>
+        </p>
+        <p className="mt-2 text-xs">
+          <Link href="/profiles" className="font-semibold text-[var(--primary)] underline">
+            다른 사람 선택 · 사주 수정
+          </Link>
         </p>
       </div>
 

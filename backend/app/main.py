@@ -17,11 +17,34 @@ from sqlmodel import select
 UPLOAD_DIR = os.path.join(os.path.dirname(__file__), "..", "uploads")
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
+def _sqlite_migrate_fortune_profiles(connection) -> None:
+    """Add new columns if missing (SQLite local)."""
+    try:
+        rows = connection.exec_driver_sql("PRAGMA table_info(fortune_profiles)").fetchall()
+        cols = {r[1] for r in rows}
+        alters = []
+        if "display_name" not in cols:
+            alters.append("ALTER TABLE fortune_profiles ADD COLUMN display_name VARCHAR(100) DEFAULT ''")
+        if "time_slot" not in cols:
+            alters.append("ALTER TABLE fortune_profiles ADD COLUMN time_slot VARCHAR(32) DEFAULT 'unknown'")
+        if "calendar_type" not in cols:
+            alters.append("ALTER TABLE fortune_profiles ADD COLUMN calendar_type VARCHAR(16) DEFAULT 'solar'")
+        if "is_self" not in cols:
+            alters.append("ALTER TABLE fortune_profiles ADD COLUMN is_self BOOLEAN DEFAULT 0")
+        if "updated_at" not in cols:
+            alters.append("ALTER TABLE fortune_profiles ADD COLUMN updated_at DATETIME")
+        for sql in alters:
+            connection.exec_driver_sql(sql)
+    except Exception as exc:
+        print(f"[startup] profile migrate skip: {exc}")
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Initialize database tables on startup
     async with engine.begin() as conn:
         await conn.run_sync(SQLModel.metadata.create_all)
+        await conn.run_sync(_sqlite_migrate_fortune_profiles)
         
     # Seed local demo accounts (never block startup)
     try:

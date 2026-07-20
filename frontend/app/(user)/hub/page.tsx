@@ -6,7 +6,9 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import {
   getPrimaryFullReport,
+  getProfileFullReport,
   getStreak,
+  listFortuneProfiles,
   listJournal,
   postCheckin,
   upsertJournal,
@@ -15,6 +17,7 @@ import {
   type JournalEntry,
   type StreakInfo,
 } from "@/lib/api";
+import { getActiveProfileId, setActiveProfileId } from "@/lib/saju-form";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -46,11 +49,20 @@ export default function HubPage() {
     try {
       await postCheckin("hub").then(setStreak).catch(() => getStreak().then(setStreak));
       try {
-        const data = await getPrimaryFullReport();
+        const profiles = await listFortuneProfiles();
+        let aid = getActiveProfileId();
+        if (!aid || !profiles.some((p) => p.id === aid)) {
+          const self = profiles.find((p) => p.is_self || p.label === "본인" || p.label === "나");
+          aid = self?.id ?? profiles[0]?.id ?? null;
+          if (aid) setActiveProfileId(aid);
+        }
+        const data = aid
+          ? await getProfileFullReport(aid)
+          : await getPrimaryFullReport();
         setProfile(data.profile);
         setReport(data.report);
       } catch {
-        router.replace("/me");
+        router.replace("/profiles");
         return;
       }
       const list = await listJournal().catch(() => [] as JournalEntry[]);
@@ -103,9 +115,20 @@ export default function HubPage() {
       <div className="mb-6 text-center">
         <p className="text-xs font-semibold text-[var(--primary)]">DAILY HUB</p>
         <h1 className="mt-1 text-2xl font-extrabold">
-          안녕하세요{profile ? `, ${profile.label}` : ""}
+          안녕하세요
+          {profile
+            ? `, ${profile.display_name || profile.label}`
+            : ""}
         </h1>
-        <p className="mt-1 text-sm text-[var(--muted)]">{today}</p>
+        <p className="mt-1 text-sm text-[var(--muted)]">
+          {today}
+          {profile ? ` · ${profile.label}` : ""}
+        </p>
+        <p className="mt-2 text-xs">
+          <Link href="/profiles" className="font-semibold text-[var(--primary)] underline">
+            사주 프로필 선택·수정
+          </Link>
+        </p>
       </div>
 
       {streak && (

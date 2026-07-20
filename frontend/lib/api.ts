@@ -175,21 +175,35 @@ export type FortuneProfile = {
   id: number;
   user_id: number;
   label: string;
+  display_name?: string;
   solar_date: string;
   hour: number | null;
   minute: number | null;
   time_unknown: boolean;
+  time_slot?: string;
   gender: string;
+  calendar_type?: string;
+  is_self?: boolean;
   created_at: string;
+  birth_year?: number;
+  birth_month?: number;
+  birth_day?: number;
 };
 
 export type FortuneProfileCreateBody = {
   label: string;
-  solar_date: string;
+  display_name?: string;
+  birth_year?: number;
+  birth_month?: number;
+  birth_day?: number;
+  time_slot?: string;
+  calendar_type?: "solar" | "lunar";
+  solar_date?: string;
   hour?: number | null;
   minute?: number | null;
-  time_unknown: boolean;
+  time_unknown?: boolean;
   gender: "male" | "female";
+  is_self?: boolean;
 };
 
 export async function listFortuneProfiles(): Promise<FortuneProfile[]> {
@@ -213,11 +227,36 @@ export async function createFortuneProfile(
   return res.json();
 }
 
+export async function updateFortuneProfile(
+  id: number,
+  body: Partial<FortuneProfileCreateBody>
+): Promise<FortuneProfile> {
+  const res = await apiFetch(`/api/profiles/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) {
+    throw new Error(parseApiError(await res.text(), "프로필 수정에 실패했습니다"));
+  }
+  return res.json();
+}
+
 export async function deleteFortuneProfile(id: number): Promise<void> {
   const res = await apiFetch(`/api/profiles/${id}`, { method: "DELETE" });
   if (!res.ok) {
     throw new Error(parseApiError(await res.text(), "프로필 삭제에 실패했습니다"));
   }
+}
+
+export async function getProfileFullReport(profileId: number): Promise<{
+  profile: FortuneProfile;
+  report: FullReport;
+}> {
+  const res = await apiFetch(`/api/profiles/${profileId}/full-report`);
+  if (!res.ok) {
+    throw new Error(parseApiError(await res.text(), "리포트를 불러오지 못했습니다"));
+  }
+  return res.json();
 }
 
 export type ReportSection = { id: string; title: string; body: string };
@@ -301,12 +340,18 @@ export type RegisterWithSajuBody = {
   password: string;
   password_confirm: string;
   saju: {
-    solar_date: string;
-    hour: number;
-    minute: number;
-    time_unknown: boolean;
-    gender: "male" | "female";
+    display_name?: string;
     label?: string;
+    birth_year?: number;
+    birth_month?: number;
+    birth_day?: number;
+    time_slot?: string;
+    calendar_type?: "solar" | "lunar";
+    solar_date?: string;
+    hour?: number;
+    minute?: number;
+    time_unknown?: boolean;
+    gender: "male" | "female";
   };
 };
 

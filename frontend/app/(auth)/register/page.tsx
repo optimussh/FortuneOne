@@ -4,61 +4,23 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { registerWithSaju } from "@/lib/api";
+import { SajuDetailForm } from "@/components/fortune/SajuDetailForm";
+import {
+  defaultSajuForm,
+  formToHour,
+  formToSolarDate,
+  setActiveProfileId,
+  type SajuFormValue,
+} from "@/lib/saju-form";
 
 export default function RegisterPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
-  const [solarDate, setSolarDate] = useState("");
-  const [hour, setHour] = useState(12);
-  const [minute, setMinute] = useState(0);
-  const [timeUnknown, setTimeUnknown] = useState(true);
-  const [gender, setGender] = useState<"male" | "female">("male");
+  const [saju, setSaju] = useState<SajuFormValue>(defaultSajuForm());
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
-  const handleRegister = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
-
-    if (password !== passwordConfirm) {
-      setError("비밀번호가 일치하지 않습니다");
-      return;
-    }
-    if (password.length < 6) {
-      setError("비밀번호는 6자 이상이어야 합니다");
-      return;
-    }
-    if (!solarDate) {
-      setError("생년월일(양력)을 입력해 주세요");
-      return;
-    }
-
-    setIsLoading(true);
-    try {
-      const data = await registerWithSaju({
-        email,
-        password,
-        password_confirm: passwordConfirm,
-        saju: {
-          solar_date: solarDate,
-          hour: timeUnknown ? 12 : hour,
-          minute: timeUnknown ? 0 : minute,
-          time_unknown: timeUnknown,
-          gender,
-          label: "나",
-        },
-      });
-      localStorage.setItem("token", data.access_token);
-      router.push("/hub");
-      router.refresh();
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "오류가 발생했습니다");
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const field: React.CSSProperties = {
     width: "100%",
@@ -72,6 +34,56 @@ export default function RegisterPage() {
     fontWeight: 600,
     display: "block",
     marginBottom: 6,
+  };
+
+  const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+
+    if (password !== passwordConfirm) {
+      setError("비밀번호가 일치하지 않습니다");
+      return;
+    }
+    if (password.length < 6) {
+      setError("비밀번호는 6자 이상이어야 합니다");
+      return;
+    }
+    if (!saju.display_name.trim()) {
+      setError("이름을 입력하세요");
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const { hour, time_unknown } = formToHour(saju);
+      const data = await registerWithSaju({
+        email,
+        password,
+        password_confirm: passwordConfirm,
+        saju: {
+          display_name: saju.display_name.trim(),
+          label: saju.label || "본인",
+          birth_year: saju.birth_year,
+          birth_month: saju.birth_month,
+          birth_day: saju.birth_day,
+          time_slot: saju.time_slot,
+          calendar_type: saju.calendar_type,
+          gender: saju.gender,
+          solar_date: formToSolarDate(saju),
+          hour,
+          minute: 0,
+          time_unknown,
+        },
+      });
+      localStorage.setItem("token", data.access_token);
+      if (data.profile?.id) setActiveProfileId(data.profile.id);
+      router.push("/hub");
+      router.refresh();
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "오류가 발생했습니다");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -91,12 +103,12 @@ export default function RegisterPage() {
           maxWidth: 480,
           background: "var(--card-bg, #fff)",
           borderRadius: 20,
-          padding: "40px 36px",
+          padding: "36px 32px",
           border: "1px solid var(--border)",
           boxShadow: "0 8px 40px rgba(0,0,0,0.06)",
         }}
       >
-        <div style={{ textAlign: "center", marginBottom: 28 }}>
+        <div style={{ textAlign: "center", marginBottom: 24 }}>
           <Link
             href="/"
             style={{
@@ -111,7 +123,7 @@ export default function RegisterPage() {
             FortuneOne
           </Link>
           <p style={{ marginTop: 8, fontSize: 14, color: "var(--muted)" }}>
-            가입 시 기본 사주 정보를 함께 등록합니다
+            계정 + 상세 사주 정보 등록
           </p>
         </div>
 
@@ -143,91 +155,13 @@ export default function RegisterPage() {
 
           <div
             style={{
-              marginTop: 8,
+              marginTop: 4,
               paddingTop: 16,
               borderTop: "1px solid var(--border)",
             }}
           >
-            <p style={{ fontSize: 14, fontWeight: 700, marginBottom: 12 }}>기본 사주 정보</p>
-            <div style={{ marginBottom: 12 }}>
-              <label style={label}>생년월일 (양력) *</label>
-              <input
-                type="date"
-                required
-                value={solarDate}
-                onChange={(e) => setSolarDate(e.target.value)}
-                style={field}
-              />
-            </div>
-            <div style={{ marginBottom: 12 }}>
-              <label style={label}>성별 *</label>
-              <div style={{ display: "flex", gap: 8 }}>
-                <button
-                  type="button"
-                  onClick={() => setGender("male")}
-                  style={{
-                    flex: 1,
-                    padding: 10,
-                    borderRadius: 10,
-                    border: gender === "male" ? "2px solid var(--primary)" : "1px solid var(--border)",
-                    background: gender === "male" ? "var(--primary-light)" : "#fff",
-                    fontWeight: 600,
-                    cursor: "pointer",
-                  }}
-                >
-                  남성
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setGender("female")}
-                  style={{
-                    flex: 1,
-                    padding: 10,
-                    borderRadius: 10,
-                    border: gender === "female" ? "2px solid var(--primary)" : "1px solid var(--border)",
-                    background: gender === "female" ? "var(--primary-light)" : "#fff",
-                    fontWeight: 600,
-                    cursor: "pointer",
-                  }}
-                >
-                  여성
-                </button>
-              </div>
-            </div>
-            <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, marginBottom: 10 }}>
-              <input
-                type="checkbox"
-                checked={timeUnknown}
-                onChange={(e) => setTimeUnknown(e.target.checked)}
-              />
-              태어난 시간 모름 (정오 가정)
-            </label>
-            {!timeUnknown && (
-              <div style={{ display: "flex", gap: 8 }}>
-                <div style={{ flex: 1 }}>
-                  <label style={label}>시</label>
-                  <input
-                    type="number"
-                    min={0}
-                    max={23}
-                    value={hour}
-                    onChange={(e) => setHour(Number(e.target.value))}
-                    style={field}
-                  />
-                </div>
-                <div style={{ flex: 1 }}>
-                  <label style={label}>분</label>
-                  <input
-                    type="number"
-                    min={0}
-                    max={59}
-                    value={minute}
-                    onChange={(e) => setMinute(Number(e.target.value))}
-                    style={field}
-                  />
-                </div>
-              </div>
-            )}
+            <p style={{ fontSize: 14, fontWeight: 700, marginBottom: 12 }}>사주 정보</p>
+            <SajuDetailForm value={saju} onChange={setSaju} showRelation />
           </div>
 
           {error && (
