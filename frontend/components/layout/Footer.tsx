@@ -56,6 +56,9 @@ export function Footer() {
             <Link href="/compatibility" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
               궁합
             </Link>
+            <Link href="/store" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
+              스토어
+            </Link>
             <Link href="/login" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
               로그인
             </Link>
@@ -71,6 +74,9 @@ export function Footer() {
             </Link>
             <Link href="/policy/privacy" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
               개인정보 처리방침
+            </Link>
+            <Link href="/about/engines" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
+              오픈소스 · 라이선스
             </Link>
           </div>
         </div>

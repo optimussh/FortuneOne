@@ -294,6 +294,12 @@ export default function HubPage() {
         <Link href="/shop" className="text-[var(--primary)] underline">
           구슬 상점
         </Link>
+        <Link href="/store" className="text-[var(--primary)] underline">
+          운세 스토어
+        </Link>
+        <Link href="/about/engines" className="text-[var(--primary)] underline">
+          엔진·라이선스
+        </Link>
         <Link href="/today" className="text-[var(--primary)] underline">
           띠별
         </Link>

@@ -23,25 +23,40 @@ for p in pay:
     if digits:
         price_by_cid[m.group(1)] = int(digits)
 
-# Category mapping from sample site IA (ca2 + free themes)
+# Order matters: more specific first (money/career before generic love keywords)
 CATEGORY_RULES: list[tuple[str, str, list[str]]] = [
-    ("newyear", "신년·연간", ["2026", "신년", "올해", "연간", "12개월", "토정", "세운"]),
-    ("love", "연애·인연", ["연애", "사랑", "인연", "만남", "짝", "고백", "이별", "재회", "솔로", "썸"]),
-    ("marriage", "결혼·배우자", ["결혼", "배우자", "신랑", "신부", "웨딩", "혼인"]),
-    ("compat", "궁합·관계", ["궁합", "두 사람", "우리", "그 사람", "상대"]),
-    ("money", "재물·금전", ["재물", "금전", "돈", "부자", "재테크", "투자", "모으", "유실"]),
-    ("career", "직장·사업", ["직장", "사업", "동업", "상사", "부하", "이직", "취업"]),
-    ("life", "평생·사주풀이", ["평생", "사주", "인생", "명리", "기질", "성격"]),
-    ("theme", "테마·기타", ["자녀", "꿈", "혈액", "별자리", "타로", "주간", "월간", "오늘"]),
     ("free", "무료·체험", ["무료"]),
+    ("newyear", "신년·연간", ["2026", "신년", "올해", "연간", "12개월", "토정", "세운", "월별", "한 해"]),
+    ("money", "재물·금전", [
+        "재물", "금전", "돈", "부자", "재테크", "투자", "모으", "유실", "부", "재성",
+        "수입", "지출", "재산", "복권", "주식", "부동산", "사업 수익", "월급", "연봉",
+    ]),
+    ("career", "직장·사업", [
+        "직장", "사업", "동업", "상사", "부하", "이직", "취업", "승진", "회사", "직업",
+        "업무", "커리어", "창업", "조직", "동료", "면접",
+    ]),
+    ("marriage", "결혼·배우자", ["결혼", "배우자", "신랑", "신부", "웨딩", "혼인", "약혼"]),
+    ("compat", "궁합·관계", ["궁합", "두 사람", "우리 둘", "그 사람과의", "상대방", "호흡"]),
+    ("love", "연애·인연", [
+        "연애", "사랑", "인연", "만남", "짝", "고백", "이별", "재회", "솔로", "썸",
+        "연인", "애정", "이성", "첫사랑", "소개팅",
+    ]),
+    ("life", "평생·사주풀이", ["평생", "사주", "인생", "명리", "기질", "성격", "팔자", "총운"]),
+    ("theme", "테마·기타", ["자녀", "꿈", "혈액", "별자리", "타로", "주간", "월간", "오늘", "건강"]),
 ]
 
 
 def guess_category(title: str) -> tuple[str, str]:
+    # score by keyword hits so money/career not swallowed by "사랑" alone
+    best_id, best_label, best_score = "theme", "테마·기타", 0
     for cid, label, keys in CATEGORY_RULES:
-        if any(k in title for k in keys):
-            return cid, label
-    return "theme", "테마·기타"
+        score = sum(1 for k in keys if k in title)
+        # slight boost for early (more specific) categories when tie
+        if score > best_score:
+            best_id, best_label, best_score = cid, label, score
+    if best_score == 0:
+        return "theme", "테마·기타"
+    return best_id, best_label
 
 
 # Rewrite helpers — change feel without copying commercial slogans
@@ -73,55 +88,72 @@ def rewrite_title(t: str) -> str:
 SECTION_TEMPLATES = {
     "newyear": [
         "한 해 흐름 총평",
-        "월별 포인트 12",
+        "상·하반기 리듬",
+        "월별 포인트 가이드",
         "기회·주의 구간",
+        "인간관계·직장 연결고리",
         "실천 로드맵",
     ],
     "love": [
         "인연의 결",
+        "끌림의 패턴",
         "만남 시기 힌트",
         "표현·소통 스타일",
         "조심할 패턴",
+        "관계 회복·정리 팁",
     ],
     "marriage": [
         "배우자 상",
         "혼인 흐름",
         "가정 안정의 조건",
+        "갈등 조율법",
         "시기별 조언",
+        "함께 키울 습관",
     ],
     "compat": [
         "두 사람 기질 비교",
         "보완·충돌 포인트",
+        "감정 온도차",
         "관계 운영법",
         "함께할 때 실천",
+        "장기 호흡 조언",
     ],
     "money": [
         "재물 그릇",
         "수입·지출 리듬",
         "투자·기회 태도",
         "지키는 습관",
+        "문서·계약 주의",
+        "올해 재물 우선순위",
     ],
     "career": [
         "일 기질",
         "조직·역할 궁합",
         "전환 타이밍",
         "성장 루트",
+        "상사·동료 호흡",
+        "성과 내기 루틴",
     ],
     "life": [
         "기질 구조",
         "초·중·말년 흐름",
         "강점·보완",
+        "인간관계 기본기",
+        "건강·생활 리듬",
         "평생 테마",
     ],
     "theme": [
         "핵심 요약",
         "상세 해석",
+        "환경·타이밍",
         "주의 포인트",
         "실천 제안",
+        "한 줄 메모",
     ],
     "free": [
         "간단 요약",
         "오늘의 팁",
+        "주의 한 가지",
     ],
 }
 

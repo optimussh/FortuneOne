@@ -26,6 +26,7 @@ import {
 } from "@/lib/saju-form";
 import { SajuDetailForm } from "@/components/fortune/SajuDetailForm";
 import { WealthYearPanel } from "@/components/fortune/WealthYearPanel";
+import { ChartFactsBadge } from "@/components/fortune/ChartFactsBadge";
 import {
   Card,
   CardContent,
@@ -449,6 +450,11 @@ function MePageInner() {
             다른 사람 선택 · 사주 수정
           </Link>
         </p>
+        {report.chart_facts && (
+          <div className="mx-auto mt-3 max-w-md">
+            <ChartFactsBadge facts={report.chart_facts} />
+          </div>
+        )}
       </div>
 
       {/* pillars strip */}

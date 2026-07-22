@@ -352,11 +352,41 @@ export type TojeongReport = {
   };
 };
 
+export type ChartFacts = {
+  primary_engine: string;
+  day_master: string;
+  agreement: boolean;
+  warnings: string[];
+  licenses: {
+    engine_id: string;
+    license: string;
+    package: string;
+    homepage?: string;
+    commercial_use?: string;
+    role?: string;
+  }[];
+  engines: {
+    engine_id: string;
+    license: string;
+    package: string;
+    ok: boolean;
+    error?: string | null;
+    signature?: string | null;
+  }[];
+  pillars?: {
+    year: StemBranch;
+    month: StemBranch;
+    day: StemBranch;
+    hour: StemBranch | null;
+  };
+};
+
 export type FullReport = {
   day_master: string;
   elements: Record<string, number>;
   weak_elements: string[];
   strong_elements: string[];
+  chart_facts?: ChartFacts | null;
   yongsin: {
     element: string;
     element_ko: string;
@@ -865,8 +895,24 @@ export async function getStoreProductResult(
       disclaimer: string;
       engine_note: string;
       partner?: Record<string, unknown> | null;
+      chart_facts?: ChartFacts | null;
     };
   }>;
+}
+
+export async function getFortuneEngines() {
+  return publicJson<{
+    policy: string;
+    engines: {
+      engine_id: string;
+      license: string;
+      package: string;
+      homepage?: string;
+      commercial_use?: boolean;
+      role?: string;
+      notes?: string;
+    }[];
+  }>("/api/fortune/engines");
 }
 
 export { API_URL };

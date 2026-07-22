@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useParams, useSearchParams, useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import { getStoreProductResult } from "@/lib/api";
+import { ChartFactsBadge } from "@/components/fortune/ChartFactsBadge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -70,6 +71,12 @@ function ResultInner() {
       </p>
       <p className="mt-1 text-center font-mono text-xs text-[var(--primary)]">{h.pillars_line}</p>
       <p className="mt-1 text-center text-[11px] text-[var(--muted)]">{h.elements_line}</p>
+
+      {report.chart_facts && (
+        <div className="mx-auto mt-4 max-w-md">
+          <ChartFactsBadge facts={report.chart_facts} />
+        </div>
+      )}
 
       <Card className="mt-6 border-[var(--border)]">
         <CardHeader className="pb-2">

@@ -2,6 +2,14 @@
 
 프로젝트 진행 현황 로그. 커밋 직전 갱신 (`claude_Template` git 규칙).
 
+## 2026-07-22 (next: catalog UX + verification badge)
+
+- **catalog:** 카테고리 스코어링 재분류 (money/career 키워드 보강) · 섹션 템플릿 6단 확장
+- **feat(ui):** `ChartFactsBadge` — 상세 사주·스토어 결과에 교차검증 OK 뱃지
+- **feat(report):** 상품 결과 문단 보강 (톤별 opener/mid/action/closer)
+- **feat(web):** `/about/engines` MIT 고지 · 푸터/허브 링크
+- **data:** product_catalog.json 재생성
+
 ## 2026-07-22 (commercial-safe multi-engine)
 
 - **feat(engines):** MIT only multi-engine fact layer
