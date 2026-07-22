@@ -16,25 +16,33 @@ function ResultInner() {
   const partnerId = sp.get("partner_id") ? Number(sp.get("partner_id")) : undefined;
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
+  const token = sp.get("token") || undefined;
   const [report, setReport] = useState<Awaited<
     ReturnType<typeof getStoreProductResult>
   >["report"] | null>(null);
+  const [access, setAccess] = useState<Record<string, unknown> | null>(null);
   const [error, setError] = useState("");
 
   useEffect(() => {
     if (authLoading) return;
-    if (!user) {
-      router.replace(`/login?next=/store/${id}/result?profile_id=${profileId}`);
+    // email token allows view without login
+    if (!token && !user) {
+      router.replace(
+        `/login?next=/store/${id}/result?profile_id=${profileId || ""}`
+      );
       return;
     }
-    if (!profileId) {
+    if (!token && !profileId) {
       setError("profile_id가 필요합니다");
       return;
     }
-    getStoreProductResult(id, profileId, partnerId)
-      .then((r) => setReport(r.report))
+    getStoreProductResult(id, profileId || 0, partnerId, token)
+      .then((r) => {
+        setReport(r.report);
+        setAccess((r.access as Record<string, unknown>) || null);
+      })
       .catch((e) => setError(e instanceof Error ? e.message : "실패"));
-  }, [user, authLoading, id, profileId, partnerId, router]);
+  }, [user, authLoading, id, profileId, partnerId, token, router]);
 
   if (error) {
     return (
@@ -76,6 +84,29 @@ function ResultInner() {
         <div className="mx-auto mt-4 max-w-md">
           <ChartFactsBadge facts={report.chart_facts} />
         </div>
+      )}
+
+      {access && (
+        <Card className="mx-auto mt-4 max-w-md border-emerald-200 bg-emerald-50">
+          <CardContent className="py-3 text-center text-[11px] leading-relaxed text-emerald-900">
+            <strong>다시보기</strong>:{" "}
+            {(access.policy as string) || "웹 7일 · 이메일 링크 30일"}
+            {access.web_expires_at != null && (
+              <>
+                <br />웹 만료: {String(access.web_expires_at).slice(0, 10)}
+                {access.days_left_web != null ? ` (약 ${String(access.days_left_web)}일 남음)` : ""}
+              </>
+            )}
+            {access.email_result_link ? (
+              <>
+                <br />
+                <span className="break-all text-[10px]">
+                  이메일용 링크(복사): {String(access.email_result_link)}
+                </span>
+              </>
+            ) : null}
+          </CardContent>
+        </Card>
       )}
 
       <Card className="mt-4 border-dashed border-[var(--border)]">

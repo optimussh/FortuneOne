@@ -18,8 +18,24 @@ async def fulfill_order(session: AsyncSession, order: PaymentOrder) -> dict:
         pk = order.product_key
         if not pk.startswith("product:"):
             pk = product_unlock_key(pk.replace("product:", ""))
-        await mon.grant_unlock(session, order.user_id, pk, source=f"pay_{order.provider}")
-        return {"unlock": pk, **meta}
+        row = await mon.grant_unlock(
+            session,
+            order.user_id,
+            pk,
+            source=f"pay_{order.provider}",
+            profile_id=order.profile_id,
+            partner_profile_id=order.partner_profile_id,
+            renew=True,
+        )
+        return {
+            "unlock": pk,
+            "web_expires_at": row.web_expires_at.isoformat() if row.web_expires_at else None,
+            "email_expires_at": row.email_expires_at.isoformat() if row.email_expires_at else None,
+            "email_token": row.email_token,
+            "web_view_days": mon.WEB_VIEW_DAYS,
+            "email_view_days": mon.EMAIL_VIEW_DAYS,
+            **meta,
+        }
 
     if kind == "wealth_year":
         year = 2026
@@ -29,8 +45,16 @@ async def fulfill_order(session: AsyncSession, order: PaymentOrder) -> dict:
             except ValueError:
                 year = 2026
         key = mon.wealth_product_key(year)
-        await mon.grant_unlock(session, order.user_id, key, source=f"pay_{order.provider}")
-        return {"unlock": key, **meta}
+        row = await mon.grant_unlock(
+            session, order.user_id, key, source=f"pay_{order.provider}", renew=True
+        )
+        return {
+            "unlock": key,
+            "web_expires_at": row.web_expires_at.isoformat() if row.web_expires_at else None,
+            "email_expires_at": row.email_expires_at.isoformat() if row.email_expires_at else None,
+            "email_token": row.email_token,
+            **meta,
+        }
 
     if kind == "beads_pack":
         from app.services.monetization import BEAD_PACKS

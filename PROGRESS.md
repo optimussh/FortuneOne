@@ -2,6 +2,14 @@
 
 프로젝트 진행 현황 로그. 커밋 직전 갱신 (`claude_Template` git 규칙).
 
+## 2026-07-23 (deploy CI + legal FO + re-view 7/30)
+
+- **ci:** `.github/workflows/ci.yml` — pytest, tsc, docker build
+- **docs:** `docs/DEPLOY.md` 배포·환경변수·스테이징 체크리스트
+- **legal:** 이용약관·개인정보 FortuneOne 전면 교체 · 푸터 사업자 고지 템플릿
+- **access:** 유료 다시보기 웹 **7일** · 이메일 토큰 **30일** (`content_unlocks` 컬럼)
+- **shop:** 구슬·부자되기 → `/api/payments` 주문 플로우 통일
+
 ## 2026-07-22 (payment ready — mock + Toss template)
 
 - **feat(payments):** provider `mock` | `toss` · orders/confirm/webhook/config

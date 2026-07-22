@@ -186,26 +186,67 @@ def _calc_profile(profile: FortuneProfile):
 @router.get("/products/{product_id}/result")
 async def store_product_result(
     product_id: str,
-    profile_id: int,
+    profile_id: Optional[int] = None,
     partner_id: Optional[int] = None,
-    current_user: User = Depends(get_current_user),
+    token: Optional[str] = None,
+    current_user: User | None = Depends(get_optional_user),
     session: AsyncSession = Depends(get_session),
 ):
     p = get_product(product_id)
     if not p:
         raise HTTPException(status_code=404, detail="상품 없음")
 
-    unlocked = p.get("is_free") or await mon.has_unlock(
-        session, current_user.id, product_unlock_key(product_id)
-    )
-    if not unlocked:
-        raise HTTPException(
-            status_code=402,
-            detail="결제가 필요합니다. 상품 페이지에서 모의 결제 후 이용해 주세요.",
-        )
+    key = product_unlock_key(product_id)
+    access_meta: dict = {}
+    owner_id: int | None = None
+
+    # Email magic link (30-day window)
+    if token:
+        row = await mon.get_unlock_by_email_token(session, token)
+        if not row or row.product_key != key:
+            raise HTTPException(status_code=404, detail="유효하지 않은 다시보기 링크입니다")
+        access_meta = mon.unlock_access_info(row, channel="email")
+        if not access_meta.get("ok"):
+            raise HTTPException(status_code=402, detail=access_meta.get("message"))
+        owner_id = row.user_id
+        profile_id = profile_id or row.profile_id
+        partner_id = partner_id or row.partner_profile_id
+    elif p.get("is_free"):
+        if not current_user:
+            raise HTTPException(status_code=401, detail="로그인이 필요합니다")
+        owner_id = current_user.id
+        access_meta = {
+            "ok": True,
+            "channel": "web",
+            "message": "무료 상품",
+        }
+    else:
+        if not current_user:
+            raise HTTPException(status_code=401, detail="로그인이 필요합니다")
+        row = await mon.get_unlock_row(session, current_user.id, key)
+        if not row:
+            raise HTTPException(
+                status_code=402,
+                detail="결제가 필요합니다. 상품 페이지에서 결제 후 이용해 주세요.",
+            )
+        access_meta = mon.unlock_access_info(row, channel="web")
+        if not access_meta.get("ok"):
+            raise HTTPException(
+                status_code=402,
+                detail=access_meta.get("message")
+                or "다시보기 기간이 만료되었습니다. 재구매해 주세요.",
+            )
+        owner_id = current_user.id
+        if not profile_id and row.profile_id:
+            profile_id = row.profile_id
+        if partner_id is None and row.partner_profile_id:
+            partner_id = row.partner_profile_id
+
+    if not profile_id:
+        raise HTTPException(status_code=400, detail="profile_id가 필요합니다")
 
     profile = await session.get(FortuneProfile, profile_id)
-    if not profile or profile.user_id != current_user.id:
+    if not profile or (owner_id is not None and profile.user_id != owner_id):
         raise HTTPException(status_code=404, detail="프로필 없음")
 
     eng = _calc_profile(profile)
@@ -214,7 +255,7 @@ async def store_product_result(
     partner_birth = None
     if partner_id:
         pp = await session.get(FortuneProfile, partner_id)
-        if pp and pp.user_id == current_user.id:
+        if pp and (owner_id is None or pp.user_id == owner_id):
             partner_eng = _calc_profile(pp)
             partner_name = getattr(pp, "display_name", "") or pp.label
             partner_birth = pp.solar_date
@@ -229,10 +270,21 @@ async def store_product_result(
         partner_name=partner_name,
         partner_birth=partner_birth,
     )
+    fe = __import__("app.core.config", fromlist=["settings"]).settings.FRONTEND_URL.rstrip("/")
+    email_link = None
+    if access_meta.get("email_token"):
+        email_link = f"{fe}/store/{product_id}/result?token={access_meta['email_token']}"
     return {
         "unlocked": True,
         "profile_id": profile_id,
         "report": report,
+        "access": {
+            **access_meta,
+            "web_view_days": mon.WEB_VIEW_DAYS,
+            "email_view_days": mon.EMAIL_VIEW_DAYS,
+            "email_result_link": email_link,
+            "policy": f"웹 다시보기 {mon.WEB_VIEW_DAYS}일 · 이메일 링크 {mon.EMAIL_VIEW_DAYS}일",
+        },
     }
 
 

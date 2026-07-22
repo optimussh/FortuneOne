@@ -41,12 +41,37 @@ def _sqlite_migrate_fortune_profiles(connection) -> None:
         print(f"[startup] profile migrate skip: {exc}")
 
 
+def _sqlite_migrate_content_unlocks(connection) -> None:
+    """Add re-view window columns on content_unlocks."""
+    try:
+        rows = connection.exec_driver_sql("PRAGMA table_info(content_unlocks)").fetchall()
+        if not rows:
+            return
+        cols = {r[1] for r in rows}
+        alters = []
+        for col, sqltype in [
+            ("web_expires_at", "DATETIME"),
+            ("email_expires_at", "DATETIME"),
+            ("email_token", "VARCHAR(64)"),
+            ("profile_id", "INTEGER"),
+            ("partner_profile_id", "INTEGER"),
+            ("renewed_at", "DATETIME"),
+        ]:
+            if col not in cols:
+                alters.append(f"ALTER TABLE content_unlocks ADD COLUMN {col} {sqltype}")
+        for sql in alters:
+            connection.exec_driver_sql(sql)
+    except Exception as exc:
+        print(f"[startup] unlocks migrate skip: {exc}")
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Initialize database tables on startup
     async with engine.begin() as conn:
         await conn.run_sync(SQLModel.metadata.create_all)
         await conn.run_sync(_sqlite_migrate_fortune_profiles)
+        await conn.run_sync(_sqlite_migrate_content_unlocks)
         
     # Seed local demo accounts (never block startup)
     try:

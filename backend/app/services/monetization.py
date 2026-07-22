@@ -9,8 +9,9 @@ Beads: tarot extra, ask (after free 1/day), other-profile deep unlock (year)
 from __future__ import annotations
 
 from copy import deepcopy
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from typing import Any
+import secrets
 
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
@@ -20,6 +21,10 @@ from app.models.monetization import BeadLedger, ContentUnlock, DailyFreeUse, Use
 # ── Catalog ──────────────────────────────────────────────────────────────
 
 STARTER_BEADS = 15
+
+# Re-view policy (commercial template; configurable later)
+WEB_VIEW_DAYS = 7
+EMAIL_VIEW_DAYS = 30
 
 BEAD_PACKS: dict[str, dict[str, Any]] = {
     "pack_100": {
@@ -128,14 +133,109 @@ async def get_or_create_wallet(session: AsyncSession, user_id: int) -> UserWalle
     return wallet
 
 
-async def has_unlock(session: AsyncSession, user_id: int, product_key: str) -> bool:
+def _apply_view_windows(
+    row: ContentUnlock,
+    *,
+    source: str,
+    profile_id: int | None = None,
+    partner_profile_id: int | None = None,
+    renew: bool = False,
+) -> ContentUnlock:
+    now = datetime.utcnow()
+    # free / grant: long window (1 year) so demo isn't blocked
+    if source in ("free", "grant", "starter"):
+        web_days, email_days = 365, 365
+    else:
+        web_days, email_days = WEB_VIEW_DAYS, EMAIL_VIEW_DAYS
+    row.web_expires_at = now + timedelta(days=web_days)
+    row.email_expires_at = now + timedelta(days=email_days)
+    if not row.email_token or renew:
+        row.email_token = secrets.token_urlsafe(24)
+    if profile_id is not None:
+        row.profile_id = profile_id
+    if partner_profile_id is not None:
+        row.partner_profile_id = partner_profile_id
+    if renew:
+        row.renewed_at = now
+        row.source = source
+    return row
+
+
+async def has_unlock(
+    session: AsyncSession,
+    user_id: int,
+    product_key: str,
+    *,
+    channel: str = "web",
+) -> bool:
+    """channel: web | email (email ignores web expiry if email window valid — used with token)."""
     result = await session.exec(
         select(ContentUnlock).where(
             ContentUnlock.user_id == user_id,
             ContentUnlock.product_key == product_key,
         )
     )
-    return result.first() is not None
+    row = result.first()
+    if not row:
+        return False
+    info = unlock_access_info(row, channel=channel)
+    return bool(info["ok"])
+
+
+def unlock_access_info(row: ContentUnlock, *, channel: str = "web") -> dict[str, Any]:
+    now = datetime.utcnow()
+    # Legacy rows without expiry → treat as valid (grandfather)
+    web_exp = getattr(row, "web_expires_at", None)
+    email_exp = getattr(row, "email_expires_at", None)
+    if channel == "email":
+        if email_exp is None:
+            return {
+                "ok": True,
+                "channel": "email",
+                "legacy": True,
+                "web_expires_at": web_exp.isoformat() if web_exp else None,
+                "email_expires_at": None,
+                "email_token": getattr(row, "email_token", None),
+            }
+        ok = email_exp >= now
+        return {
+            "ok": ok,
+            "channel": "email",
+            "reason": None if ok else "email_view_expired",
+            "message": None
+            if ok
+            else f"이메일 다시보기 기간({EMAIL_VIEW_DAYS}일)이 만료되었습니다. 재구매해 주세요.",
+            "web_expires_at": web_exp.isoformat() if web_exp else None,
+            "email_expires_at": email_exp.isoformat() if email_exp else None,
+            "email_token": row.email_token,
+        }
+    # web
+    if web_exp is None:
+        return {
+            "ok": True,
+            "channel": "web",
+            "legacy": True,
+            "web_expires_at": None,
+            "email_expires_at": email_exp.isoformat() if email_exp else None,
+            "email_token": getattr(row, "email_token", None),
+            "profile_id": getattr(row, "profile_id", None),
+            "partner_profile_id": getattr(row, "partner_profile_id", None),
+        }
+    ok = web_exp >= now
+    return {
+        "ok": ok,
+        "channel": "web",
+        "reason": None if ok else "web_view_expired",
+        "message": None
+        if ok
+        else f"웹 다시보기 기간({WEB_VIEW_DAYS}일)이 만료되었습니다. 재구매하거나 이메일 링크(최대 {EMAIL_VIEW_DAYS}일)를 이용하세요.",
+        "web_expires_at": web_exp.isoformat() if web_exp else None,
+        "email_expires_at": email_exp.isoformat() if email_exp else None,
+        "email_token": row.email_token,
+        "profile_id": getattr(row, "profile_id", None),
+        "partner_profile_id": getattr(row, "partner_profile_id", None),
+        "days_left_web": max(0, (web_exp - now).days) if web_exp else None,
+    }
 
 
 async def grant_unlock(
@@ -143,6 +243,10 @@ async def grant_unlock(
     user_id: int,
     product_key: str,
     source: str = "purchase",
+    *,
+    profile_id: int | None = None,
+    partner_profile_id: int | None = None,
+    renew: bool = True,
 ) -> ContentUnlock:
     existing = await session.exec(
         select(ContentUnlock).where(
@@ -152,12 +256,52 @@ async def grant_unlock(
     )
     row = existing.first()
     if row:
+        _apply_view_windows(
+            row,
+            source=source,
+            profile_id=profile_id,
+            partner_profile_id=partner_profile_id,
+            renew=renew,
+        )
+        session.add(row)
+        await session.commit()
+        await session.refresh(row)
         return row
     row = ContentUnlock(user_id=user_id, product_key=product_key, source=source)
+    _apply_view_windows(
+        row,
+        source=source,
+        profile_id=profile_id,
+        partner_profile_id=partner_profile_id,
+        renew=False,
+    )
     session.add(row)
     await session.commit()
     await session.refresh(row)
     return row
+
+
+async def get_unlock_row(
+    session: AsyncSession, user_id: int, product_key: str
+) -> ContentUnlock | None:
+    result = await session.exec(
+        select(ContentUnlock).where(
+            ContentUnlock.user_id == user_id,
+            ContentUnlock.product_key == product_key,
+        )
+    )
+    return result.first()
+
+
+async def get_unlock_by_email_token(
+    session: AsyncSession, token: str
+) -> ContentUnlock | None:
+    if not token:
+        return None
+    result = await session.exec(
+        select(ContentUnlock).where(ContentUnlock.email_token == token)
+    )
+    return result.first()
 
 
 async def add_beads(

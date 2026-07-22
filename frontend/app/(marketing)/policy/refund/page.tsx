@@ -25,7 +25,22 @@ export default function RefundPolicyPage() {
       </section>
 
       <section style={{ marginTop: 28 }}>
-        <h2 style={{ fontSize: 18, fontWeight: 700 }}>2. 청약 철회·환불</h2>
+        <h2 style={{ fontSize: 18, fontWeight: 700 }}>2. 다시보기 기간</h2>
+        <ul style={{ paddingLeft: 20 }}>
+          <li>
+            <strong>웹:</strong> 결제(해금) 완료 시점부터 <strong>7일</strong>간 동일 계정으로 결과
+            재열람 가능
+          </li>
+          <li>
+            <strong>이메일 링크:</strong> 제공 시 결제 시점부터 <strong>30일</strong>간 링크로 열람
+            가능
+          </li>
+          <li>기간 만료 후 재열람은 재결제가 필요할 수 있습니다.</li>
+        </ul>
+      </section>
+
+      <section style={{ marginTop: 28 }}>
+        <h2 style={{ fontSize: 18, fontWeight: 700 }}>3. 청약 철회·환불</h2>
         <ul style={{ paddingLeft: 20 }}>
           <li>
             결제 후 <strong>콘텐츠를 열람(결과 페이지 접속·다운로드)하기 전</strong>에는 원칙적으로

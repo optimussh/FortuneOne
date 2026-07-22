@@ -66,10 +66,22 @@ cd backend
 python -m pytest -v
 ```
 
+## CI / Deploy
+
+- GitHub Actions: `.github/workflows/ci.yml` (pytest · tsc · docker build)
+- 배포 가이드: [`docs/DEPLOY.md`](docs/DEPLOY.md)
+
+## 결제
+
+- 기본 `PAYMENT_PROVIDER=mock` — 키 없이 전 과정 테스트
+- 토스 준비 시 `TOSS_CLIENT_KEY` / `TOSS_SECRET_KEY` + `PAYMENT_PROVIDER=toss`
+- 다시보기: **웹 7일** · **이메일 링크 30일**
+
 ## Docs
 
 - Design: `docs/superpowers/specs/2026-07-19-fortuneone-local-mvp-design.md`
-- Plan: `docs/superpowers/plans/2026-07-19-fortuneone-local-mvp.md`
+- Payment: `docs/superpowers/specs/2026-07-22-payment-ready.md`
+- Deploy: `docs/DEPLOY.md`
 
 ## Repo
 

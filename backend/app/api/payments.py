@@ -84,10 +84,15 @@ async def create_order(
             f"/store/{body.product_id}/result?profile_id={body.profile_id}"
             + (f"&partner_id={body.partner_profile_id}" if body.partner_profile_id else "")
         )
-        # free → grant immediately
+        # free → grant immediately (long window)
         if amount == 0:
-            await mon.grant_unlock(
-                session, current_user.id, product_key, source="free"
+            row = await mon.grant_unlock(
+                session,
+                current_user.id,
+                product_key,
+                source="free",
+                profile_id=body.profile_id,
+                partner_profile_id=body.partner_profile_id,
             )
             return {
                 "ok": True,
@@ -96,6 +101,13 @@ async def create_order(
                 "amount_krw": 0,
                 "message": "무료 상품 · 바로 결과 확인",
                 "result_path": result_path,
+                "access": {
+                    "web_expires_at": row.web_expires_at.isoformat() if row.web_expires_at else None,
+                    "email_expires_at": row.email_expires_at.isoformat() if row.email_expires_at else None,
+                    "email_token": row.email_token,
+                    "web_view_days": mon.WEB_VIEW_DAYS,
+                    "email_view_days": mon.EMAIL_VIEW_DAYS,
+                },
             }
 
     elif body.kind == "wealth_year":

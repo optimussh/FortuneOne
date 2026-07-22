@@ -25,9 +25,18 @@ class ContentUnlock(SQLModel, table=True):
 
     id: Optional[int] = Field(default=None, primary_key=True)
     user_id: int = Field(index=True)
-    product_key: str = Field(index=True, max_length=64)  # e.g. wealth_2026
-    source: str = Field(default="purchase", max_length=32)  # purchase | beads | grant
+    product_key: str = Field(index=True, max_length=64)  # e.g. wealth_2026 / product:p1
+    source: str = Field(default="purchase", max_length=32)  # purchase | beads | grant | free
     created_at: datetime = Field(default_factory=datetime.utcnow)
+    # Re-view windows (commercial policy template)
+    # web_expires_at: logged-in web access (default +7d from grant/renew)
+    # email_expires_at: magic link access (default +30d)
+    web_expires_at: Optional[datetime] = None
+    email_expires_at: Optional[datetime] = None
+    email_token: Optional[str] = Field(default=None, index=True, max_length=64)
+    profile_id: Optional[int] = None  # last profile used for result deep-link
+    partner_profile_id: Optional[int] = None
+    renewed_at: Optional[datetime] = None
 
 
 class BeadLedger(SQLModel, table=True):

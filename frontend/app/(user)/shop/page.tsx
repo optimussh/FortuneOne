@@ -4,7 +4,13 @@ import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
-import { buyBeadPack, buyWealthYear, getWallet, type WalletInfo } from "@/lib/api";
+import {
+  createPaymentOrder,
+  getPaymentConfig,
+  getWallet,
+  type PaymentConfig,
+  type WalletInfo,
+} from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -12,8 +18,10 @@ export default function ShopPage() {
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
   const [wallet, setWallet] = useState<WalletInfo | null>(null);
+  const [payCfg, setPayCfg] = useState<PaymentConfig | null>(null);
   const [msg, setMsg] = useState("");
   const [busy, setBusy] = useState(false);
+  const [agree, setAgree] = useState(false);
 
   const load = useCallback(async () => {
     const w = await getWallet();
@@ -27,6 +35,7 @@ export default function ShopPage() {
       return;
     }
     void load().catch((e) => setMsg(e instanceof Error ? e.message : "실패"));
+    getPaymentConfig().then(setPayCfg).catch(() => null);
   }, [user, authLoading, router, load]);
 
   const packs =
@@ -38,26 +47,36 @@ export default function ShopPage() {
       bonus_pct: number;
     }[]) || [];
 
-  const onBuyPack = async (id: string) => {
-    setBusy(true);
-    setMsg("");
-    try {
-      const r = await buyBeadPack(id);
-      setMsg(r.message);
-      await load();
-    } catch (e) {
-      setMsg(e instanceof Error ? e.message : "실패");
-    } finally {
-      setBusy(false);
+  const startPay = async (kind: "beads_pack" | "wealth_year", product_id: string) => {
+    if (!agree) {
+      setMsg("약관에 동의해 주세요");
+      return;
     }
-  };
-
-  const onUnlock = async () => {
     setBusy(true);
     setMsg("");
     try {
-      const r = await buyWealthYear(2026);
-      setMsg(r.message);
+      const order = await createPaymentOrder({
+        kind,
+        product_id,
+        agree_privacy: true,
+        agree_age14: true,
+        email: user?.email || "",
+      });
+      if (order.free) {
+        setMsg(order.message);
+        await load();
+        return;
+      }
+      if (order.provider === "mock" || order.mock_auto_confirm) {
+        const q = new URLSearchParams({
+          orderId: order.order_id || "",
+          paymentKey: `mock_${order.order_id}`,
+          amount: String(order.amount_krw),
+        });
+        router.push(`/payments/success?${q}`);
+        return;
+      }
+      setMsg("토스 결제 연동: 스토어 체크아웃과 동일한 SDK 경로를 사용하세요. 현재는 mock 권장.");
       await load();
     } catch (e) {
       setMsg(e instanceof Error ? e.message : "실패");
@@ -81,7 +100,16 @@ export default function ShopPage() {
         <h1 className="mt-1 text-2xl font-extrabold">구슬 · 해금</h1>
         <p className="mt-2 text-sm text-[var(--muted)]">{wallet.note}</p>
         <p className="mt-3 text-3xl font-extrabold text-amber-600">✦ {wallet.beads}</p>
-        <p className="text-xs text-[var(--muted)]">보유 구슬 (가입 시 {wallet.starter_beads}개 지급)</p>
+        <p className="text-xs text-[var(--muted)]">
+          보유 구슬 · 결제 provider: {payCfg?.provider || "mock"}
+        </p>
+        <p className="mt-2 text-[10px] text-[var(--muted)]">
+          유료 해금 다시보기: 웹 7일 · 이메일 링크 30일 (
+          <Link href="/policy/refund" className="underline">
+            환불·기간 정책
+          </Link>
+          )
+        </p>
       </div>
 
       {msg && (
@@ -90,19 +118,33 @@ export default function ShopPage() {
         </p>
       )}
 
+      <label className="mb-4 flex items-start gap-2 text-sm">
+        <input type="checkbox" checked={agree} onChange={(e) => setAgree(e.target.checked)} />
+        <span>
+          <Link href="/policy" className="underline">
+            이용약관
+          </Link>
+          ·
+          <Link href="/policy/privacy" className="underline">
+            개인정보
+          </Link>
+          · 만 14세 이상 동의
+        </span>
+      </label>
+
       <Card className="mb-4 border-amber-400 bg-amber-50">
         <CardHeader className="pb-2">
           <CardTitle className="text-base">2026 부자되기 단건</CardTitle>
           <CardDescription className="text-xs">
-            총론 전문 · 월별 · 일자 캘린더 · 장문 · 저장 — 모의{" "}
-            {(wallet.catalog as { wealth_year?: { price_krw: number } })?.wealth_year?.price_krw?.toLocaleString() ||
-              "3,900"}
-            원
+            연간 해금 · 모의/토스 결제 모듈 연동
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Button disabled={busy || wealthUnlocked} onClick={() => void onUnlock()}>
-            {wealthUnlocked ? "이미 해금됨" : "모의 결제로 해금"}
+          <Button
+            disabled={busy || wealthUnlocked}
+            onClick={() => void startPay("wealth_year", "wealth_2026")}
+          >
+            {wealthUnlocked ? "이미 해금됨" : "결제하고 해금"}
           </Button>
           <Button asChild variant="link" className="mt-2">
             <Link href="/me?tab=wealth">부자되기 보기 →</Link>
@@ -113,9 +155,7 @@ export default function ShopPage() {
       <Card className="mb-4 border-[var(--border)]">
         <CardHeader className="pb-2">
           <CardTitle className="text-base">구슬 팩</CardTitle>
-          <CardDescription className="text-xs">
-            많이 살수록 보너스 · 타로 추가·질문·프로필 심화에 사용
-          </CardDescription>
+          <CardDescription className="text-xs">타로 추가·질문·프로필 심화</CardDescription>
         </CardHeader>
         <CardContent className="space-y-2">
           {packs.map((p) => (
@@ -130,8 +170,13 @@ export default function ShopPage() {
                   {p.bonus_pct ? ` · +${p.bonus_pct}%` : ""}
                 </div>
               </div>
-              <Button size="sm" variant="outline" disabled={busy} onClick={() => void onBuyPack(p.id)}>
-                모의 구매
+              <Button
+                size="sm"
+                variant="outline"
+                disabled={busy}
+                onClick={() => void startPay("beads_pack", p.id)}
+              >
+                결제
               </Button>
             </div>
           ))}
@@ -147,19 +192,13 @@ export default function ShopPage() {
           <p>· 질문형 (무료 1회/일 초과): {wallet.costs.ask} 구슬</p>
           <p>· 다른 사람 프로필 심화: {wallet.costs.profile_deep} 구슬</p>
           <p className="pt-2 text-[10px]">
-            점수·운세는 참고 지표이며 투자 권유가 아닙니다. 실제 PG 연동 전 모의 결제만 동작합니다.
+            <Link href="/store" className="text-[var(--primary)] underline">
+              운세 스토어
+            </Link>
+            도 동일 결제 모듈을 사용합니다.
           </p>
         </CardContent>
       </Card>
-
-      <div className="mt-6 flex justify-center gap-3 text-sm">
-        <Link href="/hub" className="text-[var(--primary)] underline">
-          허브
-        </Link>
-        <Link href="/me?tab=wealth" className="text-[var(--primary)] underline">
-          부자되기
-        </Link>
-      </div>
     </main>
   );
 }

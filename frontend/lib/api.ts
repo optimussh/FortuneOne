@@ -894,15 +894,31 @@ export async function checkoutStoreProduct(body: {
 export async function getStoreProductResult(
   productId: string,
   profileId: number,
-  partnerId?: number
+  partnerId?: number,
+  token?: string
 ) {
-  const q = new URLSearchParams({ profile_id: String(profileId) });
+  const q = new URLSearchParams();
+  if (profileId) q.set("profile_id", String(profileId));
   if (partnerId) q.set("partner_id", String(partnerId));
+  if (token) q.set("token", token);
   const res = await apiFetch(`/api/store/products/${productId}/result?${q}`);
   if (!res.ok) throw new Error(parseApiError(await res.text(), "결과 조회 실패"));
   return res.json() as Promise<{
     unlocked: boolean;
     profile_id: number;
+    access?: {
+      ok?: boolean;
+      channel?: string;
+      web_expires_at?: string | null;
+      email_expires_at?: string | null;
+      email_token?: string | null;
+      email_result_link?: string | null;
+      policy?: string;
+      days_left_web?: number | null;
+      web_view_days?: number;
+      email_view_days?: number;
+      message?: string;
+    };
     report: {
       product: { id: string; title: string; price_krw?: number };
       header: Record<string, unknown>;
