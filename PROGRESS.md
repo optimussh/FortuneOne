@@ -2,6 +2,13 @@
 
 프로젝트 진행 현황 로그. 커밋 직전 갱신 (`claude_Template` git 규칙).
 
+## 2026-07-22 (product content quality pack)
+
+- **catalog v2:** FO 제목·소개·이런분께·8단 구성 · money/career FO 상품 보강 (128종)
+- **report:** 스토어 결과 장문(섹션당 ~300자+) · role_guide 포함
+- **UX:** 스토어/허브/상세 사주에 **기본 탭 vs 스토어 심화** 역할 안내
+- **script:** `backend/app/data/polish_catalog.py`
+
 ## 2026-07-22 (next: catalog UX + verification badge)
 
 - **catalog:** 카테고리 스코어링 재분류 (money/career 키워드 보강) · 섹션 템플릿 6단 확장

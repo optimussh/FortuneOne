@@ -810,6 +810,7 @@ export async function getDailyTarotToday() {
 export type StoreProduct = {
   id: string;
   title: string;
+  subtitle?: string;
   price_krw: number;
   category_id: string;
   category_label: string;
@@ -821,6 +822,9 @@ export type StoreProduct = {
   tone?: string;
   payment?: Record<string, unknown>;
   intro_blurbs?: string[];
+  for_whom?: string[];
+  diff_from_free_tabs?: string;
+  copy_version?: number;
 };
 
 export async function getStoreMenu() {
@@ -829,14 +833,27 @@ export async function getStoreMenu() {
     categories: { id: string; label: string }[];
     payment_module: Record<string, unknown>;
     engine_plan: Record<string, unknown>;
+    role_guide?: {
+      free_tabs?: Record<string, string>;
+      store?: string;
+      summary?: string;
+    };
+    content_quality?: { category_counts?: Record<string, number> };
   }>("/api/store/menu");
 }
 
 export async function getStoreProducts(category?: string) {
   const q = category ? `?category=${encodeURIComponent(category)}` : "";
-  return publicJson<{ count: number; products: StoreProduct[] }>(
-    `/api/store/products${q}`
-  );
+  return publicJson<{
+    count: number;
+    products: StoreProduct[];
+    role_guide?: {
+      free_tabs?: Record<string, string>;
+      store?: string;
+      summary?: string;
+    };
+    category_counts?: Record<string, number>;
+  }>(`/api/store/products${q}`);
 }
 
 export async function getStoreProduct(id: string) {

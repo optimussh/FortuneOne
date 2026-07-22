@@ -36,6 +36,8 @@ async def store_menu():
         "categories": cat.get("categories") or [],
         "payment_module": cat.get("payment_module") or {},
         "engine_plan": cat.get("engine_plan") or {},
+        "role_guide": cat.get("role_guide"),
+        "content_quality": cat.get("content_quality"),
     }
 
 
@@ -45,22 +47,35 @@ async def store_products(category: Optional[str] = None):
     # public list without source_title
     public = []
     for p in items:
-        public.append(
-            {
-                "id": p["id"],
-                "title": p["title"],
-                "price_krw": p["price_krw"],
-                "category_id": p["category_id"],
-                "category_label": p["category_label"],
-                "needs_profile": p.get("needs_profile", True),
-                "needs_partner": p.get("needs_partner", False),
-                "is_free": p.get("is_free", False),
-                "preview_sections": p.get("preview_sections") or [],
-                "result_sections": p.get("result_sections") or [],
-                "tone": p.get("tone"),
-            }
-        )
-    return {"count": len(public), "products": public}
+        public.append(_public_product(p))
+    cat = load_catalog()
+    return {
+        "count": len(public),
+        "products": public,
+        "role_guide": cat.get("role_guide"),
+        "category_counts": (cat.get("content_quality") or {}).get("category_counts"),
+    }
+
+
+def _public_product(p: dict) -> dict:
+    return {
+        "id": p["id"],
+        "title": p["title"],
+        "subtitle": p.get("subtitle"),
+        "price_krw": p["price_krw"],
+        "category_id": p["category_id"],
+        "category_label": p["category_label"],
+        "needs_profile": p.get("needs_profile", True),
+        "needs_partner": p.get("needs_partner", False),
+        "is_free": p.get("is_free", False),
+        "preview_sections": p.get("preview_sections") or [],
+        "result_sections": p.get("result_sections") or [],
+        "intro_blurbs": p.get("intro_blurbs") or [],
+        "for_whom": p.get("for_whom") or [],
+        "diff_from_free_tabs": p.get("diff_from_free_tabs"),
+        "tone": p.get("tone"),
+        "copy_version": p.get("copy_version"),
+    }
 
 
 @router.get("/products/{product_id}")
@@ -77,28 +92,18 @@ async def store_product_detail(
         unlocked = await mon.has_unlock(session, user.id, product_unlock_key(product_id))
         if p.get("is_free"):
             unlocked = True
+    pub = _public_product(p)
+    pub["payment"] = p.get("payment") or load_catalog().get("payment_module")
+    if not pub.get("intro_blurbs"):
+        pub["intro_blurbs"] = [
+            f"「{p['title']}」은 회원님 사주 원국을 바탕으로 한 FortuneOne 해석입니다.",
+            "상세 사주 탭(신년·토정·부자되기)은 기본 제공, 스토어는 주제 심화 패키지입니다.",
+        ]
     return {
-        "product": {
-            "id": p["id"],
-            "title": p["title"],
-            "price_krw": p["price_krw"],
-            "category_id": p["category_id"],
-            "category_label": p["category_label"],
-            "needs_profile": p.get("needs_profile", True),
-            "needs_partner": p.get("needs_partner", False),
-            "is_free": p.get("is_free", False),
-            "preview_sections": p.get("preview_sections") or [],
-            "result_sections": p.get("result_sections") or [],
-            "tone": p.get("tone"),
-            "payment": p.get("payment") or load_catalog().get("payment_module"),
-            "intro_blurbs": [
-                f"「{p['title']}」은 회원님 사주 원국을 바탕으로 한 FortuneOne 해석입니다.",
-                "구성은 샘플 사이트의 상품 구조(소개·태그·본문 섹션)를 벤치마크하되, 문장·용어는 자체 스타일입니다.",
-                "제목·상세 카피는 추후 교체 가능하도록 분리되어 있습니다.",
-            ],
-        },
+        "product": pub,
         "unlocked": unlocked,
         "payment_module": load_catalog().get("payment_module") or {},
+        "role_guide": load_catalog().get("role_guide"),
     }
 
 

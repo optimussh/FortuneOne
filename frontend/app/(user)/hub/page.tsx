@@ -185,30 +185,50 @@ export default function HubPage() {
         </Card>
       )}
 
+      <Card className="mb-4 border-dashed border-[var(--border)]">
+        <CardContent className="py-3 text-center text-[11px] leading-relaxed text-[var(--muted)]">
+          <strong className="text-[var(--foreground)]">역할 안내</strong> — 허브·상세 탭은
+          기본 제공 리포트,{" "}
+          <Link href="/store" className="font-semibold text-[var(--primary)] underline">
+            스토어
+          </Link>
+          는 연애·결혼·재물 등 주제 심화 패키지입니다.
+        </CardContent>
+      </Card>
+
       <div className="mb-6 grid gap-3 sm:grid-cols-2">
         <Card className="border-[var(--primary)] bg-[var(--primary-light)]">
           <CardContent className="flex items-center justify-between gap-3 py-4">
             <div>
-              <p className="text-sm font-bold">2026 명품 토정</p>
-              <p className="mt-0.5 text-xs text-[var(--muted)]">
-                종합운 · 월별 12 · 영역운 · 행운 숫자·색
-              </p>
+              <p className="text-sm font-bold">2026 토정 (기본)</p>
+              <p className="mt-0.5 text-xs text-[var(--muted)]">종합 · 월별 12 · 영역운</p>
             </div>
             <Button asChild size="sm">
-              <Link href="/me?tab=tojeong">바로 보기</Link>
+              <Link href="/me?tab=tojeong">보기</Link>
             </Button>
           </CardContent>
         </Card>
         <Card className="border-amber-500/50 bg-amber-50">
           <CardContent className="flex items-center justify-between gap-3 py-4">
             <div>
-              <p className="text-sm font-bold text-amber-900">2026 부자되기</p>
-              <p className="mt-0.5 text-xs text-amber-800/80">
-                재물 총론 · 월 등급 · 일자 캘린더
-              </p>
+              <p className="text-sm font-bold text-amber-900">2026 부자되기 (기본)</p>
+              <p className="mt-0.5 text-xs text-amber-800/80">월 등급 · 일자 캘린더</p>
             </div>
             <Button asChild size="sm" className="bg-amber-700 hover:bg-amber-800">
-              <Link href="/me?tab=wealth">바로 보기</Link>
+              <Link href="/me?tab=wealth">보기</Link>
+            </Button>
+          </CardContent>
+        </Card>
+        <Card className="border-[var(--border)] sm:col-span-2">
+          <CardContent className="flex items-center justify-between gap-3 py-4">
+            <div>
+              <p className="text-sm font-bold">운세 스토어 (심화)</p>
+              <p className="mt-0.5 text-xs text-[var(--muted)]">
+                연애·결혼·재물·직장 주제 패키지 · 모의 결제
+              </p>
+            </div>
+            <Button asChild size="sm" variant="outline">
+              <Link href="/store">둘러보기</Link>
             </Button>
           </CardContent>
         </Card>

@@ -78,7 +78,17 @@ function ResultInner() {
         </div>
       )}
 
-      <Card className="mt-6 border-[var(--border)]">
+      <Card className="mt-4 border-dashed border-[var(--border)]">
+        <CardContent className="py-3 text-center text-[11px] text-[var(--muted)]">
+          이 결과는 <strong>스토어 주제 심화</strong>입니다. 기본 탭(신년·토정·부자되기)과
+          역할이 다릅니다.{" "}
+          <Link href="/me" className="text-[var(--primary)] underline">
+            상세 사주
+          </Link>
+        </CardContent>
+      </Card>
+
+      <Card className="mt-4 border-[var(--border)]">
         <CardHeader className="pb-2">
           <CardTitle className="text-base">서문</CardTitle>
         </CardHeader>

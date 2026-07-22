@@ -51,6 +51,9 @@ export default function StoreProductPage() {
         {product.category_label}
       </p>
       <h1 className="mt-2 text-center text-xl font-extrabold leading-snug">{product.title}</h1>
+      {product.subtitle && (
+        <p className="mt-1 text-center text-xs text-[var(--muted)]">{product.subtitle}</p>
+      )}
       <p className="mt-3 text-center text-2xl font-extrabold text-amber-700">
         {product.is_free ? "무료" : `${product.price_krw.toLocaleString()}원`}
       </p>
@@ -63,16 +66,27 @@ export default function StoreProductPage() {
           {(product.intro_blurbs || []).map((b, i) => (
             <p key={i}>{b}</p>
           ))}
-          <p className="text-[11px]">
-            샘플 사이트의 상품 구조(소개 · 구성 · 결제)를 벤치마크했으며, 본문 문장·제목 표현은
-            FortuneOne 스타일로 다시 썼습니다. 세부 카피는 추후 교체 가능합니다.
-          </p>
         </CardContent>
       </Card>
 
+      {(product.for_whom || []).length > 0 && (
+        <Card className="mt-4 border-[var(--border)]">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base">이런 분께</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ul className="list-disc space-y-1 pl-5 text-sm">
+              {product.for_whom!.map((x) => (
+                <li key={x}>{x}</li>
+              ))}
+            </ul>
+          </CardContent>
+        </Card>
+      )}
+
       <Card className="mt-4 border-[var(--border)]">
         <CardHeader className="pb-2">
-          <CardTitle className="text-base">운세 구성</CardTitle>
+          <CardTitle className="text-base">운세 구성 ({(product.result_sections || []).length}단)</CardTitle>
         </CardHeader>
         <CardContent>
           <ol className="list-decimal space-y-1 pl-5 text-sm">
@@ -80,6 +94,31 @@ export default function StoreProductPage() {
               <li key={s}>{s}</li>
             ))}
           </ol>
+        </CardContent>
+      </Card>
+
+      <Card className="mt-4 border-amber-200 bg-amber-50">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-base">기본 탭과 차이</CardTitle>
+        </CardHeader>
+        <CardContent className="text-xs leading-relaxed text-[var(--muted)]">
+          <p>
+            {product.diff_from_free_tabs ||
+              "상세 사주 탭(오늘·신년·토정·부자되기)은 기본 제공, 스토어는 주제 심화 패키지입니다."}
+          </p>
+          <p className="mt-2">
+            <Link href="/me" className="font-semibold text-[var(--primary)] underline">
+              상세 사주 열기
+            </Link>
+            {" · "}
+            <Link href="/me?tab=tojeong" className="underline text-[var(--primary)]">
+              토정
+            </Link>
+            {" · "}
+            <Link href="/me?tab=wealth" className="underline text-[var(--primary)]">
+              부자되기
+            </Link>
+          </p>
         </CardContent>
       </Card>
 
@@ -99,9 +138,7 @@ export default function StoreProductPage() {
 
       <div className="mt-8 flex flex-col gap-2">
         {unlocked ? (
-          <Button
-            onClick={() => router.push(`/store/${product.id}/checkout?unlocked=1`)}
-          >
+          <Button onClick={() => router.push(`/store/${product.id}/checkout?unlocked=1`)}>
             결과 보기 (해금됨)
           </Button>
         ) : (

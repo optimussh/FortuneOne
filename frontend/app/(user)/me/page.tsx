@@ -273,10 +273,10 @@ function TojeongPanel({ data }: { data: TojeongReport }) {
 
 const TABS = [
   { id: "daily", label: "오늘의 운세" },
-  { id: "newyear", label: "2026 신년" },
-  { id: "tojeong", label: "2026 토정" },
-  { id: "wealth", label: "2026 부자되기" },
-  { id: "five", label: "오행 사주" },
+  { id: "newyear", label: "신년(기본)" },
+  { id: "tojeong", label: "토정(기본)" },
+  { id: "wealth", label: "부자되기(기본)" },
+  { id: "five", label: "오행" },
   { id: "life", label: "인생풀이" },
 ] as const;
 
@@ -444,6 +444,13 @@ function MePageInner() {
           {" · "}
           {formatTimeSlotLabel(profile.time_slot, profile.hour, profile.time_unknown)} · 일간{" "}
           <span className="font-bold text-[var(--primary)]">{report.day_master}</span>
+        </p>
+        <p className="mt-2 text-[11px] leading-relaxed text-[var(--muted)]">
+          <strong className="text-[var(--foreground)]">기본 리포트</strong>
+          (오늘·신년·토정·부자되기·오행·인생풀이) · 주제 심화는{" "}
+          <Link href="/store" className="font-semibold text-[var(--primary)] underline">
+            운세 스토어
+          </Link>
         </p>
         <p className="mt-2 text-xs">
           <Link href="/profiles" className="font-semibold text-[var(--primary)] underline">

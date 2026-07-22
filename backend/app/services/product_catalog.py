@@ -23,6 +23,12 @@ def load_catalog() -> dict[str, Any]:
     return json.loads(_DATA.read_text(encoding="utf-8"))
 
 
+def reload_catalog() -> dict[str, Any]:
+    """Clear cache after polish/regenerate."""
+    load_catalog.cache_clear()
+    return load_catalog()
+
+
 def list_products(category_id: str | None = None) -> list[dict[str, Any]]:
     items = load_catalog().get("products") or []
     if category_id:
