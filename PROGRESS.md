@@ -2,6 +2,16 @@
 
 프로젝트 진행 현황 로그. 커밋 직전 갱신 (`claude_Template` git 규칙).
 
+## 2026-07-22 (commercial-safe multi-engine)
+
+- **feat(engines):** MIT only multi-engine fact layer
+  - primary `sajupy` · cross-check `lunar_python` (6tail)
+  - disagreement → primary + warnings (no silent merge)
+- **deps:** `lunar_python>=1.3.0`
+- **API:** `GET /api/fortune/engines`, `chart_facts` on saju/full-report
+- **docs:** `2026-07-22-commercial-safe-engines.md`
+- **skip:** sxtwl (native build), GPL/unknown license, scraped copy
+
 ## 2026-07-22 (unsin benchmark store)
 
 - **feat(store):** 샘플 IA 벤치마크 상품 카탈로그 **110** · `/store` 목록·상세·모의결제·결과

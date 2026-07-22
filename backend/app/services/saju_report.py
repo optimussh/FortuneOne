@@ -511,6 +511,7 @@ def build_full_report(
             ),
         },
         "mingshi": mingshi_table(result),
+        "chart_facts": getattr(result, "chart_facts", None),
         "day_master": result.day_master,
         "elements": result.elements,
         "weak_elements": result.weak_elements,

@@ -105,6 +105,7 @@ class SajuResponse(BaseModel):
     yongsin: YongsinOut | None = None
     daeun: list[DaeunOut] = []
     lucky_items: list[AffiliateItem] = []
+    chart_facts: dict | None = None
 
 
 def _run_saju(body: SajuRequest):
@@ -185,7 +186,19 @@ def _to_saju_response(result, body: SajuRequest, hour: int, minute: int, time_as
             for p in result.daeun
         ],
         lucky_items=items,
+        chart_facts=getattr(result, "chart_facts", None),
     )
+
+
+@router.get("/engines")
+async def list_safe_engines():
+    """Commercial-safe engine registry (MIT/Apache/BSD only)."""
+    from app.services.engines.merge import COMMERCIAL_SAFE_ENGINES
+
+    return {
+        "policy": "Only MIT/Apache/BSD engines with explicit commercial use.",
+        "engines": COMMERCIAL_SAFE_ENGINES,
+    }
 
 
 @router.post("/saju", response_model=SajuResponse)

@@ -205,7 +205,8 @@ def build_product_report(
             "상용 운세 문구를 복제하지 않습니다. 엔터테인먼트 목적이며 중요 결정은 전문가 상담을 권합니다."
         ),
         "engine_note": (
-            "현재: sajupy 원국 + FO 카테고리별 서사 모듈. "
-            "추후 multi-engine(fact layer 합의 + 문체 모듈 분리) 확장 예정."
+            "Fact layer: sajupy (MIT, primary) + lunar_python/6tail (MIT, cross-check). "
+            "Narrative: FortuneOne category templates (not commercial copy)."
         ),
+        "chart_facts": getattr(result, "chart_facts", None),
     }

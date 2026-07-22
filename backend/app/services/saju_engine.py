@@ -115,6 +115,8 @@ class SajuResult:
     strong_elements: list[str] = field(default_factory=list)
     yongsin: YongsinAdvice | None = None
     daeun: list[DaeunPeriod] = field(default_factory=list)
+    # Multi-engine commercial-safe fact verification (optional)
+    chart_facts: dict | None = None
 
 
 def _count_elements(pillars: Pillars) -> dict[str, int]:
@@ -230,13 +232,27 @@ class SajuEngine:
         as_of: date | None = None,
         time_assumed: bool = False,
     ) -> SajuResult:
-        raw = self._calculate_pillars(solar_date, hour, minute)
+        raw = self._calculate_pillars(
+            solar_date, hour, minute, time_assumed=time_assumed
+        )
         pillars = Pillars(
             year=StemBranch(stem=raw["year_stem"], branch=raw["year_branch"]),
             month=StemBranch(stem=raw["month_stem"], branch=raw["month_branch"]),
             day=StemBranch(stem=raw["day_stem"], branch=raw["day_branch"]),
-            hour=StemBranch(stem=raw["hour_stem"], branch=raw["hour_branch"]),
+            hour=(
+                StemBranch(stem=raw["hour_stem"], branch=raw["hour_branch"])
+                if raw.get("hour_stem") and raw.get("hour_branch")
+                else None
+            ),
         )
+        # When time assumed, still keep hour pillar for engine completeness
+        if pillars.hour is None and raw.get("hour_stem"):
+            pillars = Pillars(
+                year=pillars.year,
+                month=pillars.month,
+                day=pillars.day,
+                hour=StemBranch(stem=raw["hour_stem"], branch=raw["hour_branch"]),
+            )
         day_master = pillars.day.stem
         elements = _count_elements(pillars)
         target = as_of or date.today()
@@ -253,27 +269,46 @@ class SajuEngine:
             strong_elements=strong,
             yongsin=yongsin,
             daeun=daeun,
+            chart_facts=raw.get("chart_facts"),
         )
 
     def _calculate_pillars(
-        self, solar_date: date, hour: int, minute: int
+        self,
+        solar_date: date,
+        hour: int,
+        minute: int,
+        *,
+        time_assumed: bool = False,
     ) -> dict[str, Any]:
+        """Multi-engine commercial-safe pillars (sajupy primary + lunar_python check)."""
         try:
-            from sajupy import calculate_saju
-        except ImportError as exc:  # pragma: no cover
-            raise RuntimeError("sajupy is not installed") from exc
+            from app.services.engines.merge import compute_chart_facts, facts_to_raw_dict
 
-        try:
-            return calculate_saju(
-                solar_date.year,
-                solar_date.month,
-                solar_date.day,
+            facts = compute_chart_facts(
+                solar_date,
                 hour,
                 minute,
                 utc_offset=9,
+                time_unknown=time_assumed,
             )
-        except Exception as exc:
-            raise ValueError(f"사주 계산 실패: {exc}") from exc
+            return facts_to_raw_dict(facts)
+        except Exception:
+            # Fallback: sajupy only (still MIT)
+            try:
+                from sajupy import calculate_saju
+            except ImportError as exc:  # pragma: no cover
+                raise RuntimeError("sajupy is not installed") from exc
+            try:
+                return calculate_saju(
+                    solar_date.year,
+                    solar_date.month,
+                    solar_date.day,
+                    hour,
+                    minute,
+                    utc_offset=9,
+                )
+            except Exception as exc:
+                raise ValueError(f"사주 계산 실패: {exc}") from exc
 
 
 def compatibility_score(
