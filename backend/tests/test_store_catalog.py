@@ -21,7 +21,7 @@ def test_product_report_sections():
     rep = build_product_report(p, r, date(1990, 8, 27), "male", display_name="테스트")
     assert rep["sections"]
     assert rep["header"]["day_master"]
-    assert "FortuneOne" in rep["disclaimer"] or "자체" in rep["disclaimer"] or "규칙" in rep["disclaimer"]
+    assert "참고" in rep["disclaimer"] or "자문" in rep["disclaimer"]
     # v3: multi-paragraph, no robotic FO footer stamp
     body0 = rep["sections"][0]["body"]
     assert "FO 자체 문체" not in body0
