@@ -2,6 +2,11 @@
 
 프로젝트 진행 현황 로그. 커밋 직전 갱신 (`claude_Template` git 규칙).
 
+## 2026-07-23 (user-facing copy: no engine jargon)
+
+- **catalog/report:** 상품 소개·결과에서 MIT/sajupy/템플릿/복제 고지 문구 제거
+- **how:** 이용 방법 + 참고용 면책 + 다시보기만 남김 (기술 스택 문구는 `/about/engines`)
+
 ## 2026-07-23 (catalog copy v3 — 3x 주제별 상세)
 
 - **catalog v3:** 전 상품(128) `intro_blurbs`·`for_whom`·`diff_from_free_tabs`·`subtitle` 주제별 구체화·설득 문안

@@ -108,13 +108,10 @@ def build_product_report(
         ),
     )
 
-    if chart_facts and chart_facts.get("agreement"):
-        intro += (
-            f"\n\n원국 계산은 상용 가능(MIT) 엔진 교차 확인을 거쳤습니다. "
-            f"문장은 FortuneOne 규칙으로 생성한 참고용 해석입니다."
-        )
-    else:
-        intro += "\n\n문장은 FortuneOne 규칙으로 생성한 참고용 해석이며, 결정권은 언제나 본인에게 있습니다."
+    intro += (
+        "\n\n아래 해석은 참고용입니다. 결정은 언제나 본인 몫이며, "
+        "필요할 때만 다시 펼쳐 보셔도 충분합니다."
+    )
 
     section_titles = list(
         product.get("result_sections")
@@ -382,12 +379,9 @@ def build_product_report(
             else None
         ),
         "disclaimer": (
-            "FortuneOne 규칙 기반 해석입니다. 엔터테인먼트·자기성찰 목적이며 "
-            "투자·법률·의료 자문이 아닙니다. 결정권은 본인에게 있습니다."
+            "엔터테인먼트·자기성찰 목적의 참고 해석입니다. "
+            "투자·법률·의료 자문이 아니며, 결정권은 본인에게 있습니다."
         ),
-        "engine_note": (
-            "원국 fact: sajupy(MIT) + lunar_python/6tail(MIT) 교차 확인. "
-            f"문장: FortuneOne narrative v{NARRATIVE_VERSION}."
-        ),
+        "engine_note": "",
         "chart_facts": chart_facts,
     }

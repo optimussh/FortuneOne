@@ -610,11 +610,9 @@ def intro_blurbs(cat: str, title: str) -> list[str]:
     )
 
     how = (
-        f"이용 방법: 로그인 → 사주 프로필 선택(필요 시 상대 프로필) → 결제(모의) → 즉시 결과. "
-        f"원국 fact는 MIT 상용 가능 엔진(sajupy + lunar_python 교차)으로 검증하고, "
-        f"해석 문장은 FortuneOne 자체 템플릿(v3)으로 생성합니다. "
-        f"상용 운세 사이트의 문구를 복제하지 않으며, 엔터테인먼트·자기성찰 목적의 참고용입니다. "
-        f"투자·법률·의료 자문이 아니며 결정권은 언제나 본인에게 있습니다."
+        "이용 방법: 로그인 후 내 사주 프로필을 고르고 결제하면, 바로 맞춤 결과를 확인할 수 있습니다. "
+        "결과는 참고용 해석이며 투자·법률·의료 자문이 아닙니다. 최종 선택은 언제나 본인에게 있습니다. "
+        "결제 후 웹 7일, 메일용 링크로 30일까지 다시 볼 수 있습니다."
     )
 
     close = _pick(
@@ -887,8 +885,9 @@ def polish(catalog: dict) -> dict:
         "notes": [
             "Titles and long-form blurbs are FO-authored; source_title internal only.",
             "Per-category diff_from_free_tabs + purchase-oriented intros (~3x length).",
-            "MIT engines for chart facts; narrative templates not scraped commercial copy.",
+            "User-facing product copy omits engine/stack jargon; technical notes stay on /about/engines.",
         ],
+
         "category_counts": dict(Counter(p["category_id"] for p in out)),
     }
     catalog["role_guide"] = {
