@@ -57,6 +57,34 @@ async def store_products(category: Optional[str] = None):
     }
 
 
+def _clean_blurbs(blurbs: list | None) -> list[str]:
+    """Strip legacy engine/stack jargon from product page copy."""
+    out: list[str] = []
+    ban = (
+        "MIT",
+        "sajupy",
+        "lunar_python",
+        "자체 템플릿",
+        "상용 운세 사이트",
+        "원국 fact",
+        "복제하지",
+    )
+    for b in blurbs or []:
+        s = str(b).strip()
+        if not s:
+            continue
+        if any(k in s for k in ban):
+            # Replace whole paragraph with user-facing how-to (not tech note)
+            s = (
+                "이용 방법: 로그인 후 내 사주 프로필을 고르고 결제하면 바로 맞춤 결과를 확인할 수 있습니다. "
+                "결과는 참고용이며 투자·법률·의료 자문이 아닙니다. "
+                "결제 후 웹 7일, 메일용 링크로 30일까지 다시 볼 수 있습니다."
+            )
+        if s not in out:
+            out.append(s)
+    return out
+
+
 def _public_product(p: dict) -> dict:
     return {
         "id": p["id"],
@@ -70,7 +98,7 @@ def _public_product(p: dict) -> dict:
         "is_free": p.get("is_free", False),
         "preview_sections": p.get("preview_sections") or [],
         "result_sections": p.get("result_sections") or [],
-        "intro_blurbs": p.get("intro_blurbs") or [],
+        "intro_blurbs": _clean_blurbs(p.get("intro_blurbs")),
         "for_whom": p.get("for_whom") or [],
         "diff_from_free_tabs": p.get("diff_from_free_tabs"),
         "tone": p.get("tone"),
