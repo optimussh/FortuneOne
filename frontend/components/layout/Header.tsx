@@ -7,6 +7,7 @@ import { getWallet } from "@/lib/api";
 
 const NAV = [
   { href: "/hub", label: "허브" },
+  { href: "/store", label: "스토어" },
   { href: "/", label: "사주" },
   { href: "/tarot", label: "타로" },
   { href: "/today", label: "띠별" },

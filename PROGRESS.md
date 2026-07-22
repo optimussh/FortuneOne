@@ -2,6 +2,14 @@
 
 프로젝트 진행 현황 로그. 커밋 직전 갱신 (`claude_Template` git 규칙).
 
+## 2026-07-22 (unsin benchmark store)
+
+- **feat(store):** 샘플 IA 벤치마크 상품 카탈로그 **110** · `/store` 목록·상세·모의결제·결과
+- **flow:** 사주 프로필 선택 → mock checkout → `product:{id}` unlock → 프로필 기반 리포트
+- **copy:** 상용 문구 미복제 · 제목 치환 · FO 템플릿 본문 (추후 교체 가능)
+- **docs:** `2026-07-22-unsin-benchmark-store.md` · multi-engine fact/narrative 권장
+- **data:** `backend/app/data/product_catalog.json`
+
 ## 2026-07-20 (hybrid monetization)
 
 - **feat(shop):** 구슬 지갑 · 팩 모의구매 · 부자되기 단건 해금 · spend API

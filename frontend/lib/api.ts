@@ -775,4 +775,98 @@ export async function getDailyTarotToday() {
   }>;
 }
 
+// --- Store (benchmark catalog products) ---
+
+export type StoreProduct = {
+  id: string;
+  title: string;
+  price_krw: number;
+  category_id: string;
+  category_label: string;
+  needs_profile?: boolean;
+  needs_partner?: boolean;
+  is_free?: boolean;
+  preview_sections?: string[];
+  result_sections?: string[];
+  tone?: string;
+  payment?: Record<string, unknown>;
+  intro_blurbs?: string[];
+};
+
+export async function getStoreMenu() {
+  return publicJson<{
+    menu: { id: string; label: string; href: string }[];
+    categories: { id: string; label: string }[];
+    payment_module: Record<string, unknown>;
+    engine_plan: Record<string, unknown>;
+  }>("/api/store/menu");
+}
+
+export async function getStoreProducts(category?: string) {
+  const q = category ? `?category=${encodeURIComponent(category)}` : "";
+  return publicJson<{ count: number; products: StoreProduct[] }>(
+    `/api/store/products${q}`
+  );
+}
+
+export async function getStoreProduct(id: string) {
+  const res = await apiFetch(`/api/store/products/${id}`);
+  if (!res.ok) throw new Error(parseApiError(await res.text(), "상품 조회 실패"));
+  return res.json() as Promise<{
+    product: StoreProduct;
+    unlocked: boolean;
+    payment_module: Record<string, unknown>;
+  }>;
+}
+
+export async function checkoutStoreProduct(body: {
+  product_id: string;
+  profile_id: number;
+  partner_profile_id?: number;
+  buyer_name?: string;
+  email?: string;
+  phone?: string;
+  method?: string;
+  agree_privacy: boolean;
+  agree_age14: boolean;
+}) {
+  const res = await apiFetch("/api/store/checkout", {
+    method: "POST",
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) throw new Error(parseApiError(await res.text(), "결제 실패"));
+  return res.json() as Promise<{
+    ok: boolean;
+    mock: boolean;
+    message: string;
+    result_path: string;
+    price_krw: number;
+  }>;
+}
+
+export async function getStoreProductResult(
+  productId: string,
+  profileId: number,
+  partnerId?: number
+) {
+  const q = new URLSearchParams({ profile_id: String(profileId) });
+  if (partnerId) q.set("partner_id", String(partnerId));
+  const res = await apiFetch(`/api/store/products/${productId}/result?${q}`);
+  if (!res.ok) throw new Error(parseApiError(await res.text(), "결과 조회 실패"));
+  return res.json() as Promise<{
+    unlocked: boolean;
+    profile_id: number;
+    report: {
+      product: { id: string; title: string; price_krw?: number };
+      header: Record<string, unknown>;
+      intro: string;
+      sections: { id: string; title: string; body: string }[];
+      preview: string;
+      disclaimer: string;
+      engine_note: string;
+      partner?: Record<string, unknown> | null;
+    };
+  }>;
+}
+
 export { API_URL };

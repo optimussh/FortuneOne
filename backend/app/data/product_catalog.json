@@ -1,0 +1,4220 @@
+{
+  "version": 1,
+  "brand": "FortuneOne",
+  "note": "Catalog structure benchmarked from sample IA; titles rewritten; body text is FO-generated placeholders.",
+  "menu": [
+    {
+      "id": "home",
+      "label": "홈",
+      "href": "/"
+    },
+    {
+      "id": "newyear",
+      "label": "신년·연간",
+      "href": "/store?cat=newyear"
+    },
+    {
+      "id": "love",
+      "label": "연애·인연",
+      "href": "/store?cat=love"
+    },
+    {
+      "id": "marriage",
+      "label": "결혼",
+      "href": "/store?cat=marriage"
+    },
+    {
+      "id": "compat",
+      "label": "궁합",
+      "href": "/store?cat=compat"
+    },
+    {
+      "id": "money",
+      "label": "재물",
+      "href": "/store?cat=money"
+    },
+    {
+      "id": "career",
+      "label": "직장·사업",
+      "href": "/store?cat=career"
+    },
+    {
+      "id": "life",
+      "label": "평생사주",
+      "href": "/store?cat=life"
+    },
+    {
+      "id": "theme",
+      "label": "테마",
+      "href": "/store?cat=theme"
+    },
+    {
+      "id": "free",
+      "label": "무료",
+      "href": "/store?cat=free"
+    },
+    {
+      "id": "tarot",
+      "label": "타로",
+      "href": "/tarot"
+    },
+    {
+      "id": "today",
+      "label": "오늘·띠별",
+      "href": "/today"
+    },
+    {
+      "id": "hub",
+      "label": "내 운세",
+      "href": "/hub"
+    },
+    {
+      "id": "shop",
+      "label": "구슬·충전",
+      "href": "/shop"
+    }
+  ],
+  "categories": [
+    {
+      "id": "newyear",
+      "label": "신년·연간"
+    },
+    {
+      "id": "love",
+      "label": "연애·인연"
+    },
+    {
+      "id": "marriage",
+      "label": "결혼·배우자"
+    },
+    {
+      "id": "compat",
+      "label": "궁합·관계"
+    },
+    {
+      "id": "money",
+      "label": "재물·금전"
+    },
+    {
+      "id": "career",
+      "label": "직장·사업"
+    },
+    {
+      "id": "life",
+      "label": "평생·사주풀이"
+    },
+    {
+      "id": "theme",
+      "label": "테마·기타"
+    },
+    {
+      "id": "free",
+      "label": "무료·체험"
+    }
+  ],
+  "products": [
+    {
+      "id": "p1084",
+      "source_cid": "1084",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=1084",
+      "category_id": "compat",
+      "category_label": "궁합·관계",
+      "title": "달콤한 비밀~ 그 사람의 현재 마음을 알고 싶다면?!",
+      "source_title": "달콤한 비밀~ 그 사람의 현재 마음을 알고 싶다면?!",
+      "price_krw": 2000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": true,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "두 사람 기질 비교",
+        "보완·충돌 포인트",
+        "관계 운영법",
+        "함께할 때 실천"
+      ],
+      "tone": "analytical",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p374",
+      "source_cid": "374",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=374",
+      "category_id": "compat",
+      "category_label": "궁합·관계",
+      "title": "지금 나를 노리고 있는 것은 누구? 혹시 그 사람?",
+      "source_title": "지금 나를 노리고 있는 것은 누구? 혹시 그 사람?",
+      "price_krw": 2000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": true,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "두 사람 기질 비교",
+        "보완·충돌 포인트",
+        "관계 운영법",
+        "함께할 때 실천"
+      ],
+      "tone": "analytical",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p1954",
+      "source_cid": "1954",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=1954",
+      "category_id": "compat",
+      "category_label": "궁합·관계",
+      "title": "점성술로 예언하다! 당신을 행복하게 할 운명의 상대",
+      "source_title": "점성술로 예언하다! 당신을 행복하게 할 운명의 상대",
+      "price_krw": 6000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": true,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "두 사람 기질 비교",
+        "보완·충돌 포인트",
+        "관계 운영법",
+        "함께할 때 실천"
+      ],
+      "tone": "analytical",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p623",
+      "source_cid": "623",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=623",
+      "category_id": "compat",
+      "category_label": "궁합·관계",
+      "title": "당신과 최고의 궁합을 가진 이성",
+      "source_title": "당신과 최고의 궁합을 가진 이성",
+      "price_krw": 7000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": true,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "두 사람 기질 비교",
+        "보완·충돌 포인트",
+        "관계 운영법",
+        "함께할 때 실천"
+      ],
+      "tone": "analytical",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p1091",
+      "source_cid": "1091",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=1091",
+      "category_id": "compat",
+      "category_label": "궁합·관계",
+      "title": "마음의 스파이~ 그 사람, 날 어떻게 할까?",
+      "source_title": "마음의 스파이~ 그 사람, 날 어떻게 할까?",
+      "price_krw": 7000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": true,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "두 사람 기질 비교",
+        "보완·충돌 포인트",
+        "관계 운영법",
+        "함께할 때 실천"
+      ],
+      "tone": "analytical",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p1876",
+      "source_cid": "1876",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=1876",
+      "category_id": "compat",
+      "category_label": "궁합·관계",
+      "title": "사실 가까이 있다? 당신을 좋아하는 운명의 상대",
+      "source_title": "사실 가까이 있다? 당신을 좋아하는 운명의 상대",
+      "price_krw": 7000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": true,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "두 사람 기질 비교",
+        "보완·충돌 포인트",
+        "관계 운영법",
+        "함께할 때 실천"
+      ],
+      "tone": "analytical",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p1179",
+      "source_cid": "1179",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=1179",
+      "category_id": "compat",
+      "category_label": "궁합·관계",
+      "title": "아름다운 나의 운명의 상대~어디서 만나게 될까?",
+      "source_title": "아름다운 나의 운명의 상대~어디서 만나게 될까?",
+      "price_krw": 7000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": true,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "두 사람 기질 비교",
+        "보완·충돌 포인트",
+        "관계 운영법",
+        "함께할 때 실천"
+      ],
+      "tone": "analytical",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p181",
+      "source_cid": "181",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=181",
+      "category_id": "compat",
+      "category_label": "궁합·관계",
+      "title": "곧 다가올 상대와 마지막에 맺어질 운명의 상대",
+      "source_title": "곧 다가올 상대와 마지막에 맺어질 운명의 상대",
+      "price_krw": 8500,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": true,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "두 사람 기질 비교",
+        "보완·충돌 포인트",
+        "관계 운영법",
+        "함께할 때 실천"
+      ],
+      "tone": "analytical",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p1747",
+      "source_cid": "1747",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=1747",
+      "category_id": "compat",
+      "category_label": "궁합·관계",
+      "title": "당신의 운명의 상대 8대 예언",
+      "source_title": "당신의 운명의 상대 8대 예언",
+      "price_krw": 9500,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": true,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "두 사람 기질 비교",
+        "보완·충돌 포인트",
+        "관계 운영법",
+        "함께할 때 실천"
+      ],
+      "tone": "analytical",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p771",
+      "source_cid": "771",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=771",
+      "category_id": "compat",
+      "category_label": "궁합·관계",
+      "title": "당신의 운명의 상대~그 특징과 만나는 시기",
+      "source_title": "당신의 운명의 상대~그 특징과 만나는 시기",
+      "price_krw": 9500,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": true,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "두 사람 기질 비교",
+        "보완·충돌 포인트",
+        "관계 운영법",
+        "함께할 때 실천"
+      ],
+      "tone": "analytical",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p1411",
+      "source_cid": "1411",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=1411",
+      "category_id": "love",
+      "category_label": "연애·인연",
+      "title": "나는 왜 인연을 만나지 못할까?",
+      "source_title": "나는 왜 인연을 만나지 못할까?",
+      "price_krw": 2500,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "인연의 결",
+        "만남 시기 힌트",
+        "표현·소통 스타일",
+        "조심할 패턴"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p1410",
+      "source_cid": "1410",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=1410",
+      "category_id": "love",
+      "category_label": "연애·인연",
+      "title": "반 년 안에 사랑하는 사람을 만날 수 있을까?",
+      "source_title": "반 년 안에 사랑하는 사람을 만날 수 있을까?",
+      "price_krw": 2500,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "인연의 결",
+        "만남 시기 힌트",
+        "표현·소통 스타일",
+        "조심할 패턴"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p2439",
+      "source_cid": "2439",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=2439",
+      "category_id": "love",
+      "category_label": "연애·인연",
+      "title": "7월 우리의 사랑 어떻게 변할까요?",
+      "source_title": "7월 우리의 사랑 어떻게 변할까요?",
+      "price_krw": 3000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "인연의 결",
+        "만남 시기 힌트",
+        "표현·소통 스타일",
+        "조심할 패턴"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p1983",
+      "source_cid": "1983",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=1983",
+      "category_id": "love",
+      "category_label": "연애·인연",
+      "title": "솔로를 위한 7월의 애정운",
+      "source_title": "솔로를 위한 7월의 애정운",
+      "price_krw": 3000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "인연의 결",
+        "만남 시기 힌트",
+        "표현·소통 스타일",
+        "조심할 패턴"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p296",
+      "source_cid": "296",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=296",
+      "category_id": "love",
+      "category_label": "연애·인연",
+      "title": "곧 나타날 평생 날 사랑해줄 운명의 상대. 그 만남은 언제?",
+      "source_title": "곧 나타날 평생 날 사랑해줄 운명의 상대. 그 만남은 언제?",
+      "price_krw": 4000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "인연의 결",
+        "만남 시기 힌트",
+        "표현·소통 스타일",
+        "조심할 패턴"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p844",
+      "source_cid": "844",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=844",
+      "category_id": "love",
+      "category_label": "연애·인연",
+      "title": "상류층과의 사랑, 나도 가능할까?",
+      "source_title": "상류층과의 사랑, 나도 가능할까?",
+      "price_krw": 4000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "인연의 결",
+        "만남 시기 힌트",
+        "표현·소통 스타일",
+        "조심할 패턴"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p341",
+      "source_cid": "341",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=341",
+      "category_id": "love",
+      "category_label": "연애·인연",
+      "title": "앞으로 3개월간 당신의 사랑과 인생의 모든 것",
+      "source_title": "앞으로 3개월간 당신의 사랑과 인생의 모든 것",
+      "price_krw": 4000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "인연의 결",
+        "만남 시기 힌트",
+        "표현·소통 스타일",
+        "조심할 패턴"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p219",
+      "source_cid": "219",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=219",
+      "category_id": "love",
+      "category_label": "연애·인연",
+      "title": "잠재된 연애 파워와 운명의 사람",
+      "source_title": "잠재된 연애 파워와 운명의 사람",
+      "price_krw": 5000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "인연의 결",
+        "만남 시기 힌트",
+        "표현·소통 스타일",
+        "조심할 패턴"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p317",
+      "source_cid": "317",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=317",
+      "category_id": "love",
+      "category_label": "연애·인연",
+      "title": "결혼으로 이어질 만남, 가까운 미래에 만날 운명의 상대",
+      "source_title": "결혼으로 이어질 만남, 가까운 미래에 만날 운명의 상대",
+      "price_krw": 6000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "인연의 결",
+        "만남 시기 힌트",
+        "표현·소통 스타일",
+        "조심할 패턴"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p335",
+      "source_cid": "335",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=335",
+      "category_id": "love",
+      "category_label": "연애·인연",
+      "title": "나만의 인연 찾기! 운명의 만남부터 결혼까지의 모든 것",
+      "source_title": "나만의 인연 찾기! 운명의 만남부터 결혼까지의 모든 것",
+      "price_krw": 6000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "인연의 결",
+        "만남 시기 힌트",
+        "표현·소통 스타일",
+        "조심할 패턴"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p1759",
+      "source_cid": "1759",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=1759",
+      "category_id": "love",
+      "category_label": "연애·인연",
+      "title": "르노르망으로 보는 7월 만남운",
+      "source_title": "르노르망으로 보는 7월 만남운",
+      "price_krw": 6000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "인연의 결",
+        "만남 시기 힌트",
+        "표현·소통 스타일",
+        "조심할 패턴"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p365",
+      "source_cid": "365",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=365",
+      "category_id": "love",
+      "category_label": "연애·인연",
+      "title": "바로 결혼에 골인? 당신에게 찾아올 흐름이 강한인 만남",
+      "source_title": "바로 결혼에 골인? 당신에게 찾아올 운명적인 만남",
+      "price_krw": 6000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "인연의 결",
+        "만남 시기 힌트",
+        "표현·소통 스타일",
+        "조심할 패턴"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p93",
+      "source_cid": "93",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=93",
+      "category_id": "love",
+      "category_label": "연애·인연",
+      "title": "반드시 찾아올 운명! 커플도 아쉬워할 멋진 이성과의 만남",
+      "source_title": "반드시 찾아올 운명! 커플도 아쉬워할 멋진 이성과의 만남",
+      "price_krw": 6000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "인연의 결",
+        "만남 시기 힌트",
+        "표현·소통 스타일",
+        "조심할 패턴"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p419",
+      "source_cid": "419",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=419",
+      "category_id": "love",
+      "category_label": "연애·인연",
+      "title": "이제 곧 만날 사람! 3개월내에 당신과 사랑을 시작할 사람은?",
+      "source_title": "이제 곧 만날 사람! 3개월내에 당신과 사랑을 시작할 사람은?",
+      "price_krw": 6000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "인연의 결",
+        "만남 시기 힌트",
+        "표현·소통 스타일",
+        "조심할 패턴"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p1364",
+      "source_cid": "1364",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=1364",
+      "category_id": "love",
+      "category_label": "연애·인연",
+      "title": "꽃길만 걸어요~ 당신을 찾아올 운명의 만남",
+      "source_title": "꽃길만 걸어요~ 당신을 찾아올 운명의 만남",
+      "price_krw": 7000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "인연의 결",
+        "만남 시기 힌트",
+        "표현·소통 스타일",
+        "조심할 패턴"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p860",
+      "source_cid": "860",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=860",
+      "category_id": "love",
+      "category_label": "연애·인연",
+      "title": "너에게만 반응하는 이 사랑, 어떻게 매듭지어질까?",
+      "source_title": "너에게만 반응하는 이 사랑, 어떻게 매듭지어질까?",
+      "price_krw": 7000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "인연의 결",
+        "만남 시기 힌트",
+        "표현·소통 스타일",
+        "조심할 패턴"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p716",
+      "source_cid": "716",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=716",
+      "category_id": "love",
+      "category_label": "연애·인연",
+      "title": "만남도 없고 좋아하는 사람도 없는데 결혼할 수 있을까?",
+      "source_title": "만남도 없고 좋아하는 사람도 없는데 결혼할 수 있을까?",
+      "price_krw": 7000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "인연의 결",
+        "만남 시기 힌트",
+        "표현·소통 스타일",
+        "조심할 패턴"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p1798",
+      "source_cid": "1798",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=1798",
+      "category_id": "love",
+      "category_label": "연애·인연",
+      "title": "사랑의 시작을 놓치지 말자! 운명의 만남과 결혼",
+      "source_title": "사랑의 시작을 놓치지 말자! 운명의 만남과 결혼",
+      "price_krw": 7000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "인연의 결",
+        "만남 시기 힌트",
+        "표현·소통 스타일",
+        "조심할 패턴"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p1801",
+      "source_cid": "1801",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=1801",
+      "category_id": "love",
+      "category_label": "연애·인연",
+      "title": "어쩌다 인연, 당신에게 고백을 생각하는 배우자 후보",
+      "source_title": "어쩌다 인연, 당신에게 고백을 생각하는 배우자 후보",
+      "price_krw": 7000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "인연의 결",
+        "만남 시기 힌트",
+        "표현·소통 스타일",
+        "조심할 패턴"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p1278",
+      "source_cid": "1278",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=1278",
+      "category_id": "love",
+      "category_label": "연애·인연",
+      "title": "운명의 만남으로 안내~ 이럴 때 이렇게 만난다!",
+      "source_title": "운명의 만남으로 안내~ 이럴 때 이렇게 만난다!",
+      "price_krw": 7000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "인연의 결",
+        "만남 시기 힌트",
+        "표현·소통 스타일",
+        "조심할 패턴"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p1870",
+      "source_cid": "1870",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=1870",
+      "category_id": "love",
+      "category_label": "연애·인연",
+      "title": "행복을 그리는 미래, 당신의 만남과 결혼",
+      "source_title": "행복을 그리는 미래, 당신의 만남과 결혼",
+      "price_krw": 7000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "인연의 결",
+        "만남 시기 힌트",
+        "표현·소통 스타일",
+        "조심할 패턴"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p727",
+      "source_cid": "727",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=727",
+      "category_id": "love",
+      "category_label": "연애·인연",
+      "title": "1년 후 난 누구와 어떤 식으로 사랑하고 있을까?",
+      "source_title": "1년 후 난 누구와 어떤 식으로 사랑하고 있을까?",
+      "price_krw": 9500,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "인연의 결",
+        "만남 시기 힌트",
+        "표현·소통 스타일",
+        "조심할 패턴"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p826",
+      "source_cid": "826",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=826",
+      "category_id": "love",
+      "category_label": "연애·인연",
+      "title": "당신을 깊이 사랑하고 맺어질 숙명의 배우자",
+      "source_title": "당신을 깊이 사랑하고 맺어질 숙명의 배우자",
+      "price_krw": 9500,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "인연의 결",
+        "만남 시기 힌트",
+        "표현·소통 스타일",
+        "조심할 패턴"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p824",
+      "source_cid": "824",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=824",
+      "category_id": "love",
+      "category_label": "연애·인연",
+      "title": "반년 이내에 나타날 당신에게 약속된 인연",
+      "source_title": "반년 이내에 나타날 당신에게 약속된 인연",
+      "price_krw": 9500,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "인연의 결",
+        "만남 시기 힌트",
+        "표현·소통 스타일",
+        "조심할 패턴"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p2058",
+      "source_cid": "2058",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=2058",
+      "category_id": "love",
+      "category_label": "연애·인연",
+      "title": "어쩌다 마주친, 당신과 사랑에 빠질 인연",
+      "source_title": "어쩌다 마주친, 당신과 사랑에 빠질 인연",
+      "price_krw": 9500,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "인연의 결",
+        "만남 시기 힌트",
+        "표현·소통 스타일",
+        "조심할 패턴"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p2194",
+      "source_cid": "2194",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=2194",
+      "category_id": "love",
+      "category_label": "연애·인연",
+      "title": "40대 이후의 결혼 예언! 만남, 전개, 결말",
+      "source_title": "40대 이후의 결혼 예언! 만남, 전개, 결말",
+      "price_krw": 10500,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "인연의 결",
+        "만남 시기 힌트",
+        "표현·소통 스타일",
+        "조심할 패턴"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p1679",
+      "source_cid": "1679",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=1679",
+      "category_id": "love",
+      "category_label": "연애·인연",
+      "title": "만남 예언! 당신을 사랑하고 평생 함께 할 사람",
+      "source_title": "만남 예언! 당신을 사랑하고 평생 함께 할 사람",
+      "price_krw": 10500,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "인연의 결",
+        "만남 시기 힌트",
+        "표현·소통 스타일",
+        "조심할 패턴"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p2158",
+      "source_cid": "2158",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=2158",
+      "category_id": "love",
+      "category_label": "연애·인연",
+      "title": "카가미 류지의 인연 감정! 결혼 상대의 인성과 과정",
+      "source_title": "카가미 류지의 인연 감정! 결혼 상대의 인성과 과정",
+      "price_krw": 10500,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "인연의 결",
+        "만남 시기 힌트",
+        "표현·소통 스타일",
+        "조심할 패턴"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p2170",
+      "source_cid": "2170",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=2170",
+      "category_id": "love",
+      "category_label": "연애·인연",
+      "title": "기다리면 복이 온다! 당신을 사랑해줄 운명의 배우자",
+      "source_title": "기다리면 복이 온다! 당신을 사랑해줄 운명의 배우자",
+      "price_krw": 11500,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "인연의 결",
+        "만남 시기 힌트",
+        "표현·소통 스타일",
+        "조심할 패턴"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p2043",
+      "source_cid": "2043",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=2043",
+      "category_id": "love",
+      "category_label": "연애·인연",
+      "title": "사랑은 아름다워! 당신의 사랑과 결혼, 그 모든 것",
+      "source_title": "사랑은 아름다워! 당신의 사랑과 결혼, 그 모든 것",
+      "price_krw": 11500,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "인연의 결",
+        "만남 시기 힌트",
+        "표현·소통 스타일",
+        "조심할 패턴"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p1885",
+      "source_cid": "1885",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=1885",
+      "category_id": "love",
+      "category_label": "연애·인연",
+      "title": "당신을 선택할 운명의 상대, 앞으로 싹틀 사랑",
+      "source_title": "당신을 선택할 운명의 상대, 앞으로 싹틀 사랑",
+      "price_krw": 13000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "인연의 결",
+        "만남 시기 힌트",
+        "표현·소통 스타일",
+        "조심할 패턴"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p2284",
+      "source_cid": "2284",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=2284",
+      "category_id": "love",
+      "category_label": "연애·인연",
+      "title": "진실을 알고 싶다면? 점성술로 보는 마음 인연 운명론",
+      "source_title": "진실을 알고 싶다면? 점성술로 보는 짝사랑 운명론",
+      "price_krw": 13000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "인연의 결",
+        "만남 시기 힌트",
+        "표현·소통 스타일",
+        "조심할 패턴"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p2049",
+      "source_cid": "2049",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=2049",
+      "category_id": "love",
+      "category_label": "연애·인연",
+      "title": "하나부터 열까지! 운명에 새겨진 인연의 모습",
+      "source_title": "하나부터 열까지! 운명에 새겨진 인연의 모습",
+      "price_krw": 13000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "인연의 결",
+        "만남 시기 힌트",
+        "표현·소통 스타일",
+        "조심할 패턴"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p2516",
+      "source_cid": "2516",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=2516",
+      "category_id": "love",
+      "category_label": "연애·인연",
+      "title": "애틋한 마음 인연, 혹시 그 사람도 나와 같은 마음일까?",
+      "source_title": "애틋한 짝사랑, 혹시 그 사람도 나와 같은 마음일까?",
+      "price_krw": 13500,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "인연의 결",
+        "만남 시기 힌트",
+        "표현·소통 스타일",
+        "조심할 패턴"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p1464",
+      "source_cid": "1464",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=1464",
+      "category_id": "love",
+      "category_label": "연애·인연",
+      "title": "극상의 감정! 당신을 찾아올 사랑의 운명",
+      "source_title": "극상의 감정! 당신을 찾아올 사랑의 운명",
+      "price_krw": 14000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "인연의 결",
+        "만남 시기 힌트",
+        "표현·소통 스타일",
+        "조심할 패턴"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p1971",
+      "source_cid": "1971",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=1971",
+      "category_id": "love",
+      "category_label": "연애·인연",
+      "title": "당신을 찾아올 한 번의 만남, 그 1년 후의 웨딩 스토리",
+      "source_title": "당신을 찾아올 한 번의 만남, 그 1년 후의 웨딩 스토리",
+      "price_krw": 14000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "인연의 결",
+        "만남 시기 힌트",
+        "표현·소통 스타일",
+        "조심할 패턴"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p1911",
+      "source_cid": "1911",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=1911",
+      "category_id": "love",
+      "category_label": "연애·인연",
+      "title": "운명의 사랑이 될 가능성이 있는 2번의 만남",
+      "source_title": "운명의 사랑이 될 가능성이 있는 2번의 만남",
+      "price_krw": 14000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "인연의 결",
+        "만남 시기 힌트",
+        "표현·소통 스타일",
+        "조심할 패턴"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p1736",
+      "source_cid": "1736",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=1736",
+      "category_id": "love",
+      "category_label": "연애·인연",
+      "title": "사랑의 불시착~ 당신이 만날 상대의 얼굴",
+      "source_title": "사랑의 불시착~ 당신이 만날 상대의 얼굴",
+      "price_krw": 15000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "인연의 결",
+        "만남 시기 힌트",
+        "표현·소통 스타일",
+        "조심할 패턴"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p1746",
+      "source_cid": "1746",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=1746",
+      "category_id": "love",
+      "category_label": "연애·인연",
+      "title": "예언 타로가 인도하는 좋은 인연과 결혼",
+      "source_title": "예언 타로가 인도하는 좋은 인연과 결혼",
+      "price_krw": 15000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "인연의 결",
+        "만남 시기 힌트",
+        "표현·소통 스타일",
+        "조심할 패턴"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p2024",
+      "source_cid": "2024",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=2024",
+      "category_id": "love",
+      "category_label": "연애·인연",
+      "title": "정답 공개! 당신에게 고백할 운명의 사람",
+      "source_title": "정답 공개! 당신에게 고백할 운명의 사람",
+      "price_krw": 15000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "인연의 결",
+        "만남 시기 힌트",
+        "표현·소통 스타일",
+        "조심할 패턴"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p1823",
+      "source_cid": "1823",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=1823",
+      "category_id": "love",
+      "category_label": "연애·인연",
+      "title": "찬란한 내 인생~ 당신의 연애와 결혼, 인연 감정",
+      "source_title": "찬란한 내 인생~ 당신의 연애와 결혼, 인연 감정",
+      "price_krw": 15000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "인연의 결",
+        "만남 시기 힌트",
+        "표현·소통 스타일",
+        "조심할 패턴"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p2387",
+      "source_cid": "2387",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=2387",
+      "category_id": "love",
+      "category_label": "연애·인연",
+      "title": "카가미 류지가 쏘아올린 마음 인연 퍼펙트 감정!",
+      "source_title": "카가미 류지가 쏘아올린 짝사랑 퍼펙트 감정!",
+      "price_krw": 18000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "인연의 결",
+        "만남 시기 힌트",
+        "표현·소통 스타일",
+        "조심할 패턴"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p755",
+      "source_cid": "755",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=755",
+      "category_id": "marriage",
+      "category_label": "결혼·배우자",
+      "title": "미래에 당신이 결혼할 진짜 가능성",
+      "source_title": "미래에 당신이 결혼할 진짜 가능성",
+      "price_krw": 4750,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "배우자 상",
+        "혼인 흐름",
+        "가정 안정의 조건",
+        "시기별 조언"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p1998",
+      "source_cid": "1998",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=1998",
+      "category_id": "marriage",
+      "category_label": "결혼·배우자",
+      "title": "거기 있었어? 당신과 상상 결혼까지 해본 사람",
+      "source_title": "거기 있었어? 당신과 상상 결혼까지 해본 사람",
+      "price_krw": 6000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "배우자 상",
+        "혼인 흐름",
+        "가정 안정의 조건",
+        "시기별 조언"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p949",
+      "source_cid": "949",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=949",
+      "category_id": "marriage",
+      "category_label": "결혼·배우자",
+      "title": "1년내 결혼 확률 98퍼센트! 당신의 바로 옆에 있는 결혼상대",
+      "source_title": "1년내 결혼 확률 98퍼센트! 당신의 바로 옆에 있는 결혼상대",
+      "price_krw": 7000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "배우자 상",
+        "혼인 흐름",
+        "가정 안정의 조건",
+        "시기별 조언"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p1968",
+      "source_cid": "1968",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=1968",
+      "category_id": "marriage",
+      "category_label": "결혼·배우자",
+      "title": "비교할 수 없는 예언! 운명의 결혼 상대",
+      "source_title": "비교할 수 없는 예언! 운명의 결혼 상대",
+      "price_krw": 7000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "배우자 상",
+        "혼인 흐름",
+        "가정 안정의 조건",
+        "시기별 조언"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p1779",
+      "source_cid": "1779",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=1779",
+      "category_id": "marriage",
+      "category_label": "결혼·배우자",
+      "title": "당신의 결혼 운명은? 평생 독신 or 행복한 결혼",
+      "source_title": "당신의 결혼 운명은? 평생 독신 or 행복한 결혼",
+      "price_krw": 9500,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "배우자 상",
+        "혼인 흐름",
+        "가정 안정의 조건",
+        "시기별 조언"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p1311",
+      "source_cid": "1311",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=1311",
+      "category_id": "marriage",
+      "category_label": "결혼·배우자",
+      "title": "모든 독신자 필독! 당신의 운명의 결혼상대",
+      "source_title": "모든 독신자 필독! 당신의 운명의 결혼상대",
+      "price_krw": 9500,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "배우자 상",
+        "혼인 흐름",
+        "가정 안정의 조건",
+        "시기별 조언"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p855",
+      "source_cid": "855",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=855",
+      "category_id": "marriage",
+      "category_label": "결혼·배우자",
+      "title": "몸과 마음 모두 촉촉히 적셔줄 결혼상대는 누구?",
+      "source_title": "몸과 마음 모두 촉촉히 적셔줄 결혼상대는 누구?",
+      "price_krw": 9500,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "배우자 상",
+        "혼인 흐름",
+        "가정 안정의 조건",
+        "시기별 조언"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p1547",
+      "source_cid": "1547",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=1547",
+      "category_id": "marriage",
+      "category_label": "결혼·배우자",
+      "title": "언제 결혼할 수 있을까? 당신의 결혼상대",
+      "source_title": "언제 결혼할 수 있을까? 당신의 결혼상대",
+      "price_krw": 9500,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "배우자 상",
+        "혼인 흐름",
+        "가정 안정의 조건",
+        "시기별 조언"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p537",
+      "source_cid": "537",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=537",
+      "category_id": "marriage",
+      "category_label": "결혼·배우자",
+      "title": "외모와 직업 모두 알 수 있는 당신의 결혼상대",
+      "source_title": "외모와 직업 모두 알 수 있는 당신의 결혼상대",
+      "price_krw": 9500,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "배우자 상",
+        "혼인 흐름",
+        "가정 안정의 조건",
+        "시기별 조언"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p2080",
+      "source_cid": "2080",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=2080",
+      "category_id": "marriage",
+      "category_label": "결혼·배우자",
+      "title": "이제 만나러 갑니다! 드디어 찾아올 운명의 결혼",
+      "source_title": "이제 만나러 갑니다! 드디어 찾아올 운명의 결혼",
+      "price_krw": 9500,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "배우자 상",
+        "혼인 흐름",
+        "가정 안정의 조건",
+        "시기별 조언"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p717",
+      "source_cid": "717",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=717",
+      "category_id": "marriage",
+      "category_label": "결혼·배우자",
+      "title": "지금 당신을 남몰래 생각하는 결혼 확률 No.1의 이성",
+      "source_title": "지금 당신을 남몰래 생각하는 결혼 확률 No.1의 이성",
+      "price_krw": 9500,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "배우자 상",
+        "혼인 흐름",
+        "가정 안정의 조건",
+        "시기별 조언"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p773",
+      "source_cid": "773",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=773",
+      "category_id": "marriage",
+      "category_label": "결혼·배우자",
+      "title": "진지한 당신을 위한 궁극의 결혼 찬스",
+      "source_title": "진지한 당신을 위한 궁극의 결혼 찬스",
+      "price_krw": 9500,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "배우자 상",
+        "혼인 흐름",
+        "가정 안정의 조건",
+        "시기별 조언"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p1639",
+      "source_cid": "1639",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=1639",
+      "category_id": "marriage",
+      "category_label": "결혼·배우자",
+      "title": "당신이 여름에 만나게 될 결혼 상대",
+      "source_title": "당신이 여름에 만나게 될 결혼 상대",
+      "price_krw": 10500,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "배우자 상",
+        "혼인 흐름",
+        "가정 안정의 조건",
+        "시기별 조언"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p587",
+      "source_cid": "587",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=587",
+      "category_id": "marriage",
+      "category_label": "결혼·배우자",
+      "title": "이대로 혼자, 아니면...? 진실을 전하는 당신의 결혼 감정서",
+      "source_title": "이대로 혼자, 아니면...? 진실을 전하는 당신의 결혼 감정서",
+      "price_krw": 10500,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "배우자 상",
+        "혼인 흐름",
+        "가정 안정의 조건",
+        "시기별 조언"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p2332",
+      "source_cid": "2332",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=2332",
+      "category_id": "marriage",
+      "category_label": "결혼·배우자",
+      "title": "미혼과 비혼 사이, 결혼할 가능성 진짜 있을까?",
+      "source_title": "미혼과 비혼 사이, 결혼할 가능성 진짜 있을까?",
+      "price_krw": 11500,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "배우자 상",
+        "혼인 흐름",
+        "가정 안정의 조건",
+        "시기별 조언"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p1727",
+      "source_cid": "1727",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=1727",
+      "category_id": "marriage",
+      "category_label": "결혼·배우자",
+      "title": "결혼할 수 있을까? 한다면 대체 어떤 사람과?",
+      "source_title": "결혼할 수 있을까? 한다면 대체 어떤 사람과?",
+      "price_krw": 13000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "배우자 상",
+        "혼인 흐름",
+        "가정 안정의 조건",
+        "시기별 조언"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p625",
+      "source_cid": "625",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=625",
+      "category_id": "marriage",
+      "category_label": "결혼·배우자",
+      "title": "당신이 만날 숙명의 배우자, 그 9개의 증거",
+      "source_title": "당신이 만날 숙명의 배우자, 그 9개의 증거",
+      "price_krw": 13000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "배우자 상",
+        "혼인 흐름",
+        "가정 안정의 조건",
+        "시기별 조언"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p1782",
+      "source_cid": "1782",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=1782",
+      "category_id": "marriage",
+      "category_label": "결혼·배우자",
+      "title": "꿈은 이루어진다! 당신은 ●년 ×월 결혼한다?",
+      "source_title": "꿈은 이루어진다! 당신은 ●년 ×월 결혼한다?",
+      "price_krw": 14000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "배우자 상",
+        "혼인 흐름",
+        "가정 안정의 조건",
+        "시기별 조언"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p500",
+      "source_cid": "500",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=500",
+      "category_id": "marriage",
+      "category_label": "결혼·배우자",
+      "title": "당신이 만나기 쉬운 운명의 결혼상대 5대 특징과 결말",
+      "source_title": "당신이 반드시 만날 운명의 결혼상대 5대 특징과 결말",
+      "price_krw": 14000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "배우자 상",
+        "혼인 흐름",
+        "가정 안정의 조건",
+        "시기별 조언"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p830",
+      "source_cid": "830",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=830",
+      "category_id": "marriage",
+      "category_label": "결혼·배우자",
+      "title": "이것만 있으면 결혼할 수 있다! 당신의 결혼 감정서",
+      "source_title": "이것만 있으면 결혼할 수 있다! 당신의 결혼 감정서",
+      "price_krw": 14000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "배우자 상",
+        "혼인 흐름",
+        "가정 안정의 조건",
+        "시기별 조언"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p1680",
+      "source_cid": "1680",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=1680",
+      "category_id": "marriage",
+      "category_label": "결혼·배우자",
+      "title": "혼기 예언! 이런 얼굴과 직업인 사람과 결혼한다?",
+      "source_title": "혼기 예언! 이런 얼굴과 직업인 사람과 결혼한다?",
+      "price_krw": 14000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "배우자 상",
+        "혼인 흐름",
+        "가정 안정의 조건",
+        "시기별 조언"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p1871",
+      "source_cid": "1871",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=1871",
+      "category_id": "marriage",
+      "category_label": "결혼·배우자",
+      "title": "경이로운 결혼~ 운명의 상대와 손에 넣을 행복",
+      "source_title": "경이로운 결혼~ 운명의 상대와 손에 넣을 행복",
+      "price_krw": 15000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "배우자 상",
+        "혼인 흐름",
+        "가정 안정의 조건",
+        "시기별 조언"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p2102",
+      "source_cid": "2102",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=2102",
+      "category_id": "marriage",
+      "category_label": "결혼·배우자",
+      "title": "드디어 찾아올 그 날! 카가미가 밝히는 당신의 결혼",
+      "source_title": "드디어 찾아올 그 날! 카가미가 밝히는 당신의 결혼",
+      "price_krw": 15000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "배우자 상",
+        "혼인 흐름",
+        "가정 안정의 조건",
+        "시기별 조언"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p2120",
+      "source_cid": "2120",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=2120",
+      "category_id": "marriage",
+      "category_label": "결혼·배우자",
+      "title": "미혼 말고 기혼! 당신의 결혼 운명도 미리 보기",
+      "source_title": "미혼 말고 기혼! 당신의 결혼 운명도 미리 보기",
+      "price_krw": 17500,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "배우자 상",
+        "혼인 흐름",
+        "가정 안정의 조건",
+        "시기별 조언"
+      ],
+      "tone": "narrative",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p1753",
+      "source_cid": "1753",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=1753",
+      "category_id": "money",
+      "category_label": "재물·금전",
+      "title": "명심보감 7월 재물운",
+      "source_title": "명심보감 7월 재물운",
+      "price_krw": 3000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "재물 그릇",
+        "수입·지출 리듬",
+        "투자·기회 태도",
+        "지키는 습관"
+      ],
+      "tone": "practical",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p2626",
+      "source_cid": "2626",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=2626",
+      "category_id": "newyear",
+      "category_label": "신년·연간",
+      "title": "2026년, 이제는 나도 연애하고 싶다!",
+      "source_title": "2026년, 이제는 나도 연애하고 싶다!",
+      "price_krw": 5500,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "한 해 흐름 총평",
+        "월별 포인트 12",
+        "기회·주의 구간",
+        "실천 로드맵"
+      ],
+      "tone": "roadmap",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p2619",
+      "source_cid": "2619",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=2619",
+      "category_id": "newyear",
+      "category_label": "신년·연간",
+      "title": "2026 사랑이 올까?",
+      "source_title": "2026 사랑이 올까?",
+      "price_krw": 6500,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "한 해 흐름 총평",
+        "월별 포인트 12",
+        "기회·주의 구간",
+        "실천 로드맵"
+      ],
+      "tone": "roadmap",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p2622",
+      "source_cid": "2622",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=2622",
+      "category_id": "newyear",
+      "category_label": "신년·연간",
+      "title": "2026 완벽한 연간 명리 리포트",
+      "source_title": "2026 완벽한 토정비결",
+      "price_krw": 6500,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "한 해 흐름 총평",
+        "월별 포인트 12",
+        "기회·주의 구간",
+        "실천 로드맵"
+      ],
+      "tone": "roadmap",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p2614",
+      "source_cid": "2614",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=2614",
+      "category_id": "newyear",
+      "category_label": "신년·연간",
+      "title": "2026 토정도 놀랄 내 인생",
+      "source_title": "2026 토정도 놀랄 내 인생",
+      "price_krw": 6500,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "한 해 흐름 총평",
+        "월별 포인트 12",
+        "기회·주의 구간",
+        "실천 로드맵"
+      ],
+      "tone": "roadmap",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p2623",
+      "source_cid": "2623",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=2623",
+      "category_id": "newyear",
+      "category_label": "신년·연간",
+      "title": "2026년 연간 명리 리포트 해법풀이",
+      "source_title": "2026년 토정비결 해법풀이",
+      "price_krw": 6500,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "한 해 흐름 총평",
+        "월별 포인트 12",
+        "기회·주의 구간",
+        "실천 로드맵"
+      ],
+      "tone": "roadmap",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p2624",
+      "source_cid": "2624",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=2624",
+      "category_id": "newyear",
+      "category_label": "신년·연간",
+      "title": "2026년 일년 연애운",
+      "source_title": "2026년 일년 연애운",
+      "price_krw": 6500,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "한 해 흐름 총평",
+        "월별 포인트 12",
+        "기회·주의 구간",
+        "실천 로드맵"
+      ],
+      "tone": "roadmap",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p2637",
+      "source_cid": "2637",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=2637",
+      "category_id": "newyear",
+      "category_label": "신년·연간",
+      "title": "yes or no! 2026 운명의 음양사",
+      "source_title": "yes or no! 2026 운명의 음양사",
+      "price_krw": 11000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "한 해 흐름 총평",
+        "월별 포인트 12",
+        "기회·주의 구간",
+        "실천 로드맵"
+      ],
+      "tone": "roadmap",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p2654",
+      "source_cid": "2654",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=2654",
+      "category_id": "newyear",
+      "category_label": "신년·연간",
+      "title": "2026년 12개월을 관통하는 미래",
+      "source_title": "2026년 12개월을 관통하는 미래",
+      "price_krw": 13000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "한 해 흐름 총평",
+        "월별 포인트 12",
+        "기회·주의 구간",
+        "실천 로드맵"
+      ],
+      "tone": "roadmap",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p2620",
+      "source_cid": "2620",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=2620",
+      "category_id": "newyear",
+      "category_label": "신년·연간",
+      "title": "2026년 FortuneOne",
+      "source_title": "2026년 운세의 신",
+      "price_krw": 13000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "한 해 흐름 총평",
+        "월별 포인트 12",
+        "기회·주의 구간",
+        "실천 로드맵"
+      ],
+      "tone": "roadmap",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p2625",
+      "source_cid": "2625",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=2625",
+      "category_id": "newyear",
+      "category_label": "신년·연간",
+      "title": "사주로 보는 내 2026년",
+      "source_title": "사주로 보는 내 2026년",
+      "price_krw": 13000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "한 해 흐름 총평",
+        "월별 포인트 12",
+        "기회·주의 구간",
+        "실천 로드맵"
+      ],
+      "tone": "roadmap",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p2621",
+      "source_cid": "2621",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=2621",
+      "category_id": "newyear",
+      "category_label": "신년·연간",
+      "title": "자미두수로 보는 내 2026년",
+      "source_title": "자미두수로 보는 내 2026년",
+      "price_krw": 13000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "한 해 흐름 총평",
+        "월별 포인트 12",
+        "기회·주의 구간",
+        "실천 로드맵"
+      ],
+      "tone": "roadmap",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p2618",
+      "source_cid": "2618",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=2618",
+      "category_id": "newyear",
+      "category_label": "신년·연간",
+      "title": "파괴 아니면 부활! 2026년 운명의 예언서",
+      "source_title": "파괴 아니면 부활! 2026년 운명의 예언서",
+      "price_krw": 13000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "한 해 흐름 총평",
+        "월별 포인트 12",
+        "기회·주의 구간",
+        "실천 로드맵"
+      ],
+      "tone": "roadmap",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p2611",
+      "source_cid": "2611",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=2611",
+      "category_id": "newyear",
+      "category_label": "신년·연간",
+      "title": "2026 올해 내 운명 요약서",
+      "source_title": "2026 올해 내 운명 요약서",
+      "price_krw": 14000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "한 해 흐름 총평",
+        "월별 포인트 12",
+        "기회·주의 구간",
+        "실천 로드맵"
+      ],
+      "tone": "roadmap",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p438",
+      "source_cid": "438",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=438",
+      "category_id": "theme",
+      "category_label": "테마·기타",
+      "title": "지금 나를 노리고 있는 사람이 있을까?",
+      "source_title": "지금 나를 노리고 있는 사람이 있을까?",
+      "price_krw": 2000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "핵심 요약",
+        "상세 해석",
+        "주의 포인트",
+        "실천 제안"
+      ],
+      "tone": "light",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p1754",
+      "source_cid": "1754",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=1754",
+      "category_id": "theme",
+      "category_label": "테마·기타",
+      "title": "룬에 새겨진 7월 당신의 운명",
+      "source_title": "룬에 새겨진 7월 당신의 운명",
+      "price_krw": 2500,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "핵심 요약",
+        "상세 해석",
+        "주의 포인트",
+        "실천 제안"
+      ],
+      "tone": "light",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p1413",
+      "source_cid": "1413",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=1413",
+      "category_id": "theme",
+      "category_label": "테마·기타",
+      "title": "숫자로 보는 이번 주 나의 운명 가이드",
+      "source_title": "숫자로 보는 이번 주 나의 운명 가이드",
+      "price_krw": 2500,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "핵심 요약",
+        "상세 해석",
+        "주의 포인트",
+        "실천 제안"
+      ],
+      "tone": "light",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p644",
+      "source_cid": "644",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=644",
+      "category_id": "theme",
+      "category_label": "테마·기타",
+      "title": "팔자 고치기",
+      "source_title": "팔자 고치기",
+      "price_krw": 2500,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "핵심 요약",
+        "상세 해석",
+        "주의 포인트",
+        "실천 제안"
+      ],
+      "tone": "light",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p2438",
+      "source_cid": "2438",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=2438",
+      "category_id": "theme",
+      "category_label": "테마·기타",
+      "title": "7월 나의 운명 어떤 길을 향해 나아가는 걸까?",
+      "source_title": "7월 나의 운명 어떤 길을 향해 나아가는 걸까?",
+      "price_krw": 3000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "핵심 요약",
+        "상세 해석",
+        "주의 포인트",
+        "실천 제안"
+      ],
+      "tone": "light",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p2437",
+      "source_cid": "2437",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=2437",
+      "category_id": "theme",
+      "category_label": "테마·기타",
+      "title": "7월 애정운, 이렇게 변화할거예요!",
+      "source_title": "7월 애정운, 이렇게 변화할거예요!",
+      "price_krw": 3000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "핵심 요약",
+        "상세 해석",
+        "주의 포인트",
+        "실천 제안"
+      ],
+      "tone": "light",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p1752",
+      "source_cid": "1752",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=1752",
+      "category_id": "theme",
+      "category_label": "테마·기타",
+      "title": "명심보감 7월 운세",
+      "source_title": "명심보감 7월 운세",
+      "price_krw": 3000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "핵심 요약",
+        "상세 해석",
+        "주의 포인트",
+        "실천 제안"
+      ],
+      "tone": "light",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p412",
+      "source_cid": "412",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=412",
+      "category_id": "theme",
+      "category_label": "테마·기타",
+      "title": "이제 곧 다가올 당신과 만나기 위해 태어난 운명의 사람",
+      "source_title": "이제 곧 다가올 당신과 만나기 위해 태어난 운명의 사람",
+      "price_krw": 3500,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "핵심 요약",
+        "상세 해석",
+        "주의 포인트",
+        "실천 제안"
+      ],
+      "tone": "light",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p1751",
+      "source_cid": "1751",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=1751",
+      "category_id": "theme",
+      "category_label": "테마·기타",
+      "title": "타로로 보는 7월 운세",
+      "source_title": "타로로 보는 7월 운세",
+      "price_krw": 3500,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "핵심 요약",
+        "상세 해석",
+        "주의 포인트",
+        "실천 제안"
+      ],
+      "tone": "light",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p210",
+      "source_cid": "210",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=210",
+      "category_id": "theme",
+      "category_label": "테마·기타",
+      "title": "영혼이 말하는 현생의 테마는?",
+      "source_title": "영혼이 말하는 현생의 테마는?",
+      "price_krw": 5000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "핵심 요약",
+        "상세 해석",
+        "주의 포인트",
+        "실천 제안"
+      ],
+      "tone": "light",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p92",
+      "source_cid": "92",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=92",
+      "category_id": "theme",
+      "category_label": "테마·기타",
+      "title": "3개월 내에 만나 애인으로 만들 수 있는 사람",
+      "source_title": "3개월 내에 만나 애인으로 만들 수 있는 사람",
+      "price_krw": 6000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "핵심 요약",
+        "상세 해석",
+        "주의 포인트",
+        "실천 제안"
+      ],
+      "tone": "light",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p339",
+      "source_cid": "339",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=339",
+      "category_id": "theme",
+      "category_label": "테마·기타",
+      "title": "3개월 이내에 당신에게 끌려 진지한 마음을 전해올 가까운 이성",
+      "source_title": "3개월 이내에 당신에게 끌려 진지한 마음을 전해올 가까운 이성",
+      "price_krw": 6000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "핵심 요약",
+        "상세 해석",
+        "주의 포인트",
+        "실천 제안"
+      ],
+      "tone": "light",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p346",
+      "source_cid": "346",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=346",
+      "category_id": "theme",
+      "category_label": "테마·기타",
+      "title": "이제 혼자가 아니다! 당신을 절실히 필요로 하고 있는 이성",
+      "source_title": "이제 혼자가 아니다! 당신을 절실히 필요로 하고 있는 이성",
+      "price_krw": 6000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "핵심 요약",
+        "상세 해석",
+        "주의 포인트",
+        "실천 제안"
+      ],
+      "tone": "light",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p1115",
+      "source_cid": "1115",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=1115",
+      "category_id": "theme",
+      "category_label": "테마·기타",
+      "title": "당신의 행운을 부르는 변화의 조짐과 열쇠를 쥔 인물",
+      "source_title": "당신의 행운을 부르는 변화의 조짐과 열쇠를 쥔 인물",
+      "price_krw": 7000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "핵심 요약",
+        "상세 해석",
+        "주의 포인트",
+        "실천 제안"
+      ],
+      "tone": "light",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p515",
+      "source_cid": "515",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=515",
+      "category_id": "theme",
+      "category_label": "테마·기타",
+      "title": "당신이 다음 연인과 사귀게 될 때와 최종 관계",
+      "source_title": "당신이 다음 연인과 사귀게 될 때와 최종 관계",
+      "price_krw": 7000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "핵심 요약",
+        "상세 해석",
+        "주의 포인트",
+        "실천 제안"
+      ],
+      "tone": "light",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p1757",
+      "source_cid": "1757",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=1757",
+      "category_id": "theme",
+      "category_label": "테마·기타",
+      "title": "이제 혼자는 끝! 당신의 애인 후보의 특징",
+      "source_title": "이제 혼자는 끝! 당신의 애인 후보의 특징",
+      "price_krw": 7000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "핵심 요약",
+        "상세 해석",
+        "주의 포인트",
+        "실천 제안"
+      ],
+      "tone": "light",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p964",
+      "source_cid": "964",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=964",
+      "category_id": "theme",
+      "category_label": "테마·기타",
+      "title": "지금은 혼자인 당신에게 확실히 찾아올 미래!",
+      "source_title": "지금은 혼자인 당신에게 확실히 찾아올 미래!",
+      "price_krw": 7000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "핵심 요약",
+        "상세 해석",
+        "주의 포인트",
+        "실천 제안"
+      ],
+      "tone": "light",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p1974",
+      "source_cid": "1974",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=1974",
+      "category_id": "theme",
+      "category_label": "테마·기타",
+      "title": "애매하다 싶으면 이름을 보자! 당신을 바라보는 사람",
+      "source_title": "애매하다 싶으면 이름을 보자! 당신을 바라보는 사람",
+      "price_krw": 9500,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "핵심 요약",
+        "상세 해석",
+        "주의 포인트",
+        "실천 제안"
+      ],
+      "tone": "light",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p579",
+      "source_cid": "579",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=579",
+      "category_id": "theme",
+      "category_label": "테마·기타",
+      "title": "지금 당신의 곁에 있는 운명의 이성~얼굴, 직업, 부",
+      "source_title": "지금 당신의 곁에 있는 운명의 이성~얼굴, 직업, 부",
+      "price_krw": 10500,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "핵심 요약",
+        "상세 해석",
+        "주의 포인트",
+        "실천 제안"
+      ],
+      "tone": "light",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    },
+    {
+      "id": "p1298",
+      "source_cid": "1298",
+      "source_url": "https://fortun.unsin.co.kr/intro.php?cid=1298",
+      "category_id": "theme",
+      "category_label": "테마·기타",
+      "title": "당신의 운명이 약속한다! 운명의 사람의 모든 것",
+      "source_title": "당신의 운명이 약속한다! 운명의 사람의 모든 것",
+      "price_krw": 14000,
+      "currency": "KRW",
+      "needs_profile": true,
+      "needs_partner": false,
+      "is_free": false,
+      "preview_sections": [
+        "운세 소개",
+        "이런 분께",
+        "구성 미리보기"
+      ],
+      "result_sections": [
+        "핵심 요약",
+        "상세 해석",
+        "주의 포인트",
+        "실천 제안"
+      ],
+      "tone": "light",
+      "payment": {
+        "methods_mock": [
+          "신용카드",
+          "간편결제(네이버/카카오/삼성)",
+          "휴대폰",
+          "계좌이체",
+          "문화상품권"
+        ],
+        "result_view_days_web": 7,
+        "result_view_days_email": 30
+      }
+    }
+  ],
+  "payment_module": {
+    "mode": "mock",
+    "fields": [
+      "buyer_name",
+      "email",
+      "phone",
+      "agree_privacy",
+      "agree_age14"
+    ],
+    "notices": [
+      "결제 완료 후 뒤로가기·새로고침을 반복하지 마세요.",
+      "결과 다시보기: 웹 7일 · 이메일 링크 30일(예정).",
+      "본 서비스는 엔터테인먼트 목적이며 투자·법률 자문이 아닙니다.",
+      "로컬 MVP는 모의 결제입니다. 실제 카드 청구가 없습니다."
+    ],
+    "methods": [
+      "신용카드",
+      "간편결제",
+      "휴대폰",
+      "계좌이체",
+      "문화상품권"
+    ]
+  },
+  "engine_plan": {
+    "current": "sajupy (pillars) + FO templates",
+    "recommended_multi_source": [
+      "sajupy — pillars / lunar",
+      "bazica-style or gracefullight/saju — ten gods / chart features",
+      "hoonsikim/saju JS logic port — element / day master checks",
+      "custom FO narrative layer — product sections"
+    ],
+    "merge_strategy": "one chart fact layer + multi narrative modules per product tone"
+  }
+}

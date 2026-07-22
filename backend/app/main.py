@@ -5,7 +5,7 @@ from contextlib import asynccontextmanager
 import os
 
 from app.core.config import settings
-from app.api import auth, fortune, profiles, engagement, journal, shop
+from app.api import auth, fortune, profiles, engagement, journal, shop, store
 from app.core.database import engine, async_session_maker
 from app.core.security import get_password_hash
 from app.models.base import SQLModel
@@ -135,6 +135,7 @@ app.include_router(profiles.router, prefix="/api/profiles", tags=["profiles"])
 app.include_router(engagement.router, prefix="/api/engagement", tags=["engagement"])
 app.include_router(journal.router, prefix="/api/journal", tags=["journal"])
 app.include_router(shop.router, prefix="/api/shop", tags=["shop"])
+app.include_router(store.router, prefix="/api/store", tags=["store"])
 
 @app.get("/")
 async def root():
