@@ -472,11 +472,17 @@ async def zodiac_by_year(year: int = Query(..., ge=1900, le=2100), as_of: date |
 
 
 class CompatPerson(BaseModel):
-    solar_date: date
+    """Birth input. solar_date = entered date (양력 그대로 / 음력이면 lunar YMD)."""
+
+    solar_date: date  # entered calendar date (name kept for API compat)
     hour: int = Field(default=12, ge=0, le=23)
     minute: int = Field(default=0, ge=0, le=59)
     gender: Literal["male", "female"] = "male"
     time_unknown: bool = True
+    calendar_type: Literal["solar", "lunar"] = "solar"
+    display_name: str = ""
+    time_slot: str | None = None
+    is_leap_month: bool = False
 
 
 class CompatRequest(BaseModel):
@@ -484,30 +490,87 @@ class CompatRequest(BaseModel):
     b: CompatPerson
 
 
+def _resolve_solar_date(p: CompatPerson) -> tuple[date, str, str]:
+    """Return (solar_date_for_engine, birth_input_label, solar_used_iso)."""
+    entered = p.solar_date
+    if p.calendar_type == "lunar":
+        try:
+            from sajupy import lunar_to_solar
+
+            lu = lunar_to_solar(
+                entered.year,
+                entered.month,
+                entered.day,
+                bool(p.is_leap_month),
+            )
+            solar = date(int(lu["solar_year"]), int(lu["solar_month"]), int(lu["solar_day"]))
+            return (
+                solar,
+                f"음력 {entered.year}.{entered.month}.{entered.day}"
+                + ("(윤)" if p.is_leap_month else ""),
+                solar.isoformat(),
+            )
+        except Exception as exc:
+            raise HTTPException(
+                status_code=400,
+                detail=f"음력 변환 실패 ({entered}): {exc}",
+            ) from exc
+    return (
+        entered,
+        f"양력 {entered.year}.{entered.month}.{entered.day}",
+        entered.isoformat(),
+    )
+
+
+def _time_label(p: CompatPerson) -> str:
+    if p.time_unknown:
+        return "시간 모름 (정오 가정)"
+    if p.time_slot:
+        from app.services.saju_time import SAJU_HOURS
+
+        for item in SAJU_HOURS:
+            if item["key"] == p.time_slot:
+                rng = item.get("range") or ""
+                lab = item.get("label_short") or item["key"]
+                return f"{lab} ({rng})" if rng else lab
+    return f"{p.hour:02d}:{p.minute:02d}"
+
+
 @router.post("/compatibility")
 async def compatibility(body: CompatRequest):
-    def to_req(p: CompatPerson) -> SajuRequest:
-        return SajuRequest(
-            solar_date=p.solar_date,
+    from app.services.compatibility import build_compatibility
+
+    def run_person(p: CompatPerson):
+        solar, birth_lab, solar_iso = _resolve_solar_date(p)
+        req = SajuRequest(
+            solar_date=solar,
             hour=p.hour,
             minute=p.minute,
             gender=p.gender,
             time_unknown=p.time_unknown,
         )
+        result, hour, minute, time_assumed = _run_saju(req)
+        meta = {
+            "name": (p.display_name or "").strip() or ("A" if p is body.a else "B"),
+            "gender": p.gender,
+            "calendar_type": p.calendar_type,
+            "birth_input": birth_lab,
+            "solar_used": solar_iso,
+            "time_text": _time_label(p),
+            "time_unknown": p.time_unknown or time_assumed,
+        }
+        return result, meta, hour, minute
 
-    ra, ha, ma, ta = _run_saju(to_req(body.a))
-    rb, hb, mb, tb = _run_saju(to_req(body.b))
-    _ = (ha, ma, ta, hb, mb, tb)
-    result = compatibility_score(ra, rb)
-    return {
-        **result,
-        "a_pillars": {
-            "day": {"stem": ra.pillars.day.stem, "branch": ra.pillars.day.branch},
-        },
-        "b_pillars": {
-            "day": {"stem": rb.pillars.day.stem, "branch": rb.pillars.day.branch},
-        },
-    }
+    ra, a_meta, _, _ = run_person(body.a)
+    rb, b_meta, _, _ = run_person(body.b)
+    # fix names if empty
+    if a_meta["name"] == "A" and body.a.display_name:
+        a_meta["name"] = body.a.display_name
+    if b_meta["name"] == "B" and body.b.display_name:
+        b_meta["name"] = body.b.display_name
+
+    report = build_compatibility(ra, rb, a_meta=a_meta, b_meta=b_meta)
+    return report
 
 
 @router.get("/affiliate/recommendations")

@@ -144,13 +144,49 @@ export async function getZodiacToday() {
   return publicJson<{ date: string; items: ZodiacItem[] }>("/api/fortune/zodiac/today");
 }
 
-export async function postCompatibility(a: SajuRequestBody, b: SajuRequestBody) {
-  return publicJson<{
-    score: number;
-    summary: string;
-    a_day_master: string;
-    b_day_master: string;
-  }>("/api/fortune/compatibility", {
+export type CompatPersonInput = SajuRequestBody & {
+  calendar_type?: "solar" | "lunar";
+  display_name?: string;
+  time_slot?: string;
+  is_leap_month?: boolean;
+};
+
+export type CompatReport = {
+  score: number;
+  grade: string;
+  summary: string;
+  a_day_master: string;
+  b_day_master: string;
+  relation: { label: string; a_sees_b: string; b_sees_a: string };
+  breakdown: {
+    day_master: number;
+    five_elements: number;
+    day_branch: number;
+    year_month: number;
+    hour: number | null;
+  };
+  a: {
+    display_name: string;
+    gender_ko: string;
+    calendar_label: string;
+    birth_input: string;
+    solar_used: string;
+    time_text: string;
+    day_master: string;
+    day_master_nature: string;
+    pillars_line: string;
+    elements_line: string;
+    strong: string;
+    weak: string;
+  };
+  b: CompatReport["a"];
+  sections: { id: string; title: string; body: string }[];
+  notes: string[];
+  disclaimer: string;
+};
+
+export async function postCompatibility(a: CompatPersonInput, b: CompatPersonInput) {
+  return publicJson<CompatReport>("/api/fortune/compatibility", {
     method: "POST",
     body: JSON.stringify({
       a: {
@@ -159,6 +195,10 @@ export async function postCompatibility(a: SajuRequestBody, b: SajuRequestBody) 
         minute: a.minute,
         gender: a.gender,
         time_unknown: a.time_unknown,
+        calendar_type: a.calendar_type || "solar",
+        display_name: a.display_name || "",
+        time_slot: a.time_slot || undefined,
+        is_leap_month: a.is_leap_month || false,
       },
       b: {
         solar_date: b.solar_date,
@@ -166,6 +206,10 @@ export async function postCompatibility(a: SajuRequestBody, b: SajuRequestBody) 
         minute: b.minute,
         gender: b.gender,
         time_unknown: b.time_unknown,
+        calendar_type: b.calendar_type || "solar",
+        display_name: b.display_name || "",
+        time_slot: b.time_slot || undefined,
+        is_leap_month: b.is_leap_month || false,
       },
     }),
   });

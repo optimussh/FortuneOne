@@ -50,14 +50,57 @@ def test_compatibility():
     r = client.post(
         "/api/fortune/compatibility",
         json={
-            "a": {"solar_date": "1990-05-15", "gender": "male", "time_unknown": True},
-            "b": {"solar_date": "1992-08-20", "gender": "female", "time_unknown": True},
+            "a": {
+                "solar_date": "1990-05-15",
+                "gender": "male",
+                "time_unknown": False,
+                "hour": 8,
+                "calendar_type": "solar",
+                "display_name": "철수",
+                "time_slot": "chen",
+            },
+            "b": {
+                "solar_date": "1992-08-20",
+                "gender": "female",
+                "time_unknown": True,
+                "calendar_type": "solar",
+                "display_name": "영희",
+            },
         },
     )
     assert r.status_code == 200
     body = r.json()
     assert 0 <= body["score"] <= 100
     assert body["summary"]
+    assert len(body["sections"]) >= 5
+    assert body["a"]["day_master"]
+    assert body["breakdown"]["day_master"] >= 0
+
+
+def test_compatibility_lunar():
+    r = client.post(
+        "/api/fortune/compatibility",
+        json={
+            "a": {
+                "solar_date": "1990-07-08",
+                "gender": "male",
+                "time_unknown": True,
+                "calendar_type": "lunar",
+                "display_name": "음력A",
+            },
+            "b": {
+                "solar_date": "1992-08-20",
+                "gender": "female",
+                "time_unknown": True,
+                "calendar_type": "solar",
+                "display_name": "양력B",
+            },
+        },
+    )
+    assert r.status_code == 200
+    body = r.json()
+    assert "음력" in body["a"]["birth_input"]
+    assert body["a"]["solar_used"]
 
 
 def test_affiliate():

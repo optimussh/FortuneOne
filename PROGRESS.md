@@ -101,3 +101,8 @@
   - `docs/superpowers/plans/2026-07-19-fortuneone-local-mvp.md`
 - **chore:** 프론트 포트 **6000**, 제품명 FortuneOne, CORS/compose/README/.env.example 정렬
 - **decisions:** 도메인 교체 / 사주원국+일운 / sajupy / 게스트+로컬로그인 병행
+
+## 2026-07-22 (compatibility detail)
+
+- **feat(compat):** 양력/음력·12시진 입력, 음력→양력 변환, 상세 섹션 8개·항목별 점수
+- **web:** 궁합 페이지 SajuDetailForm 2인 입력 + 상세 결과 UI
