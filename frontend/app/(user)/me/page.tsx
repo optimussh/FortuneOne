@@ -414,6 +414,12 @@ function MePageInner() {
           <Button asChild variant="outline" className="w-full">
             <Link href="/profiles">프로필 관리로</Link>
           </Button>
+          <p className="text-center text-xs text-[var(--muted)]">
+            이미 결제한 결과가 있다면{" "}
+            <Link href="/library" className="font-semibold text-[var(--primary)] underline">
+              내 구매 · 다시보기
+            </Link>
+          </p>
         </form>
       </main>
     );
@@ -452,11 +458,21 @@ function MePageInner() {
             운세 스토어
           </Link>
         </p>
-        <p className="mt-2 text-xs">
-          <Link href="/profiles" className="font-semibold text-[var(--primary)] underline">
-            다른 사람 선택 · 사주 수정
+        <div className="mt-3 flex flex-wrap items-center justify-center gap-2">
+          <Link
+            href="/library"
+            className="inline-flex items-center rounded-full border border-[var(--primary)] bg-[var(--primary-light)] px-3 py-1.5 text-xs font-semibold text-[var(--primary)]"
+          >
+            내 구매 · 다시보기
+            <span className="ml-1 font-normal text-[var(--muted)]">(웹 7일 · 메일 30일)</span>
           </Link>
-        </p>
+          <Link
+            href="/profiles"
+            className="inline-flex items-center rounded-full border border-[var(--border)] bg-white px-3 py-1.5 text-xs font-semibold text-[var(--foreground)]"
+          >
+            다른 사람 · 사주 수정
+          </Link>
+        </div>
         {report.chart_facts && (
           <div className="mx-auto mt-3 max-w-md">
             <ChartFactsBadge facts={report.chart_facts} />

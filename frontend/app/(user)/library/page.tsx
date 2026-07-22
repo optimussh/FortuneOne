@@ -18,6 +18,7 @@ export default function LibraryPage() {
   const [policy, setPolicy] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
+  const [copiedKey, setCopiedKey] = useState("");
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -150,11 +151,17 @@ export default function LibraryPage() {
                     size="sm"
                     variant="outline"
                     type="button"
-                    onClick={() => {
-                      void navigator.clipboard?.writeText(it.email_result_link || "");
+                    onClick={async () => {
+                      try {
+                        await navigator.clipboard?.writeText(it.email_result_link || "");
+                        setCopiedKey(it.product_key);
+                        window.setTimeout(() => setCopiedKey(""), 2000);
+                      } catch {
+                        setError("링크 복사에 실패했습니다. 결과 화면에서 복사해 주세요.");
+                      }
                     }}
                   >
-                    메일용 링크 복사
+                    {copiedKey === it.product_key ? "복사됨" : "메일용 링크 복사"}
                   </Button>
                 )}
               </div>
@@ -164,6 +171,9 @@ export default function LibraryPage() {
       </div>
 
       <div className="mt-8 flex flex-wrap justify-center gap-3 text-sm">
+        <Link href="/me" className="text-[var(--primary)] underline">
+          상세 사주
+        </Link>
         <Link href="/store" className="text-[var(--primary)] underline">
           스토어
         </Link>

@@ -2,6 +2,13 @@
 
 프로젝트 진행 현황 로그. 커밋 직전 갱신 (`claude_Template` git 규칙).
 
+## 2026-07-23 (library entry + review)
+
+- **web:** `/me`에 **내 구매 · 다시보기** CTA (웹 7일 · 메일 30일 안내)
+- **web:** 결과 페이지 하단 라이브러리 링크 · profile_id 생략 시 unlock 행 복원(FE 게이트 제거)
+- **smoke:** `backend/scripts/smoke_library_flow.py` — 결제→my-unlocks→웹/토큰 결과
+- **verify:** pytest 42 · tsc · e2e smoke OK (API 재시작 후 my-unlocks items 형식 확인)
+
 ## 2026-07-23 (deploy CI + legal FO + re-view 7/30)
 
 - **ci:** `.github/workflows/ci.yml` — pytest, tsc, docker build

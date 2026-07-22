@@ -25,15 +25,12 @@ function ResultInner() {
 
   useEffect(() => {
     if (authLoading) return;
-    // email token allows view without login
+    // email token allows view without login; web uses unlock row profile if omitted
     if (!token && !user) {
-      router.replace(
-        `/login?next=/store/${id}/result?profile_id=${profileId || ""}`
-      );
-      return;
-    }
-    if (!token && !profileId) {
-      setError("profile_id가 필요합니다");
+      const next = profileId
+        ? `/store/${id}/result?profile_id=${profileId}`
+        : `/store/${id}/result`;
+      router.replace(`/login?next=${encodeURIComponent(next)}`);
       return;
     }
     getStoreProductResult(id, profileId || 0, partnerId, token)
@@ -146,6 +143,9 @@ function ResultInner() {
       </p>
 
       <div className="mt-8 flex flex-wrap justify-center gap-3">
+        <Button asChild variant="outline">
+          <Link href="/library">내 구매 · 다시보기</Link>
+        </Button>
         <Button asChild variant="outline">
           <Link href="/store">스토어</Link>
         </Button>
