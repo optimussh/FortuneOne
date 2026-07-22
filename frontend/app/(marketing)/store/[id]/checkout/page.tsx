@@ -22,6 +22,40 @@ import { Input } from "@/components/ui/input";
  * - mock: auto-confirm → success page
  * - toss: loads Toss SDK when keys present (test/live)
  */
+function StepDots({ step }: { step: number }) {
+  const labels = ["상품", "프로필", "결제"];
+  return (
+    <div className="mb-6 flex items-center justify-center gap-2">
+      {labels.map((label, i) => {
+        const n = i + 1;
+        const active = n === step;
+        const done = n < step;
+        return (
+          <div key={label} className="flex items-center gap-2">
+            {i > 0 && <span className="h-px w-4 bg-[var(--border)]" />}
+            <div className="flex flex-col items-center gap-0.5">
+              <span
+                className={`flex h-6 w-6 items-center justify-center rounded-full text-[10px] font-bold ${
+                  active || done
+                    ? "bg-[var(--primary)] text-white"
+                    : "border border-[var(--border)] text-[var(--muted)]"
+                }`}
+              >
+                {n}
+              </span>
+              <span
+                className={`text-[10px] ${active ? "font-semibold text-[var(--foreground)]" : "text-[var(--muted)]"}`}
+              >
+                {label}
+              </span>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 function CheckoutInner() {
   const { id } = useParams<{ id: string }>();
   const search = useSearchParams();
@@ -139,27 +173,32 @@ function CheckoutInner() {
 
   return (
     <main className="mx-auto max-w-md px-4 py-10 pb-20">
+      <StepDots step={2} />
       <h1 className="text-center text-xl font-extrabold">결제 · 사주 연결</h1>
       <p className="mt-2 text-center text-sm text-[var(--muted)]">{product.title}</p>
       <p className="mt-1 text-center text-lg font-bold text-amber-700">
         {product.is_free ? "무료" : `${product.price_krw.toLocaleString()}원`}
       </p>
+      <p className="mt-2 text-center text-[11px] text-[var(--muted)]">
+        선택한 사주 프로필로 맞춤 결과가 생성됩니다
+      </p>
 
       {payCfg && (
         <p className="mt-2 text-center text-[10px] text-[var(--muted)]">
-          provider: <strong>{payCfg.provider}</strong>
-          {payCfg.test_mode ? " · TEST" : " · LIVE 후보"}
-          {payCfg.toss_configured ? " · Toss 키 설정됨" : " · Toss 키 없음(mock 가능)"}
+          결제: <strong>{payCfg.provider === "mock" ? "모의결제 (개발)" : payCfg.provider}</strong>
+          {payCfg.test_mode ? " · 테스트 모드" : ""}
         </p>
       )}
 
       {search.get("unlocked") && (
-        <p className="mt-2 text-center text-xs text-emerald-700">이미 해금된 상품일 수 있습니다</p>
+        <p className="mt-2 text-center text-xs text-emerald-700">
+          이미 해금된 상품일 수 있어요. 아래에서 프로필만 고르고 결과로 이동하세요.
+        </p>
       )}
 
       <Card className="mt-6 border-[var(--border)]">
         <CardHeader className="pb-2">
-          <CardTitle className="text-sm">1. 내 사주 프로필</CardTitle>
+          <CardTitle className="text-sm">내 사주 프로필</CardTitle>
         </CardHeader>
         <CardContent className="space-y-2">
           {profiles.length === 0 ? (

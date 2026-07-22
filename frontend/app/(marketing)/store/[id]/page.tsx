@@ -46,7 +46,7 @@ export default function StoreProductPage() {
   }
 
   return (
-    <main className="mx-auto max-w-lg px-4 py-10 pb-20">
+    <main className="mx-auto max-w-lg px-4 py-10 pb-28">
       <p className="text-center text-xs font-semibold text-[var(--primary)]">
         {product.category_label}
       </p>
@@ -57,15 +57,21 @@ export default function StoreProductPage() {
       <p className="mt-3 text-center text-2xl font-extrabold text-amber-700">
         {product.is_free ? "무료" : `${product.price_krw.toLocaleString()}원`}
       </p>
+      <p className="mt-2 text-center text-[11px] text-[var(--muted)]">
+        결제 후 <strong className="text-[var(--foreground)]">내 사주 프로필</strong>로 맞춤 결과 생성
+        · 웹 7일 · 메일 링크 30일 다시보기
+      </p>
 
       <Card className="mt-6 border-[var(--border)]">
         <CardHeader className="pb-2">
-          <CardTitle className="text-base">운세 소개</CardTitle>
+          <CardTitle className="text-base">이런 내용이에요</CardTitle>
         </CardHeader>
         <CardContent className="space-y-2 text-sm leading-7 text-[var(--muted)]">
-          {(product.intro_blurbs || []).map((b, i) => (
-            <p key={i}>{b}</p>
-          ))}
+          {(product.intro_blurbs || []).length > 0 ? (
+            (product.intro_blurbs || []).map((b, i) => <p key={i}>{b}</p>)
+          ) : (
+            <p>선택하신 사주 프로필을 기준으로 주제 해석과 실천 문장을 제공합니다.</p>
+          )}
         </CardContent>
       </Card>
 
@@ -136,27 +142,48 @@ export default function StoreProductPage() {
         </CardContent>
       </Card>
 
-      <div className="mt-8 flex flex-col gap-2">
-        {unlocked ? (
-          <Button onClick={() => router.push(`/store/${product.id}/checkout?unlocked=1`)}>
-            결과 보기 (해금됨)
-          </Button>
-        ) : (
-          <Button
-            onClick={() => {
-              if (!user) {
-                router.push(`/login?next=/store/${product.id}/checkout`);
-                return;
-              }
-              router.push(`/store/${product.id}/checkout`);
-            }}
-          >
-            {product.is_free ? "사주 선택 후 무료 보기" : "결제하고 결과 보기"}
-          </Button>
-        )}
+      <div className="mt-6 flex flex-col gap-2">
         <Button asChild variant="outline">
           <Link href="/store">목록으로</Link>
         </Button>
+        {unlocked && (
+          <Button asChild variant="outline">
+            <Link href="/library">내 구매 · 다시보기</Link>
+          </Button>
+        )}
+      </div>
+
+      {/* Sticky purchase bar */}
+      <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-[var(--border)] bg-white/95 px-4 py-3 backdrop-blur">
+        <div className="mx-auto flex max-w-lg items-center gap-3">
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-xs font-semibold">{product.title}</p>
+            <p className="text-sm font-extrabold text-amber-700">
+              {product.is_free ? "무료" : `${product.price_krw.toLocaleString()}원`}
+            </p>
+          </div>
+          {unlocked ? (
+            <Button
+              className="shrink-0"
+              onClick={() => router.push(`/store/${product.id}/checkout?unlocked=1`)}
+            >
+              결과 보기
+            </Button>
+          ) : (
+            <Button
+              className="shrink-0"
+              onClick={() => {
+                if (!user) {
+                  router.push(`/login?next=/store/${product.id}/checkout`);
+                  return;
+                }
+                router.push(`/store/${product.id}/checkout`);
+              }}
+            >
+              {product.is_free ? "무료로 보기" : "결제하고 보기"}
+            </Button>
+          )}
+        </div>
       </div>
     </main>
   );

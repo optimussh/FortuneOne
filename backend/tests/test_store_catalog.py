@@ -22,3 +22,9 @@ def test_product_report_sections():
     assert rep["sections"]
     assert rep["header"]["day_master"]
     assert "FortuneOne" in rep["disclaimer"] or "자체" in rep["disclaimer"] or "규칙" in rep["disclaimer"]
+    # v3: multi-paragraph, no robotic FO footer stamp
+    body0 = rep["sections"][0]["body"]
+    assert "FO 자체 문체" not in body0
+    assert "\n\n" in body0 or len(body0) >= 180
+    assert rep["header"].get("narrative_version") == 3
+    assert "테스트" in rep["intro"]

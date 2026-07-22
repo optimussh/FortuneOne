@@ -124,9 +124,15 @@ export default function HubPage() {
           {today}
           {profile ? ` · ${profile.label}` : ""}
         </p>
-        <p className="mt-2 text-xs">
+        <p className="mt-2 flex flex-wrap justify-center gap-x-3 gap-y-1 text-xs">
           <Link href="/profiles" className="font-semibold text-[var(--primary)] underline">
-            사주 프로필 선택·수정
+            사주 프로필
+          </Link>
+          <Link href="/me" className="font-semibold text-[var(--primary)] underline">
+            상세 사주
+          </Link>
+          <Link href="/library" className="font-semibold text-[var(--primary)] underline">
+            내 구매 · 다시보기
           </Link>
         </p>
       </div>
@@ -187,12 +193,14 @@ export default function HubPage() {
 
       <Card className="mb-4 border-dashed border-[var(--border)]">
         <CardContent className="py-3 text-center text-[11px] leading-relaxed text-[var(--muted)]">
-          <strong className="text-[var(--foreground)]">역할 안내</strong> — 허브·상세 탭은
-          기본 제공 리포트,{" "}
+          오늘은 허브에서 한눈에, 깊은 주제는{" "}
           <Link href="/store" className="font-semibold text-[var(--primary)] underline">
             스토어
           </Link>
-          는 연애·결혼·재물 등 주제 심화 패키지입니다.
+          에서 · 산 결과는{" "}
+          <Link href="/library" className="font-semibold text-[var(--primary)] underline">
+            다시보기
+          </Link>
         </CardContent>
       </Card>
 

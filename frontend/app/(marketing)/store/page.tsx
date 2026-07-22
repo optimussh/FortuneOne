@@ -36,46 +36,33 @@ function StoreInner() {
 
   return (
     <main className="mx-auto max-w-3xl px-4 py-10 pb-20">
-      <h1 className="text-center text-2xl font-extrabold">운세 스토어</h1>
+      <p className="text-center text-xs font-semibold tracking-wide text-[var(--primary)]">
+        STORE
+      </p>
+      <h1 className="mt-1 text-center text-2xl font-extrabold">운세 스토어</h1>
       <p className="mt-2 text-center text-sm text-[var(--muted)]">
-        주제별 심화 패키지 · 결제(모의) 후 내 사주 프로필로 결과 생성
+        연애·결혼·재물·직장 주제 심화 · 결제 후{" "}
+        <strong className="text-[var(--foreground)]">내 사주 프로필</strong>로 결과 생성
+      </p>
+      <p className="mt-2 text-center text-xs">
+        <Link href="/library" className="font-semibold text-[var(--primary)] underline">
+          내 구매 · 다시보기
+        </Link>
+        <span className="text-[var(--muted)]"> · 웹 7일 · 메일 링크 30일</span>
       </p>
 
-      {/* Role separation */}
       <Card className="mt-6 border-[var(--primary)] bg-[var(--primary-light)]">
-        <CardHeader className="pb-2">
-          <CardTitle className="text-sm">기본 탭 vs 스토어</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-2 text-xs leading-relaxed text-[var(--muted)]">
+        <CardContent className="space-y-1.5 py-3 text-xs leading-relaxed text-[var(--muted)]">
           <p className="font-semibold text-[var(--foreground)]">
             {roleGuide?.summary ||
-              "상세 사주 탭은 기본 제공, 스토어는 주제를 더 깊게 파는 패키지입니다."}
+              "상세 사주 탭은 기본, 스토어는 한 주제를 깊게 파는 패키지입니다."}
           </p>
-          <ul className="list-disc space-y-1 pl-4">
-            <li>
-              <Link href="/me" className="font-semibold text-[var(--primary)] underline">
-                상세 사주
-              </Link>
-              : 오늘 · 신년 · 토정 · 부자되기 · 오행 · 인생풀이 (기본)
-            </li>
-            <li>
-              <strong>스토어</strong>: 연애·결혼·재물·직장 등 주제 심화 (프로필 연동 결과)
-            </li>
-            <li>
-              <Link href="/me?tab=wealth" className="underline text-[var(--primary)]">
-                부자되기
-              </Link>
-              는 재물 캘린더, 스토어 재물 상품은 태도·습관 심화로 역할 분리
-            </li>
-          </ul>
-          {counts && (
-            <p className="pt-1 text-[10px]">
-              분류 현황:{" "}
-              {Object.entries(counts)
-                .map(([k, v]) => `${k} ${v}`)
-                .join(" · ")}
-            </p>
-          )}
+          <p>
+            <Link href="/me" className="font-semibold text-[var(--primary)] underline">
+              상세 사주
+            </Link>
+            에서 오늘·신년·토정·부자되기를 본 뒤, 더 궁금한 주제만 골라 보세요.
+          </p>
         </CardContent>
       </Card>
 
@@ -109,43 +96,65 @@ function StoreInner() {
       )}
       {error && <p className="mt-6 text-center text-sm text-red-600">{error}</p>}
 
-      <div className="mt-8 space-y-3">
-        {products.map((p) => (
-          <Card key={p.id} className="border-[var(--border)]">
-            <CardHeader className="pb-2">
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <p className="text-[10px] font-semibold text-[var(--primary)]">
-                    {p.category_label}
-                  </p>
-                  <CardTitle className="mt-1 text-base leading-snug">{p.title}</CardTitle>
-                  {p.subtitle && (
-                    <p className="mt-1 text-[11px] text-[var(--muted)]">{p.subtitle}</p>
-                  )}
-                </div>
-                <div className="shrink-0 text-right">
-                  <div className="text-lg font-extrabold text-amber-700">
-                    {p.is_free ? "무료" : `${p.price_krw.toLocaleString()}원`}
+      {!loading && (
+        <p className="mt-4 text-center text-[11px] text-[var(--muted)]">
+          {products.length}개 상품
+          {cat ? " · 선택 분류" : " · 전체"}
+        </p>
+      )}
+
+      <div className="mt-4 space-y-3">
+        {products.map((p) => {
+          const teaser =
+            (p.intro_blurbs && p.intro_blurbs[0]) ||
+            p.subtitle ||
+            `${(p.result_sections || []).slice(0, 2).join(" · ")} 등 ${(p.result_sections || []).length}단 구성`;
+          return (
+            <Link key={p.id} href={`/store/${p.id}`} className="block">
+              <Card className="border-[var(--border)] transition hover:border-[var(--primary)] hover:shadow-sm">
+                <CardHeader className="pb-2">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <p className="text-[10px] font-semibold text-[var(--primary)]">
+                        {p.category_label}
+                      </p>
+                      <CardTitle className="mt-1 text-base leading-snug">{p.title}</CardTitle>
+                      <p className="mt-1.5 line-clamp-2 text-[12px] leading-relaxed text-[var(--muted)]">
+                        {teaser}
+                      </p>
+                    </div>
+                    <div className="shrink-0 text-right">
+                      <div className="text-base font-extrabold text-amber-700">
+                        {p.is_free ? "무료" : `${p.price_krw.toLocaleString()}원`}
+                      </div>
+                      <p className="mt-1 text-[10px] text-[var(--muted)]">
+                        {(p.result_sections || []).length}단
+                      </p>
+                    </div>
                   </div>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent className="flex flex-wrap items-center justify-between gap-2">
-              <p className="text-[11px] text-[var(--muted)]">
-                구성 {(p.result_sections || []).length}단 ·{" "}
-                {(p.result_sections || []).slice(0, 3).join(" · ")}
-                {(p.result_sections || []).length > 3 ? " …" : ""}
-              </p>
-              <Button asChild size="sm">
-                <Link href={`/store/${p.id}`}>상세 보기</Link>
-              </Button>
-            </CardContent>
-          </Card>
-        ))}
+                </CardHeader>
+                <CardContent className="flex items-center justify-between pt-0">
+                  <p className="text-[11px] text-[var(--muted)]">
+                    {(p.result_sections || []).slice(0, 3).join(" · ")}
+                    {(p.result_sections || []).length > 3 ? " …" : ""}
+                  </p>
+                  <span className="text-xs font-semibold text-[var(--primary)]">자세히 →</span>
+                </CardContent>
+              </Card>
+            </Link>
+          );
+        })}
       </div>
 
       {!loading && products.length === 0 && (
-        <p className="mt-10 text-center text-sm text-[var(--muted)]">상품이 없습니다</p>
+        <Card className="mt-10 border-dashed border-[var(--border)]">
+          <CardContent className="space-y-3 py-10 text-center text-sm text-[var(--muted)]">
+            <p>이 분류에 표시할 상품이 없습니다.</p>
+            <Button asChild size="sm" variant="outline">
+              <Link href="/store">전체 보기</Link>
+            </Button>
+          </CardContent>
+        </Card>
       )}
     </main>
   );

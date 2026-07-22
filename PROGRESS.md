@@ -2,6 +2,14 @@
 
 프로젝트 진행 현황 로그. 커밋 직전 갱신 (`claude_Template` git 규칙).
 
+## 2026-07-23 (copy + UX polish)
+
+- **narrative v3:** `product_report.py` — 문단 분리, 톤별 서문, 구간 역할(open/mid/action/close), FO 스탬프 제거, 카테고리 초점 키워드
+- **store UX:** 목록 카드 티저·클릭 영역, 상세 sticky 결제 바, 체크아웃 스텝 표시
+- **result UX:** 목차·문단 줄바꿈·메일 링크 복사 버튼·다시보기 안내
+- **hub:** 프로필/상세/다시보기 빠른 링크, 역할 문구 단순화
+- **test:** store report v3 assertions · pytest full
+
 ## 2026-07-23 (library entry + review)
 
 - **web:** `/me`에 **내 구매 · 다시보기** CTA (웹 7일 · 메일 30일 안내)
