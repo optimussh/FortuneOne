@@ -5,29 +5,36 @@ import Link from "next/link";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import {
-  checkoutStoreProduct,
+  createPaymentOrder,
+  getPaymentConfig,
   getStoreProduct,
   listFortuneProfiles,
   type FortuneProfile,
+  type PaymentConfig,
   type StoreProduct,
 } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 
+/**
+ * Checkout: creates payment order via /api/payments.
+ * - mock: auto-confirm → success page
+ * - toss: loads Toss SDK when keys present (test/live)
+ */
 function CheckoutInner() {
   const { id } = useParams<{ id: string }>();
   const search = useSearchParams();
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
   const [product, setProduct] = useState<StoreProduct | null>(null);
+  const [payCfg, setPayCfg] = useState<PaymentConfig | null>(null);
   const [profiles, setProfiles] = useState<FortuneProfile[]>([]);
   const [profileId, setProfileId] = useState<number | "">("");
   const [partnerId, setPartnerId] = useState<number | "">("");
   const [buyerName, setBuyerName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [method, setMethod] = useState("mock_card");
   const [agree1, setAgree1] = useState(false);
   const [agree2, setAgree2] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -43,6 +50,7 @@ function CheckoutInner() {
     setEmail(user.email || "");
     setBuyerName(user.email?.split("@")[0] || "");
     getStoreProduct(id).then((r) => setProduct(r.product));
+    getPaymentConfig().then(setPayCfg).catch(() => setPayCfg(null));
     listFortuneProfiles().then((rows) => {
       setProfiles(rows);
       if (rows[0]) setProfileId(rows[0].id);
@@ -51,7 +59,7 @@ function CheckoutInner() {
 
   const pay = async () => {
     if (!profileId) {
-      setError("사주 프로필을 선택하세요. 없으면 프로필 관리에서 등록하세요.");
+      setError("사주 프로필을 선택하세요.");
       return;
     }
     if (!agree1 || !agree2) {
@@ -61,19 +69,52 @@ function CheckoutInner() {
     setBusy(true);
     setError("");
     try {
-      const r = await checkoutStoreProduct({
+      const order = await createPaymentOrder({
+        kind: "store_product",
         product_id: id,
         profile_id: Number(profileId),
         partner_profile_id: partnerId ? Number(partnerId) : undefined,
         buyer_name: buyerName,
         email,
         phone,
-        method,
         agree_privacy: agree1,
         agree_age14: agree2,
       });
-      setMsg(r.message);
-      router.push(r.result_path);
+
+      if (order.free) {
+        setMsg(order.message);
+        router.push(order.result_path);
+        return;
+      }
+
+      // Mock path — fully testable without Toss
+      if (order.provider === "mock" || order.mock_auto_confirm) {
+        setMsg("모의 결제 확인으로 이동…");
+        const q = new URLSearchParams({
+          orderId: order.order_id || "",
+          paymentKey: `mock_${order.order_id}`,
+          amount: String(order.amount_krw),
+        });
+        router.push(`/payments/success?${q}`);
+        return;
+      }
+
+      // Toss path — load widget when SDK available
+      if (order.provider === "toss" && order.client_key && order.order_id) {
+        setMsg("토스 결제창 준비… (테스트 키면 샌드박스)");
+        await openTossPayment({
+          clientKey: order.client_key,
+          customerKey: order.customer_key || `user_${user?.email}`,
+          orderId: order.order_id,
+          orderName: order.product_name || product?.title || "FortuneOne",
+          amount: order.amount_krw,
+          successUrl: order.success_url || `${window.location.origin}/payments/success`,
+          failUrl: order.fail_url || `${window.location.origin}/payments/fail`,
+        });
+        return;
+      }
+
+      setError("결제 제공자를 초기화하지 못했습니다. PAYMENT_PROVIDER=mock 으로 테스트하세요.");
     } catch (e) {
       setError(e instanceof Error ? e.message : "결제 실패");
     } finally {
@@ -87,29 +128,36 @@ function CheckoutInner() {
     );
   }
 
-  const methods = ["mock_card", "mock_kakao", "mock_naver", "mock_phone", "mock_transfer"];
-
   return (
     <main className="mx-auto max-w-md px-4 py-10 pb-20">
       <h1 className="text-center text-xl font-extrabold">결제 · 사주 연결</h1>
       <p className="mt-2 text-center text-sm text-[var(--muted)]">{product.title}</p>
       <p className="mt-1 text-center text-lg font-bold text-amber-700">
-        {product.is_free ? "무료" : `${product.price_krw.toLocaleString()}원 (모의)`}
+        {product.is_free ? "무료" : `${product.price_krw.toLocaleString()}원`}
       </p>
+
+      {payCfg && (
+        <p className="mt-2 text-center text-[10px] text-[var(--muted)]">
+          provider: <strong>{payCfg.provider}</strong>
+          {payCfg.test_mode ? " · TEST" : " · LIVE 후보"}
+          {payCfg.toss_configured ? " · Toss 키 설정됨" : " · Toss 키 없음(mock 가능)"}
+        </p>
+      )}
+
       {search.get("unlocked") && (
-        <p className="mt-2 text-center text-xs text-emerald-700">이미 해금된 상품입니다</p>
+        <p className="mt-2 text-center text-xs text-emerald-700">이미 해금된 상품일 수 있습니다</p>
       )}
 
       <Card className="mt-6 border-[var(--border)]">
         <CardHeader className="pb-2">
-          <CardTitle className="text-sm">1. 내 사주 프로필 (결과 기준)</CardTitle>
+          <CardTitle className="text-sm">1. 내 사주 프로필</CardTitle>
         </CardHeader>
         <CardContent className="space-y-2">
           {profiles.length === 0 ? (
             <p className="text-sm text-red-600">
-              등록된 사주가 없습니다.{" "}
+              프로필 없음 ·{" "}
               <Link href="/profiles" className="underline">
-                프로필 등록
+                등록
               </Link>
             </p>
           ) : (
@@ -127,7 +175,7 @@ function CheckoutInner() {
           )}
           {product.needs_partner && (
             <div>
-              <p className="mb-1 text-xs font-semibold">상대 프로필 (궁합형)</p>
+              <p className="mb-1 text-xs font-semibold">상대 프로필</p>
               <select
                 className="w-full rounded-lg border border-[var(--border)] p-2 text-sm"
                 value={partnerId}
@@ -135,7 +183,7 @@ function CheckoutInner() {
                   setPartnerId(e.target.value ? Number(e.target.value) : "")
                 }
               >
-                <option value="">선택(선택사항)</option>
+                <option value="">선택(선택)</option>
                 {profiles.map((p) => (
                   <option key={p.id} value={p.id}>
                     {p.label} · {p.display_name || "이름없음"}
@@ -171,50 +219,91 @@ function CheckoutInner() {
         </CardContent>
       </Card>
 
-      <Card className="mt-4 border-[var(--border)]">
-        <CardHeader className="pb-2">
-          <CardTitle className="text-sm">3. 결제 수단 (모의)</CardTitle>
-        </CardHeader>
-        <CardContent className="flex flex-wrap gap-2">
-          {methods.map((m) => (
-            <button
-              key={m}
-              type="button"
-              onClick={() => setMethod(m)}
-              className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                method === m
-                  ? "bg-[var(--primary)] text-white"
-                  : "border border-[var(--border)]"
-              }`}
-            >
-              {m.replace("mock_", "")}
-            </button>
-          ))}
-        </CardContent>
-      </Card>
-
       <div className="mt-4 space-y-2 text-sm">
         <label className="flex items-start gap-2">
           <input type="checkbox" checked={agree1} onChange={(e) => setAgree1(e.target.checked)} />
-          <span>개인정보 수집 및 이용에 동의 (필수)</span>
+          <span>
+            <Link href="/policy/privacy" className="underline">
+              개인정보
+            </Link>{" "}
+            수집·이용 동의 (필수)
+          </span>
         </label>
         <label className="flex items-start gap-2">
           <input type="checkbox" checked={agree2} onChange={(e) => setAgree2(e.target.checked)} />
-          <span>(필수) 만 14세 이상</span>
+          <span>(필수) 만 14세 이상 · 디지털 콘텐츠 안내 확인</span>
         </label>
+        <p className="text-[10px] text-[var(--muted)]">
+          <Link href="/policy/refund" className="underline">
+            환불 정책
+          </Link>
+          {" · "}
+          <Link href="/policy/business" className="underline">
+            사업자 정보
+          </Link>
+        </p>
       </div>
 
       {error && <p className="mt-3 text-center text-sm text-red-600">{error}</p>}
       {msg && <p className="mt-3 text-center text-sm text-emerald-700">{msg}</p>}
 
       <Button className="mt-6 w-full" disabled={busy} onClick={() => void pay()}>
-        {busy ? "처리 중…" : product.is_free ? "결과 생성" : "모의 결제하기"}
+        {busy
+          ? "처리 중…"
+          : product.is_free
+            ? "결과 생성"
+            : payCfg?.provider === "toss"
+              ? "토스로 결제"
+              : "모의 결제 테스트"}
       </Button>
       <Button asChild variant="outline" className="mt-2 w-full">
         <Link href={`/store/${id}`}>취소</Link>
       </Button>
     </main>
   );
+}
+
+async function openTossPayment(opts: {
+  clientKey: string;
+  customerKey: string;
+  orderId: string;
+  orderName: string;
+  amount: number;
+  successUrl: string;
+  failUrl: string;
+}) {
+  // Dynamic load Toss SDK v2
+  await loadScript("https://js.tosspayments.com/v2/standard");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const TossPayments = (window as any).TossPayments;
+  if (!TossPayments) {
+    throw new Error("TossPayments SDK 로드 실패");
+  }
+  const toss = TossPayments(opts.clientKey);
+  const payment = toss.payment({ customerKey: opts.customerKey });
+  await payment.requestPayment({
+    method: "CARD",
+    amount: { currency: "KRW", value: opts.amount },
+    orderId: opts.orderId,
+    orderName: opts.orderName,
+    successUrl: opts.successUrl,
+    failUrl: opts.failUrl,
+  });
+}
+
+function loadScript(src: string) {
+  return new Promise<void>((resolve, reject) => {
+    if (document.querySelector(`script[src="${src}"]`)) {
+      resolve();
+      return;
+    }
+    const s = document.createElement("script");
+    s.src = src;
+    s.async = true;
+    s.onload = () => resolve();
+    s.onerror = () => reject(new Error("script load failed"));
+    document.body.appendChild(s);
+  });
 }
 
 export default function CheckoutPage() {

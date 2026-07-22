@@ -19,9 +19,25 @@ class Settings(BaseSettings):
     
     FRONTEND_URL: str = "http://localhost:6100"
 
-    # Toss Payments
+    # Payments: mock | toss
+    # mock = always testable without keys; toss = sandbox/live when keys set
+    PAYMENT_PROVIDER: str = "mock"
+    PAYMENT_TEST_MODE: bool = True  # True: never charge real money path without live keys
+
+    # Toss Payments (https://developers.tosspayments.com/)
+    # Test keys: test_ck_... / test_sk_...  Live: live_ck_... / live_sk_...
     TOSS_CLIENT_KEY: Optional[str] = None
     TOSS_SECRET_KEY: Optional[str] = None
+    TOSS_WEBHOOK_SECRET: Optional[str] = None  # optional future
+
+    # Business disclosure (shown on site; fill when ready)
+    BUSINESS_NAME: str = "FortuneOne"
+    BUSINESS_CEO: str = "[대표자명]"
+    BUSINESS_NUMBER: str = "[사업자등록번호]"
+    BUSINESS_MAIL_ORDER: str = "[통신판매업 신고번호]"
+    BUSINESS_ADDRESS: str = "[사업장 주소]"
+    BUSINESS_PHONE: str = "[고객센터 전화]"
+    BUSINESS_EMAIL: str = "support@fortuneone.local"
 
     # OAuth (social login)
     GOOGLE_CLIENT_ID: Optional[str] = None

@@ -75,6 +75,12 @@ export function Footer() {
             <Link href="/policy/privacy" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
               개인정보 처리방침
             </Link>
+            <Link href="/policy/refund" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
+              환불 정책
+            </Link>
+            <Link href="/policy/business" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
+              사업자 정보
+            </Link>
             <Link href="/about/engines" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
               오픈소스 · 라이선스
             </Link>

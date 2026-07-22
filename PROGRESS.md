@@ -2,6 +2,15 @@
 
 프로젝트 진행 현황 로그. 커밋 직전 갱신 (`claude_Template` git 규칙).
 
+## 2026-07-22 (payment ready — mock + Toss template)
+
+- **feat(payments):** provider `mock` | `toss` · orders/confirm/webhook/config
+- **DB:** `payment_orders` · fulfill → store unlock / wealth / beads
+- **web:** checkout → `/payments/success|fail` · Toss SDK hook
+- **legal templates:** `/policy/refund` · `/policy/business`
+- **env:** PAYMENT_* · TOSS_* · BUSINESS_* in `.env.example`
+- **docs:** `2026-07-22-payment-ready.md`
+
 ## 2026-07-22 (product content quality pack)
 
 - **catalog v2:** FO 제목·소개·이런분께·8단 구성 · money/career FO 상품 보강 (128종)

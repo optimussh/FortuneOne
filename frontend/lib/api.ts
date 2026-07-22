@@ -932,4 +932,87 @@ export async function getFortuneEngines() {
   }>("/api/fortune/engines");
 }
 
+// --- Payments (mock + Toss-ready) ---
+
+export type PaymentConfig = {
+  provider: string;
+  test_mode: boolean;
+  toss_configured: boolean;
+  client_key: string | null;
+  frontend_url: string;
+  business: Record<string, string>;
+  ready_for_live: boolean;
+  instructions: Record<string, string>;
+};
+
+export async function getPaymentConfig() {
+  return publicJson<PaymentConfig>("/api/payments/config");
+}
+
+export async function createPaymentOrder(body: {
+  kind: "store_product" | "wealth_year" | "beads_pack";
+  product_id: string;
+  profile_id?: number;
+  partner_profile_id?: number;
+  buyer_name?: string;
+  email?: string;
+  phone?: string;
+  agree_privacy: boolean;
+  agree_age14: boolean;
+}) {
+  const res = await apiFetch("/api/payments/orders", {
+    method: "POST",
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) throw new Error(parseApiError(await res.text(), "주문 생성 실패"));
+  return res.json() as Promise<{
+    ok: boolean;
+    free?: boolean;
+    order_id: string | null;
+    amount_krw: number;
+    product_name?: string;
+    provider?: string;
+    client_key?: string;
+    customer_key?: string;
+    success_url?: string;
+    fail_url?: string;
+    mock_auto_confirm?: boolean;
+    result_path: string;
+    message: string;
+    extra?: Record<string, unknown>;
+  }>;
+}
+
+export async function confirmPayment(body: {
+  payment_key: string;
+  order_id: string;
+  amount: number;
+}) {
+  const res = await apiFetch("/api/payments/confirm", {
+    method: "POST",
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) throw new Error(parseApiError(await res.text(), "결제 확인 실패"));
+  return res.json() as Promise<{
+    ok: boolean;
+    already?: boolean;
+    order_id: string;
+    status: string;
+    result_path: string;
+    message: string;
+  }>;
+}
+
+export async function getPaymentOrder(orderId: string) {
+  const res = await apiFetch(`/api/payments/orders/${orderId}`);
+  if (!res.ok) throw new Error(parseApiError(await res.text(), "주문 조회 실패"));
+  return res.json() as Promise<{
+    order_id: string;
+    status: string;
+    amount_krw: number;
+    product_name: string;
+    result_path: string;
+  }>;
+}
+
 export { API_URL };
