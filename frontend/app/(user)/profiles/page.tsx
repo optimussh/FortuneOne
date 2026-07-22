@@ -17,6 +17,7 @@ import {
   defaultSajuForm,
   formToHour,
   formToSolarDate,
+  formatTimeSlotLabel,
   getActiveProfileId,
   setActiveProfileId,
   type SajuFormValue,
@@ -183,7 +184,7 @@ export default function ProfilesPage() {
               <div>
                 {p.gender === "female" ? "여자" : "남자"} · {p.solar_date} ·{" "}
                 {p.calendar_type === "lunar" ? "음력" : "양력"} ·{" "}
-                {p.time_unknown ? "시간 모름" : `시 ${p.hour ?? "?"}시`}
+                {formatTimeSlotLabel(p.time_slot, p.hour, p.time_unknown)}
               </div>
               <div className="flex flex-wrap gap-2">
                 <Button size="sm" variant={activeId === p.id ? "default" : "outline"} onClick={() => selectProfile(p.id)}>

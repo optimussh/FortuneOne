@@ -19,6 +19,7 @@ import {
   defaultSajuForm,
   formToHour,
   formToSolarDate,
+  formatTimeSlotLabel,
   getActiveProfileId,
   setActiveProfileId,
   type SajuFormValue,
@@ -439,8 +440,8 @@ function MePageInner() {
         <p className="mt-2 text-sm text-[var(--muted)]">
           {profile.label} · {profile.display_name || ""} ·{" "}
           {profile.calendar_type === "lunar" ? "음력" : "양력"} {profile.solar_date}
-          {profile.time_unknown ? " · 시간 모름" : ` · ${profile.time_slot || profile.hour + "시"}`}{" "}
-          · 일간{" "}
+          {" · "}
+          {formatTimeSlotLabel(profile.time_slot, profile.hour, profile.time_unknown)} · 일간{" "}
           <span className="font-bold text-[var(--primary)]">{report.day_master}</span>
         </p>
         <p className="mt-2 text-xs">

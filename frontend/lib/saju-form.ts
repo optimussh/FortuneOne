@@ -66,6 +66,29 @@ export function formToHour(v: SajuFormValue): { hour: number; time_unknown: bool
   return { hour: hit.hour, time_unknown: false };
 }
 
+/** Display saved time_slot (e.g. chen → 진시 (辰) 07:30–09:29). */
+export function formatTimeSlotLabel(
+  time_slot?: string | null,
+  hour?: number | null,
+  time_unknown?: boolean
+): string {
+  if (time_unknown || !time_slot || time_slot === "unknown") {
+    if (time_unknown) return "시간 모름";
+  }
+  const hit = SAJU_HOURS.find((h) => h.key === time_slot);
+  if (hit) {
+    if (hit.hour === null) return "시간 모름";
+    return hit.label;
+  }
+  if (hour != null && Number.isFinite(hour)) {
+    // reverse lookup by representative hour
+    const byHour = SAJU_HOURS.find((h) => h.hour === hour);
+    if (byHour) return byHour.label;
+    return `${hour}시`;
+  }
+  return "시간 모름";
+}
+
 export const ACTIVE_PROFILE_KEY = "fortune:activeProfileId";
 
 export function getActiveProfileId(): number | null {
