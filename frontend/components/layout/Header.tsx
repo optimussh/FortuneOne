@@ -191,6 +191,19 @@ export function Header() {
                     상세 사주
                   </Link>
                   <Link
+                    href="/library"
+                    onClick={() => setMenuOpen(false)}
+                    style={{
+                      display: "block",
+                      padding: "8px 12px",
+                      fontSize: 14,
+                      textDecoration: "none",
+                      color: "var(--foreground)",
+                    }}
+                  >
+                    내 구매 · 다시보기
+                  </Link>
+                  <Link
                     href="/shop"
                     onClick={() => setMenuOpen(false)}
                     style={{

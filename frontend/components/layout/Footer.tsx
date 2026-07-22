@@ -89,6 +89,12 @@ export function Footer() {
             <Link href="/shop" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
               구슬·해금
             </Link>
+            <Link
+              href="/library"
+              style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}
+            >
+              내 구매 · 다시보기
+            </Link>
           </div>
         </div>
 

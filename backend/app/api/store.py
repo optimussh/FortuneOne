@@ -293,11 +293,78 @@ async def my_product_unlocks(
     current_user: User = Depends(get_current_user),
     session: AsyncSession = Depends(get_session),
 ):
+    """구매·해금 목록 + 다시보기(웹 7일 / 메일 30일) 상태."""
     from app.models.monetization import ContentUnlock
+    from app.core.config import settings
 
     result = await session.exec(
         select(ContentUnlock).where(ContentUnlock.user_id == current_user.id)
     )
-    rows = result.all()
-    keys = [r.product_key for r in rows if r.product_key.startswith("product:")]
-    return {"unlocks": keys, "count": len(keys)}
+    rows = list(result.all())
+    fe = settings.FRONTEND_URL.rstrip("/")
+    items = []
+    for r in rows:
+        access = mon.unlock_access_info(r, channel="web")
+        email_access = mon.unlock_access_info(r, channel="email")
+        pk = r.product_key
+        kind = "other"
+        title = pk
+        result_path = "/hub"
+        product_id = None
+        if pk.startswith("product:"):
+            kind = "store_product"
+            product_id = pk.replace("product:", "", 1)
+            p = get_product(product_id)
+            title = (p or {}).get("title") or product_id
+            q = []
+            if r.profile_id:
+                q.append(f"profile_id={r.profile_id}")
+            if r.partner_profile_id:
+                q.append(f"partner_id={r.partner_profile_id}")
+            result_path = f"/store/{product_id}/result" + (
+                ("?" + "&".join(q)) if q else ""
+            )
+        elif pk.startswith("wealth_"):
+            kind = "wealth_year"
+            title = f"{pk.replace('wealth_', '')} 부자되기 연간 해금"
+            result_path = "/me?tab=wealth"
+        elif pk.startswith("wealth_") is False and "profile_" in pk:
+            kind = "profile_deep"
+            title = "프로필 심화 해금"
+        email_link = None
+        if r.email_token and product_id:
+            email_link = f"{fe}/store/{product_id}/result?token={r.email_token}"
+            if r.profile_id:
+                email_link += f"&profile_id={r.profile_id}"
+        items.append(
+            {
+                "product_key": pk,
+                "kind": kind,
+                "title": title,
+                "source": r.source,
+                "created_at": r.created_at.isoformat() if r.created_at else None,
+                "web_ok": access.get("ok"),
+                "email_ok": email_access.get("ok"),
+                "web_expires_at": access.get("web_expires_at"),
+                "email_expires_at": access.get("email_expires_at"),
+                "days_left_web": access.get("days_left_web"),
+                "result_path": result_path,
+                "email_result_link": email_link,
+                "profile_id": r.profile_id,
+                "policy": f"웹 {mon.WEB_VIEW_DAYS}일 · 이메일 링크 {mon.EMAIL_VIEW_DAYS}일",
+            }
+        )
+    # newest first
+    items.sort(key=lambda x: x.get("created_at") or "", reverse=True)
+    return {
+        "count": len(items),
+        "policy": {
+            "web_view_days": mon.WEB_VIEW_DAYS,
+            "email_view_days": mon.EMAIL_VIEW_DAYS,
+            "summary": (
+                f"유료 결과 다시보기: 로그인 웹 {mon.WEB_VIEW_DAYS}일, "
+                f"이메일 링크 {mon.EMAIL_VIEW_DAYS}일. 만료 후 재구매가 필요할 수 있습니다."
+            ),
+        },
+        "items": items,
+    }

@@ -317,6 +317,9 @@ export default function HubPage() {
         <Link href="/store" className="text-[var(--primary)] underline">
           운세 스토어
         </Link>
+        <Link href="/library" className="text-[var(--primary)] underline">
+          내 구매 · 다시보기
+        </Link>
         <Link href="/about/engines" className="text-[var(--primary)] underline">
           엔진·라이선스
         </Link>

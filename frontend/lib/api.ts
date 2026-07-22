@@ -933,6 +933,37 @@ export async function getStoreProductResult(
   }>;
 }
 
+export type PurchaseItem = {
+  product_key: string;
+  kind: string;
+  title: string;
+  source: string;
+  created_at: string | null;
+  web_ok: boolean;
+  email_ok: boolean;
+  web_expires_at?: string | null;
+  email_expires_at?: string | null;
+  days_left_web?: number | null;
+  result_path: string;
+  email_result_link?: string | null;
+  profile_id?: number | null;
+  policy?: string;
+};
+
+export async function getMyPurchases() {
+  const res = await apiFetch("/api/store/my-unlocks");
+  if (!res.ok) throw new Error(parseApiError(await res.text(), "구매 목록 조회 실패"));
+  return res.json() as Promise<{
+    count: number;
+    policy: {
+      web_view_days: number;
+      email_view_days: number;
+      summary: string;
+    };
+    items: PurchaseItem[];
+  }>;
+}
+
 export async function getFortuneEngines() {
   return publicJson<{
     policy: string;
