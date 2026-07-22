@@ -116,7 +116,16 @@ function CheckoutInner() {
 
       setError("결제 제공자를 초기화하지 못했습니다. PAYMENT_PROVIDER=mock 으로 테스트하세요.");
     } catch (e) {
-      setError(e instanceof Error ? e.message : "결제 실패");
+      const m = e instanceof Error ? e.message : "결제 실패";
+      // Common when API process is outdated (missing /api/payments)
+      if (/not found|404|Failed to fetch|NetworkError/i.test(m)) {
+        setError(
+          m +
+            " — 백엔드(API :8000)를 최신 코드로 재시작해 주세요. (PAYMENT mock 라우트 필요)"
+        );
+      } else {
+        setError(m);
+      }
     } finally {
       setBusy(false);
     }
