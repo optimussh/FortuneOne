@@ -64,11 +64,18 @@ export default function StoreProductPage() {
 
       <Card className="mt-6 border-[var(--border)]">
         <CardHeader className="pb-2">
-          <CardTitle className="text-base">이런 내용이에요</CardTitle>
+          <CardTitle className="text-base">상품 소개</CardTitle>
+          <p className="text-[11px] text-[var(--muted)]">
+            주제별 맞춤 설명 · 결제 전 꼭 읽어 보세요
+          </p>
         </CardHeader>
-        <CardContent className="space-y-2 text-sm leading-7 text-[var(--muted)]">
+        <CardContent className="space-y-4 text-sm leading-7 text-[var(--foreground)]">
           {(product.intro_blurbs || []).length > 0 ? (
-            (product.intro_blurbs || []).map((b, i) => <p key={i}>{b}</p>)
+            (product.intro_blurbs || []).map((b, i) => (
+              <p key={i} className="text-[var(--muted)] first:text-[var(--foreground)] first:font-medium">
+                {b}
+              </p>
+            ))
           ) : (
             <p>선택하신 사주 프로필을 기준으로 주제 해석과 실천 문장을 제공합니다.</p>
           )}
@@ -105,16 +112,16 @@ export default function StoreProductPage() {
 
       <Card className="mt-4 border-amber-200 bg-amber-50">
         <CardHeader className="pb-2">
-          <CardTitle className="text-base">기본 탭과 차이</CardTitle>
+          <CardTitle className="text-base">기본 탭과 무엇이 다른가요?</CardTitle>
         </CardHeader>
-        <CardContent className="text-xs leading-relaxed text-[var(--muted)]">
-          <p>
+        <CardContent className="text-sm leading-7 text-[var(--muted)]">
+          <p className="whitespace-pre-line">
             {product.diff_from_free_tabs ||
               "상세 사주 탭(오늘·신년·토정·부자되기)은 기본 제공, 스토어는 주제 심화 패키지입니다."}
           </p>
-          <p className="mt-2">
+          <p className="mt-3 text-xs">
             <Link href="/me" className="font-semibold text-[var(--primary)] underline">
-              상세 사주 열기
+              상세 사주
             </Link>
             {" · "}
             <Link href="/me?tab=tojeong" className="underline text-[var(--primary)]">
@@ -123,6 +130,10 @@ export default function StoreProductPage() {
             {" · "}
             <Link href="/me?tab=wealth" className="underline text-[var(--primary)]">
               부자되기
+            </Link>
+            {" · "}
+            <Link href="/library" className="underline text-[var(--primary)]">
+              내 구매
             </Link>
           </p>
         </CardContent>

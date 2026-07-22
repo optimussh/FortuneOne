@@ -244,12 +244,55 @@ def build_product_report(
                 f"같은 일을 둘이 다 하려는 순간이 가장 피곤한 구간입니다."
             )
 
+        detail_extra = _pick(
+            s + 23,
+            [
+                (
+                    f"{name}님의 경우, 강점({strong})을 ‘속도’로만 쓰면 과열되고 "
+                    f"‘품질·기록’으로 쓰면 평가와 관계가 안정되는 편입니다. "
+                    f"약점({weak})은 숨길 대상이 아니라, 환경 설계로 메울 항목입니다."
+                ),
+                (
+                    f"같은 사주라도 수면·일정·사람 배치가 바뀌면 체감 운이 달라집니다. "
+                    f"해석을 운명 선언으로 읽기보다, 이번 주 실험할 변수 하나로 번역해 보세요."
+                ),
+                (
+                    f"‘{focus}’가 잘 안 풀릴 때는 더 세게 밀기보다 기준을 문장으로 적는 편이 낫습니다. "
+                    f"기준이 없으면 감정 파도에 결정을 맡기게 됩니다."
+                ),
+                (
+                    f"오행 분포({elems})는 균형 점수가 아니라 사용 설명서에 가깝습니다. "
+                    f"강한 쪽을 과시하고 약한 쪽을 방치하면, 장기적으로 같은 함정에 빠지기 쉽습니다."
+                ),
+            ],
+        )
+        scene = _pick(
+            s + 29,
+            [
+                (
+                    f"실제 장면으로 옮기면 이렇습니다. 중요한 대화·계약·고백 전에는 "
+                    f"‘원하는 결과 한 줄’과 ‘절대 하지 않을 말 한 줄’을 메모하세요. "
+                    f"{t['color']} 계열 소품이나 {t['dir']} 방향 자리를 고르는 것은 보조일 뿐입니다."
+                ),
+                (
+                    f"일주일 단위로 점검할 질문: 나는 속도를 냈는가, 기록을 남겼는가, "
+                    f"사람을 소모했는가. 세 가지 중 하나만 개선해도 체감이 바뀝니다."
+                ),
+                (
+                    f"운이 좋아 보이는 날일수록 규모를 키우기 쉽습니다. "
+                    f"그럴 때일수록 손안의 자원(시간·돈·체력) 상한을 숫자로 정해 두세요."
+                ),
+            ],
+        )
+
         if role == "open":
             body = _join_paras(
                 f"먼저 ‘{sec_title}’부터 보겠습니다. 이 구간의 키워드는 ‘{focus}’ 쪽에 가깝습니다.",
                 chart,
                 story,
-                f"{life}",
+                life,
+                detail_extra,
+                scene,
                 partner_bit,
             )
         elif role == "action":
@@ -261,6 +304,9 @@ def build_product_report(
                     f"{name}님의 약점 쪽({weak})을 하루 루틴 한 줄로만 보완해도, "
                     f"강한 쪽({strong})이 과열되지 않고 오래 갑니다."
                 ),
+                detail_extra,
+                scene,
+                _pick(s + 41, practice_lines),
                 partner_bit,
             )
         elif role == "close":
@@ -269,10 +315,13 @@ def build_product_report(
                 practice,
                 close,
                 story2,
+                detail_extra,
                 (
                     f"다시 읽고 싶을 때는 내 구매·다시보기에서 기간 안에 열 수 있습니다. "
-                    f"결정이 필요할 때만 펼쳐 보셔도 충분합니다."
+                    f"결정이 필요할 때만 펼쳐 보셔도 충분합니다. "
+                    f"불안이 커질수록 리포트를 여러 번 사는 것보다, 메모한 실천 한 줄을 반복하는 편이 낫습니다."
                 ),
+                scene,
             )
         else:
             body = _join_paras(
@@ -280,18 +329,21 @@ def build_product_report(
                 chart if i % 2 == 0 else life,
                 story,
                 practice if i % 3 == 0 else story2,
+                detail_extra,
+                scene if i % 2 == 1 else _pick(s + 37, practice_lines),
                 partner_bit if i % 2 == 1 else "",
-                close if i == n // 2 else "",
+                close if i == n // 2 else life if i % 2 == 0 else "",
             )
 
-        # Soft length floor — natural sentence, not filler stamp
-        if len(body) < 220:
+        # Length floor for commercial long-form feel (~3x earlier short stamps)
+        if len(body) < 520:
             body = _join_paras(
                 body,
                 (
-                    f"오행 분포({elems})를 기준으로 보면, "
-                    f"한 기운만 밀어붙이기보다 약한 쪽을 생활 습관으로 메우는 전략이 "
-                    f"장기적으로 안정적입니다."
+                    f"정리하면, {name}님에게 유효한 태도는 ‘{t['mood']}’ 기운을 과시가 아니라 "
+                    f"지속 가능한 루틴으로 쓰는 것입니다. "
+                    f"오행({elems}) 기준으로 한 기운만 밀어붙이기보다 약한 쪽을 생활 습관으로 메우면 "
+                    f"선택이 덜 흔들립니다. 이 구간(‘{sec_title}’)에서 가져갈 한 줄만 메모해 두세요."
                 ),
             )
 

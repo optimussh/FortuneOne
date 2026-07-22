@@ -2,6 +2,14 @@
 
 프로젝트 진행 현황 로그. 커밋 직전 갱신 (`claude_Template` git 규칙).
 
+## 2026-07-23 (catalog copy v3 — 3x 주제별 상세)
+
+- **catalog v3:** 전 상품(128) `intro_blurbs`·`for_whom`·`diff_from_free_tabs`·`subtitle` 주제별 구체화·설득 문안
+- **avg:** intro ~259→~778자, for_whom·기본탭 차이도 카테고리별 분기 (동일 문구 제거)
+- **report:** 결과 섹션 본문 장면·실천 문단 추가 (장문)
+- **script:** `python -m app.data.polish_catalog` · copy_version 3
+- **web:** 상품 상세 소개/기본탭 차이 가독성
+
 ## 2026-07-23 (copy + UX polish)
 
 - **narrative v3:** `product_report.py` — 문단 분리, 톤별 서문, 구간 역할(open/mid/action/close), FO 스탬프 제거, 카테고리 초점 키워드

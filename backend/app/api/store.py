@@ -96,8 +96,9 @@ async def store_product_detail(
     pub["payment"] = p.get("payment") or load_catalog().get("payment_module")
     if not pub.get("intro_blurbs"):
         pub["intro_blurbs"] = [
-            f"「{p['title']}」은 회원님 사주 원국을 바탕으로 한 FortuneOne 해석입니다.",
-            "상세 사주 탭(신년·토정·부자되기)은 기본 제공, 스토어는 주제 심화 패키지입니다.",
+            f"「{p['title']}」는 회원님 사주 원국을 바탕으로 한 주제 심화 리포트입니다.",
+            "상세 사주 탭(오늘·신년·토정·부자되기)은 기본 제공이고, 스토어는 한 주제를 깊게 파는 패키지입니다.",
+            "결제 후 내 프로필로 결과가 생성되며, 웹 7일·메일 링크 30일 다시보기할 수 있습니다.",
         ]
     return {
         "product": pub,
