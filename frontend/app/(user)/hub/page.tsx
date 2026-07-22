@@ -138,24 +138,60 @@ export default function HubPage() {
       </div>
 
       {streak && (
-        <div className="mb-4 flex items-center justify-center gap-3 rounded-2xl border border-[var(--border)] bg-[var(--card-bg)] px-4 py-3">
-          <span className="text-2xl">🔥</span>
-          <div>
-            <div className="font-bold">{streak.current_streak}일 연속</div>
-            <div className="text-xs text-[var(--muted)]">
-              최고 {streak.longest_streak}일
-              {streak.already_checked_in_today ? " · 오늘 출석 완료" : ""}
+        <div className="mb-4 space-y-2">
+          <div className="flex items-center justify-center gap-3 rounded-2xl border border-[var(--border)] bg-[var(--card-bg)] px-4 py-3">
+            <span className="text-2xl">🔥</span>
+            <div>
+              <div className="font-bold">{streak.current_streak}일 연속</div>
+              <div className="text-xs text-[var(--muted)]">
+                최고 {streak.longest_streak}일
+                {streak.already_checked_in_today ? " · 오늘 출석 완료" : ""}
+              </div>
+            </div>
+            <div className="ml-auto flex gap-1">
+              {streak.recent_7.map((ok, i) => (
+                <span
+                  key={i}
+                  className="h-2 w-2 rounded-full"
+                  style={{ background: ok ? "#f59e0b" : "#e5e7eb" }}
+                />
+              ))}
             </div>
           </div>
-          <div className="ml-auto flex gap-1">
-            {streak.recent_7.map((ok, i) => (
-              <span
-                key={i}
-                className="h-2 w-2 rounded-full"
-                style={{ background: ok ? "#f59e0b" : "#e5e7eb" }}
-              />
-            ))}
-          </div>
+          {streak.reward_message && (
+            <p className="rounded-xl bg-amber-50 px-3 py-2 text-center text-xs font-semibold text-amber-900">
+              {streak.reward_message}
+              {streak.beads_awarded_today
+                ? ` (+구슬 ${streak.beads_awarded_today})`
+                : ""}
+            </p>
+          )}
+          {streak.milestones && streak.milestones.length > 0 && (
+            <div className="flex flex-wrap justify-center gap-2">
+              {streak.milestones.map((m) => (
+                <span
+                  key={m.day}
+                  className={`rounded-full px-2.5 py-1 text-[10px] font-semibold ${
+                    m.claimed
+                      ? "bg-emerald-100 text-emerald-800"
+                      : m.achieved
+                        ? "bg-amber-100 text-amber-900"
+                        : "border border-[var(--border)] text-[var(--muted)]"
+                  }`}
+                  title={`${m.label} · 구슬 ${m.beads}`}
+                >
+                  {m.label}
+                  {m.claimed ? " ✓" : m.achieved ? " 보상!" : ` · ${m.beads}구슬`}
+                </span>
+              ))}
+            </div>
+          )}
+          {streak.next_milestone && !streak.next_milestone.achieved && (
+            <p className="text-center text-[10px] text-[var(--muted)]">
+              다음 보상: {streak.next_milestone.label} (구슬 {streak.next_milestone.beads})
+              · 앞으로 {streak.next_milestone.day - streak.current_streak}일
+            </p>
+          )}
         </div>
       )}
 

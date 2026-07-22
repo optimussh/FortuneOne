@@ -43,7 +43,7 @@ def _stable(result: SajuResult, birth: date, year: int) -> int:
         result.day_master,
         _pillars_line(result),
         birth.isoformat(),
-        f"tojeong_{year}",
+        f"tojeong_{year}_v4",
     )
 
 

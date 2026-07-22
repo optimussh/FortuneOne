@@ -679,12 +679,24 @@ export async function registerWithSaju(body: RegisterWithSajuBody): Promise<{
 
 // --- Engagement / journal / tarot interactive / topics ---
 
+export type StreakMilestone = {
+  day: number;
+  beads: number;
+  achieved: boolean;
+  claimed: boolean;
+  label: string;
+};
+
 export type StreakInfo = {
   current_streak: number;
   longest_streak: number;
   last_checkin_date: string | null;
   already_checked_in_today: boolean;
   recent_7: boolean[];
+  milestones?: StreakMilestone[];
+  beads_awarded_today?: number;
+  reward_message?: string | null;
+  next_milestone?: StreakMilestone | null;
 };
 
 export async function getStreak(): Promise<StreakInfo> {
@@ -825,6 +837,7 @@ export type StoreProduct = {
   for_whom?: string[];
   diff_from_free_tabs?: string;
   copy_version?: number;
+  hit?: boolean;
 };
 
 export async function getStoreMenu() {
@@ -842,18 +855,31 @@ export async function getStoreMenu() {
   }>("/api/store/menu");
 }
 
-export async function getStoreProducts(category?: string) {
-  const q = category ? `?category=${encodeURIComponent(category)}` : "";
+export async function getStoreProducts(category?: string, search?: string) {
+  const params = new URLSearchParams();
+  if (category) params.set("category", category);
+  if (search?.trim()) params.set("q", search.trim());
+  const qs = params.toString() ? `?${params}` : "";
   return publicJson<{
     count: number;
     products: StoreProduct[];
+    q?: string;
     role_guide?: {
       free_tabs?: Record<string, string>;
       store?: string;
       summary?: string;
     };
     category_counts?: Record<string, number>;
-  }>(`/api/store/products${q}`);
+  }>(`/api/store/products${qs}`);
+}
+
+export async function getStoreRecommend(limit = 8) {
+  return publicJson<{
+    count: number;
+    products: StoreProduct[];
+    title: string;
+    subtitle?: string;
+  }>(`/api/store/recommend?limit=${limit}`);
 }
 
 export async function getStoreProduct(id: string) {

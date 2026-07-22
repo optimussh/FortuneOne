@@ -147,59 +147,57 @@ def _pillars_line(r: SajuResult) -> str:
 # ── Daily (changes by date) ───────────────────────────────────────────────
 
 
+def _paras(*parts: str) -> str:
+    return "\n\n".join(p.strip() for p in parts if p and p.strip())
+
+
 def build_daily_long(result: SajuResult, as_of: date | None = None) -> dict[str, Any]:
+    """Daily fortune — multi-paragraph v4 (store narrative tone)."""
     d = as_of or date.today()
     t = _t(result)
-    seed = _seed(result.day_master, d.isoformat(), "daily_v3")
+    seed = _seed(result.day_master, d.isoformat(), "daily_v4")
     sc = result.daily.scores
     nature = STEM_NATURE.get(result.day_master, "균형 잡힌")
     tip = _pick(
         seed,
         [
             "오전에 중요한 결정을 배치해 보세요.",
-            "오후 대인 일정을 앞당기면 흐름이 좋습니다.",
-            "저녁엔 정보 입력보다 정리가 유리합니다.",
-            "짧은 산책이 판단 오류를 줄여 줍니다.",
+            "오후 대인 일정을 조금 앞당기면 흐름이 좋습니다.",
+            "저녁엔 새 정보보다 정리가 유리합니다.",
+            "10분 산책이 판단 오류를 줄여 줍니다.",
         ],
     )
+    color = result.daily.lucky.get("color", t["color"])
+    direction = result.daily.lucky.get("direction", t["dir"])
 
-    overview = (
-        f"【{d.month}월 {d.day}일 총운】 일간 {result.day_master}({nature}) 기준으로 오늘의 바탕은 "
-        f"‘{t['mood']}’입니다. 원국 강약은 강 {_strong(result)} · 약 {_weak(result)}이며, "
-        f"오행 분포는 {_elems(result)}입니다. 총운 {sc.get('overall', 70)}점대에서는 "
-        f"{t['adj']} 강점을 쓰되 과속은 금물입니다. {tip} "
-        f"감정 소모 큰 논쟁은 하루 미루고, 약속은 짧게 확인하세요. "
-        f"행운 색 {result.daily.lucky.get('color', t['color'])}, 방향 {result.daily.lucky.get('direction', t['dir'])}을 "
-        f"동선에 살짝 반영해도 좋습니다. "
-        f"오늘 해석은 날짜가 바뀌면 달라질 수 있는 ‘일운’ 영역입니다."
+    overview = _paras(
+        f"{d.month}월 {d.day}일, 일간 {result.day_master}({nature}) 기준으로 오늘의 바탕은 ‘{t['mood']}’입니다.",
+        (
+            f"총운 {sc.get('overall', 70)}점대에서는 {t['adj']} 강점을 쓰되 과속은 금물입니다. "
+            f"원국 강 {_strong(result)} · 약 {_weak(result)}, 오행 {_elems(result)}."
+        ),
+        f"{tip} 감정 소모가 큰 논쟁은 하루 미루고, 약속은 짧게 두 번 확인하세요.",
+        f"색 {color} · 방향 {direction}을 동선에 살짝만 반영해도 충분합니다. 이 해석은 날짜가 바뀌면 달라지는 일운입니다.",
     )
-    wealth = (
-        f"【재물】 점수 {sc.get('money', 65)}. 키워드는 {t['wealth']}입니다. "
-        f"큰 결제·계약은 숫자 재확인 후, 충동 소비 대신 ‘목록 구매’를 권합니다. "
-        f"고정비·구독·수수료처럼 새는 구멍을 막으면 체감 운이 올라갑니다. "
-        f"수입 아이디어는 메모만 하고 저녁에 실현 가능성을 검토하세요. "
-        f"금전 부탁에는 원칙과 한도를 분명히 하세요. "
-        f"{_pick(seed + 1, ['현금 흐름표 한 줄 업데이트', '불필요 구독 1건 점검', '견적 비교 한 번'])}을 실천 과제로 둡니다."
+    wealth = _paras(
+        f"재물 점수 {sc.get('money', 65)}. 오늘의 키워드는 {t['wealth']} 쪽에 가깝습니다.",
+        "큰 결제·계약은 숫자를 한 번 더 본 뒤, 충동 대신 ‘목록 구매’를 권합니다. 고정비·구독처럼 새는 구멍을 막으면 체감이 올라갑니다.",
+        f"금전 부탁에는 원칙과 한도를 분명히 하세요. 실천: {_pick(seed + 1, ['현금 흐름 한 줄', '구독 1건 점검', '견적 비교 한 번'])}.",
     )
-    love = (
-        f"【관계】 점수 {sc.get('love', 65)}. {t['love']}이 오늘의 관계 톤입니다. "
-        f"가까운 이에게는 추측 대신 확인 질문이 오해를 줄입니다. "
-        f"솔로는 공통 관심사 대화가, 커플은 ‘이기고 지는 말’보다 피로도 배려가 유리합니다. "
-        f"밤늦은 감정 논쟁은 피하고, 사실-느낌-요청 순으로 말해 보세요. "
-        f"{_pick(seed + 2, ['짧은 감사 인사', '경청 후 한 줄 공감', '함께 짧은 산책'])} 한 가지면 충분합니다."
+    love = _paras(
+        f"관계 점수 {sc.get('love', 65)}. 오늘의 톤은 {t['love']}입니다.",
+        "가까운 이에게는 추측 대신 확인 질문이 오해를 줄입니다. 솔로는 공통 관심 대화, 커플은 이기고 지는 말보다 피로도 배려가 유리합니다.",
+        f"밤늦은 감정 논쟁은 피하고, 사실 → 느낌 → 요청 순으로 말해 보세요. 한 가지면 충분합니다: {_pick(seed + 2, ['짧은 감사', '경청 후 공감 한 줄', '함께 짧은 산책'])}.",
     )
-    work = (
-        f"【일·건강】 건강 {sc.get('health', 65)}. {t['career']} 방식의 업무가 잘 맞습니다. "
-        f"100% 완성보다 ‘제출 가능한 80%’를 먼저 내보내세요. "
-        f"회의 전 결론 문장 메모가 영향력을 키웁니다. "
-        f"몸 쪽은 {t['body']} 관련 무리를 줄이고 수분·스트레칭을 챙기세요. "
-        f"야근 강행보다 내일로 넘겨도 되는 일을 분류하는 날이 효율적입니다."
+    work = _paras(
+        f"건강 {sc.get('health', 65)}. 일에서는 {t['career']} 방식이 잘 맞습니다.",
+        "100%보다 ‘제출 가능한 80%’를 먼저 내보내세요. 회의 전 결론 문장 메모가 영향력을 키웁니다.",
+        f"몸 쪽은 {t['body']} 관련 무리를 줄이고 수분·스트레칭을 챙기세요. 야근 강행보다 내일로 넘겨도 되는 일을 분류하는 날이 효율적입니다.",
     )
-    advice = (
-        f"【가이드】 강점 {t['adj']} 활용 · 보완 {_weak(result)}. "
-        f"피하기: 감정 큰 결정, 검증 없는 금전 약속. "
-        f"실천: 아침 10분 계획 + 저녁 감사 한 줄. "
-        f"일간 {result.day_master}의 {nature} 페이스를 존중하세요."
+    advice = _paras(
+        f"오늘 챙길 한 줄: 강점({t['adj']})은 드러내고, 보완({_weak(result)})은 루틴으로.",
+        "피하기 — 감정 큰 결정, 검증 없는 금전 약속. 실천 — 아침 10분 계획 + 저녁 감사 한 줄.",
+        f"일간 {result.day_master}의 {nature} 페이스를 존중하세요. 깊이 있는 주제는 스토어 패키지, 매일은 이 탭이면 충분합니다.",
     )
 
     return {
@@ -207,6 +205,7 @@ def build_daily_long(result: SajuResult, as_of: date | None = None) -> dict[str,
         "title": f"{d.month}월 {d.day}일 오늘의 운세",
         "scores": sc,
         "lucky": result.daily.lucky,
+        "narrative_version": 4,
         "sections": [
             {"id": "overview", "title": "총운 해설", "body": overview},
             {"id": "wealth", "title": "재물·실속", "body": wealth},
@@ -225,67 +224,52 @@ def build_new_year_2026(result: SajuResult, birth: date) -> dict[str, Any]:
 
 
 def build_year_fortune(result: SajuResult, birth: date, year: int = 2026) -> dict[str, Any]:
+    """Year fortune — multi-paragraph v4, aligned with store narrative."""
     t = _t(result)
-    seed = _stable(result, birth, f"year_{year}_v3")
+    seed = _stable(result, birth, f"year_{year}_v4")
     nature = STEM_NATURE.get(result.day_master, "균형 잡힌")
     age = year - birth.year
     yong = result.yongsin.element_ko if result.yongsin else "균형"
     yong_r = result.yongsin.reason if result.yongsin else "오행 균형을 의식한 선택이 유익합니다."
     pillars = _pillars_line(result)
 
-    h1 = (
-        f"【{year}년 한 해의 주제 · 정통 사주】 "
-        f"원국 {pillars}, 일간 {result.day_master}({nature})인 당신에게 {year}년은 "
-        f"‘{t['mood']}’가 주제로 작동하는 해입니다. 대략 만 {age}세 전후 시점으로, "
-        f"강한 기운 {_strong(result)}은 성과의 엔진이 되고 약한 기운 {_weak(result)}은 "
-        f"보완 과제로 반복 등장할 수 있습니다. 오행 {_elems(result)} 분포 위에서 "
-        f"{t['virtue']}를 의식한 선택이 마찰을 줄입니다. "
-        f"용신 관점의 {yong}—{yong_r} "
-        f"연초에는 ‘끝낼 일 3 / 내려놓을 일 3’을 문서로 남겨 방향을 고정하세요. "
-        f"이 해의 승부처는 속도가 아니라 방향과 지속 가능한 루틴입니다. "
-        f"같은 생년월일시와 같은 연도({year})로 다시 조회해도 이 주제 해석은 동일하게 유지됩니다."
+    h1 = _paras(
+        f"{year}년, 원국 {pillars} · 일간 {result.day_master}({nature})에게 한 해의 주제는 ‘{t['mood']}’입니다.",
+        (
+            f"만 {age}세 전후. 강한 기운 {_strong(result)}은 성과의 엔진, 약한 기운 {_weak(result)}은 "
+            f"보완 과제로 반복 등장하기 쉽습니다. 오행 {_elems(result)} 위에서 {t['virtue']}를 의식하면 마찰이 줄어듭니다."
+        ),
+        f"용신 관점의 {yong} — {yong_r}",
+        "연초에는 ‘끝낼 일 3 / 내려놓을 일 3’을 짧게 적어 방향을 고정하세요. 승부처는 속도가 아니라 지속 가능한 루틴입니다.",
     )
-    h2 = (
-        f"【{year} 상·하반기】 "
-        f"상반기(1–6월)는 학습, 재정 점검, 건강 베이스라인, 관계 경계 설정에 무게를 두는 편이 맞습니다. "
-        f"{t['wealth']} 원칙으로 가계를 재설계하면 연말 완충력이 커집니다. "
-        f"충동 이직·무리한 확장은 상반기보다 하반기 검증 후가 안전합니다. "
-        f"하반기(7–12월)는 준비해 둔 일이 가시화되기 쉽고, {t['career']} 영역에서 "
-        f"실적·이름·포트폴리오를 드러내면 기회가 붙습니다. "
-        f"다만 과로는 누적 피로로 돌아오므로 휴식 일정을 미리 캘린더에 넣으세요. "
-        f"분기마다 목표를 ‘버릴 것/키울 것’으로 재분류하면 대운 리듬과도 맞물리기 쉽습니다. "
-        f"일간 {result.day_master}의 {nature} 성향은 ‘한 방’보다 ‘방향 고정 후 반복 개선’에서 진가를 냅니다."
+    h2 = _paras(
+        f"상반기(1–6월)는 학습, 재정 점검, 건강 베이스, 관계 경계에 무게를 두는 편이 맞습니다. {t['wealth']} 원칙으로 가계를 다잡으면 연말 완충이 커집니다.",
+        "충동 이직·무리한 확장은 상반기보다 하반기에 검증한 뒤가 안전합니다.",
+        f"하반기(7–12월)는 준비해 둔 일이 가시화되기 쉽고, {t['career']} 영역에서 실적·이름·포트폴리오를 드러내면 기회가 붙습니다.",
+        f"과로는 누적 피로로 돌아오니 휴식을 캘린더에 먼저 넣으세요. 일간 {result.day_master}의 {nature} 성향은 한 방보다 방향 고정 후 반복 개선에서 진가를 냅니다.",
     )
-    h3 = (
-        f"【{year} 재물·애정·사회】 "
-        f"재물은 한 번에 크게보다 매월 규칙이 정답에 가깝습니다. "
-        f"고정비 재협상, 비상금 3–6개월, 소득 분산을 연간 목표로 잡으세요. "
-        f"애정·가족에서는 {t['love']}이 관계를 살리는 열쇠이며, 결혼·동거·이사 같은 고관여 결정은 "
-        f"감정 고조기보다 한 템포 쉬어 조율하는 편이 안전합니다. "
-        f"사회적으로는 {t['social']} 역할에서 평판이 쌓이니, 작은 약속도 지켜 연말 신뢰 자산으로 만드세요. "
-        f"약한 오행({_weak(result)})을 상징하는 생활 요소—색({t['color']})·방향({t['dir']})·루틴—을 "
-        f"보강하면 결정 피로가 줄어 재물·관계 판단이 맑아지는 경우가 많습니다. "
-        f"이 영역 해석 역시 {year}년·동일 원국 기준 고정 텍스트입니다."
+    h3 = _paras(
+        "재물은 한 번에 크게보다 매월 규칙이 정답에 가깝습니다. 고정비 재협상, 비상금, 소득 분산을 연간 목표로 잡으세요.",
+        f"애정·가족에서는 {t['love']}이 관계를 살리는 열쇠입니다. 결혼·동거·이사 같은 고관여 결정은 감정 고조기보다 한 템포 쉬어 조율하세요.",
+        f"사회적으로는 {t['social']} 역할에서 평판이 쌓입니다. 작은 약속도 지켜 연말 신뢰 자산으로 만드세요.",
+        f"약한 오행({_weak(result)})을 색({t['color']})·방향({t['dir']})·루틴으로 보강하면 결정 피로가 줄기 쉽습니다.",
     )
-    h4 = (
-        f"【{year} 실천 로드맵】 "
-        f"1월: 목표·예산·건강 수치 측정. 3–4월: {t['career']} 관련 스킬·자격·포트폴리오 보강. "
-        f"6월: 중간 점검으로 버릴 일과 키울 일 재분류. 9–10월: 성과 공개·협상·계약. "
-        f"12월: 감사 정리와 다음 해 씨앗 심기. "
-        f"이 로드맵은 인생풀이의 초·중·말년 큰 흐름 위에서 {year}년이라는 한 계단을 오르는 설계입니다. "
-        f"{t['adj']} 강점은 드러내고, 약점은 사람·도구·습관으로 보완하십시오. "
-        f"용신 {yong}을 일정표에 월 1회 이상 의도적으로 배치하는 것만으로도 한 해의 중심이 잡힙니다. "
-        f"동일 사주·동일 연도면 본 로드맵의 골격은 변하지 않습니다."
+    h4 = _paras(
+        f"1월: 목표·예산·건강 수치. 3–4월: {t['career']} 관련 스킬·포트폴리오. 6월: 버릴 일/키울 일 재분류.",
+        "9–10월: 성과 공개·협상·계약. 12월: 감사 정리와 다음 해 씨앗.",
+        f"{t['adj']} 강점은 드러내고 약점은 사람·도구·습관으로 보완하세요. 용신 {yong}을 월 1회 이상 일정에 의도적으로 배치하면 한 해의 중심이 잡힙니다.",
+        "더 좁은 주제(연애·결혼·재물 태도 등)는 스토어 심화 패키지에서, 한 해 스케치는 이 탭에서 보시면 됩니다.",
     )
 
     return {
         "year": year,
-        "title": f"{year} 신년 운세 심층 해설",
-        "subtitle": f"일간 {result.day_master} · {t['mood']} · 연도 고정 해석",
+        "title": f"{year} 신년 운세",
+        "subtitle": f"일간 {result.day_master} · {t['mood']} · 기본 제공 연간 리포트",
+        "narrative_version": 4,
         "sections": [
-            {"id": "theme", "title": "한 해의 주제 (정통 사주)", "body": h1},
+            {"id": "theme", "title": "한 해의 주제", "body": h1},
             {"id": "half", "title": "상·하반기 흐름", "body": h2},
-            {"id": "life", "title": "재물·애정·사회운", "body": h3},
+            {"id": "life", "title": "재물·애정·사회", "body": h3},
             {"id": "roadmap", "title": "실천 로드맵", "body": h4},
         ],
     }

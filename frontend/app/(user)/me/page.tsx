@@ -38,7 +38,7 @@ import { Button } from "@/components/ui/button";
 
 function SectionBlock({ title, body }: { title: string; body: string }) {
   return (
-    <div className="mb-5 last:mb-0">
+    <div className="mb-6 last:mb-0">
       <h4 className="mb-2 text-sm font-bold text-[var(--primary)]">{title}</h4>
       <p className="whitespace-pre-line text-sm leading-7 text-[var(--foreground)]">{body}</p>
     </div>

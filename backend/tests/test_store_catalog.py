@@ -28,3 +28,17 @@ def test_product_report_sections():
     assert "\n\n" in body0 or len(body0) >= 180
     assert rep["header"].get("narrative_version") == 3
     assert "테스트" in rep["intro"]
+
+
+def test_hit_copy_and_search():
+    from app.services.product_catalog import get_product, list_products, recommend_products
+
+    hit = get_product("p537")
+    assert hit and hit.get("hit") is True
+    assert "배우자" in (hit.get("subtitle") or "") or "결혼" in (hit.get("subtitle") or "")
+    assert len(hit.get("intro_blurbs") or []) >= 4
+    love = list_products(q="연애")
+    assert len(love) >= 5
+    rec = recommend_products(6)
+    assert len(rec) >= 4
+    assert rec[0]["id"] in {"p1411", "p537", "p1753", "p579", "p2626", "p623"}

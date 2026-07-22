@@ -2,6 +2,16 @@
 
 프로젝트 진행 현황 로그. 커밋 직전 갱신 (`claude_Template` git 규칙).
 
+## 2026-07-23 (product quality pack B + competitor benchmark)
+
+- **docs:** `docs/superpowers/specs/2026-07-23-competitor-benchmark.md` 점신·운세비결·스토어형 비교
+- **B6 문장:** 일운·신년 `saju_report` narrative v4 문단형 · 토정 시드 v4
+- **B7 히트10:** `hit_product_copy.py` 수작업 소개 (p1411,p537,p1753,p579,p2626,p623,p644,p2387,p2120,p1736)
+- **B8 온보딩:** `/welcome` 3스텝 · 가입 후 랜딩
+- **B9 발견:** `GET /store/products?q=` 검색 · `/store/recommend` · FE 검색·추천 블록
+- **B10 리텐션:** 출석 3/7/30 구슬 보상 · 허브 마일스톤 UI
+- **verify:** pytest + hit/search tests · tsc
+
 ## 2026-07-23 (user-facing copy: no engine jargon)
 
 - **catalog/report:** 상품 소개·결과에서 MIT/sajupy/템플릿/복제 고지 문구 제거

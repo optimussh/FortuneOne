@@ -77,7 +77,7 @@ export default function RegisterPage() {
       });
       localStorage.setItem("token", data.access_token);
       if (data.profile?.id) setActiveProfileId(data.profile.id);
-      router.push("/hub");
+      router.push("/welcome");
       router.refresh();
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "오류가 발생했습니다");

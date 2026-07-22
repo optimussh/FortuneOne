@@ -42,18 +42,31 @@ async def store_menu():
 
 
 @router.get("/products")
-async def store_products(category: Optional[str] = None):
-    items = list_products(category)
-    # public list without source_title
-    public = []
-    for p in items:
-        public.append(_public_product(p))
+async def store_products(category: Optional[str] = None, q: Optional[str] = None):
+    items = list_products(category, q=q)
+    public = [_public_product(p) for p in items]
     cat = load_catalog()
     return {
         "count": len(public),
         "products": public,
+        "q": q or "",
         "role_guide": cat.get("role_guide"),
         "category_counts": (cat.get("content_quality") or {}).get("category_counts"),
+    }
+
+
+@router.get("/recommend")
+async def store_recommend(limit: int = 8):
+    """Hit products + category mix for onboarding / store home."""
+    from app.services.product_catalog import recommend_products
+
+    limit = max(1, min(limit, 16))
+    items = recommend_products(limit=limit)
+    return {
+        "count": len(items),
+        "products": [_public_product(p) for p in items],
+        "title": "지금 많이 보는 주제",
+        "subtitle": "연애·결혼·재물·직장 히트 패키지와 추천 조합",
     }
 
 
@@ -103,6 +116,7 @@ def _public_product(p: dict) -> dict:
         "diff_from_free_tabs": p.get("diff_from_free_tabs"),
         "tone": p.get("tone"),
         "copy_version": p.get("copy_version"),
+        "hit": bool(p.get("hit")),
     }
 
 
