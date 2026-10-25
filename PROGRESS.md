@@ -2,6 +2,10 @@
 
 프로젝트 진행 현황 로그. 커밋 직전 갱신 (`claude_Template` git 규칙).
 
+## 2026-10-25 (security patch: Next.js 15.5.28 + React 19.1.10 + Node 20.20.2-alpine)
+
+- **security:** 2026년 10월 Next.js/React/Node.js 긴급 보안 취약점(CVE-2026-96889, GHSA-p3m5-59mp-jv5r, CVE-2026-111497) 대응으로 `next` 15.5.28, `react`/`react-dom` 19.1.10, `frontend/Dockerfile` 베이스 이미지 `node:20.20.2-alpine` 상향
+
 ## 2026-07-23 (product quality pack B + competitor benchmark)
 
 - **docs:** `docs/superpowers/specs/2026-07-23-competitor-benchmark.md` 점신·운세비결·스토어형 비교
